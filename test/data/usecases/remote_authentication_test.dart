@@ -38,7 +38,10 @@ void main() {
           url: url,
           method: method,
           body: body,
-        )).thenAnswer((_) async {});
+        )).thenAnswer((_) async => {
+          'accessToken': faker.guid.guid(),
+          'name': faker.person.name(),
+        });
 
     // Act
     sut.auth(params);
@@ -48,7 +51,7 @@ void main() {
           url: url,
           method: 'post',
           body: body,
-        ));
+        )).called(1);
   });
 
   test('Should throw UnexpectedError if HttpClient returns 400', () {
@@ -108,5 +111,26 @@ void main() {
 
     // Assert
     expect(future, throwsA(DomainError.invalidCredentials));
+  });
+
+  test('Should return an Account if HttpClient returns 200', () async {
+    // Arrange
+    final String token = faker.guid.guid();
+    final Map<String, dynamic> response = {
+      'accessToken': token,
+      'name': faker.person.name(),
+    };
+
+    when(() => client.request(
+          url: any(named: 'url'),
+          method: any(named: 'method'),
+          body: any(named: 'body'),
+        )).thenAnswer((_) async => response);
+
+    // Act
+    final account = await sut.auth(params);
+
+    // Assert
+    expect(account.token, token);
   });
 }
