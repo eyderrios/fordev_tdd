@@ -26,12 +26,19 @@ class RemoteAuthentication {
 }
 
 void main() {
+  const String method = 'post';
+  late String url;
+  late HttpClientSpy client;
+  late RemoteAuthentication sut;
+
+  setUp(() {
+    url = faker.internet.httpUrl();
+    client = HttpClientSpy();
+    sut = RemoteAuthentication(httpClient: client, url: url);
+  });
+
   test('Should call HttpClient with correct URL', () {
     // Arrange
-    const method = 'post';
-    final url = faker.internet.httpUrl();
-    final client = HttpClientSpy();
-    final sut = RemoteAuthentication(httpClient: client, url: url);
 
     when(() => client.request(
           url: url,
