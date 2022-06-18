@@ -38,7 +38,7 @@ class RemoteAuthenticationParams {
         password: params.password,
       );
 
-  Map toJson() => {
+  Map<String, dynamic> toJson() => {
         'email': email,
         'password': password,
       };

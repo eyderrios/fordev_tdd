@@ -14,6 +14,7 @@ void main() {
   late HttpClientSpy client;
   late RemoteAuthentication sut;
   late AuthenticationParams params;
+  late Map<String, dynamic> body;
 
   setUp(() {
     url = faker.internet.httpUrl();
@@ -23,6 +24,10 @@ void main() {
       email: faker.internet.email(),
       password: faker.internet.password(),
     );
+    body = {
+      'email': params.email,
+      'password': params.password,
+    };
   });
 
   test('Should call HttpClient with correct URL', () {
@@ -30,6 +35,7 @@ void main() {
     when(() => client.request(
           url: url,
           method: method,
+          body: body,
         )).thenAnswer((_) async {});
 
     // Act
@@ -39,10 +45,7 @@ void main() {
     verify(() => client.request(
           url: url,
           method: 'post',
-          body: {
-            'email': params.email,
-            'password': params.password,
-          },
+          body: body,
         ));
   });
 }
