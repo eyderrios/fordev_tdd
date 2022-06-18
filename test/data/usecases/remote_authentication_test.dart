@@ -3,7 +3,10 @@ import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
 abstract class HttpClient {
-  Future<void> request({required String url});
+  Future<void> request({
+    required String url,
+    required String method,
+  });
 }
 
 class HttpClientSpy extends Mock implements HttpClient {}
@@ -18,21 +21,30 @@ class RemoteAuthentication {
   });
 
   Future<void> auth() async {
-    await httpClient.request(url: url);
+    await httpClient.request(url: url, method: 'post');
   }
 }
 
 void main() {
   test('Should call HttpClient with correct URL', () {
     // Arrange
+    const method = 'post';
     final url = faker.internet.httpUrl();
-    final httpClient = HttpClientSpy();
-    final sut = RemoteAuthentication(httpClient: httpClient, url: url);
+    final client = HttpClientSpy();
+    final sut = RemoteAuthentication(httpClient: client, url: url);
 
-    when(() => httpClient.request(url: url)).thenAnswer((_) async {});
+    when(() => client.request(
+          url: url,
+          method: method,
+        )).thenAnswer((_) async {});
+
     // Act
     sut.auth();
+
     // Assert
-    verify(() => httpClient.request(url: url)).called(1);
+    verify(() => client.request(
+          url: url,
+          method: 'post',
+        )).called(1);
   });
 }
