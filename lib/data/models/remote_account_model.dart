@@ -6,7 +6,7 @@ class RemoteAccountModel {
 
   RemoteAccountModel(this.token);
 
-  factory RemoteAccountModel.fromJson(Map<String, dynamic> json) {
+  factory RemoteAccountModel.fromJson(HttpClientBody json) {
     if (!json.containsKey('accessToken')) {
       throw HttpError.invalidData;
     }

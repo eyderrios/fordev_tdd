@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:faker/faker.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
@@ -16,7 +18,7 @@ void main() {
   late HttpClientSpy client;
   late RemoteAuthentication sut;
   late AuthenticationParams params;
-  late Map<String, dynamic> body;
+  late HttpClientBody body;
 
   Map<String, dynamic> mockValidData() => {
         'accessToken': faker.guid.guid(),
