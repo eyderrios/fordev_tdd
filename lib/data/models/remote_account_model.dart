@@ -1,12 +1,17 @@
-import 'package:fordev_tdd/domain/entities/account_entity.dart';
+import '../../domain/entities/account_entity.dart';
+import '../http/http.dart';
 
 class RemoteAccountModel {
   final String token;
 
   RemoteAccountModel(this.token);
 
-  factory RemoteAccountModel.fromJson(Map<String, dynamic> json) =>
-      RemoteAccountModel(json['accessToken']);
+  factory RemoteAccountModel.fromJson(Map<String, dynamic> json) {
+    if (!json.containsKey('accessKey')) {
+      throw HttpError.invalidData;
+    }
+    return RemoteAccountModel(json['accessToken']);
+  }
 
   AccountEntity toEntity() => AccountEntity(token);
 }
