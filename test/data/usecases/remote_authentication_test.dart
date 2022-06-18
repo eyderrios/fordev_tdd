@@ -39,7 +39,6 @@ void main() {
 
   test('Should call HttpClient with correct URL', () {
     // Arrange
-
     when(() => client.request(
           url: url,
           method: method,
@@ -52,6 +51,6 @@ void main() {
     verify(() => client.request(
           url: url,
           method: 'post',
-        )).called(1);
+        ));
   });
 }
