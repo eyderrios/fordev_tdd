@@ -6,8 +6,8 @@
 3. Sistema valida os dados recebidos da API
 4. Sistema entrega os dados da conta do usuário
 
-> ## Exceção - URL inválida
-1. Sistema retorna uma mensagem de erro inesperado
+> ## Exceção - URL inválida (404)
+1. ✅ Sistema retorna uma mensagem de erro inesperado
 
 > ## Exceção - Dados inválidos (400)
 1. ✅ Sistema retorna uma mensagem de erro inesperado
