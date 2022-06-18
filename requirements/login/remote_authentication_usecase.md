@@ -18,5 +18,5 @@
 > ## Exceção - Falha no servidor (500)
 1. ✅ Sistema retorna uma mensagem de erro inesperado
 
-> ## Exceção - Credenciais inválidas
-1. Sistema retorna uma mensagem de erro informando credenciais inválidas
+> ## Exceção - Credenciais inválidas (401)
+1. ✅ Sistema retorna uma mensagem de erro informando credenciais inválidas
