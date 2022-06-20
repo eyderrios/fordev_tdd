@@ -5,7 +5,7 @@ import 'package:http/http.dart';
 
 import '../../data/http/http.dart';
 
-class HttpAdapter {
+class HttpAdapter implements HttpClient {
   static const headers = {
     HttpHeaders.contentTypeHeader: 'application/json',
     HttpHeaders.acceptHeader: 'application/json',
@@ -15,15 +15,16 @@ class HttpAdapter {
 
   HttpAdapter(this.client);
 
-  Future<void> request({
+  Future<HttpClientBody> request({
     required String url,
     required String method,
     HttpClientBody? body,
   }) async {
-    await client.post(
+    final response = await client.post(
       Uri.parse(url),
       headers: HttpAdapter.headers,
       body: (body != null) ? jsonEncode(body) : null,
     );
+    return jsonDecode(response.body);
   }
 }
