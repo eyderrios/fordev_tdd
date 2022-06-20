@@ -19,7 +19,6 @@ void main() {
   late String url;
   late Uri uri;
   late HttpClientBody body;
-  late Response response;
 
   setUp(() {
     client = ClientSpy();
@@ -27,7 +26,6 @@ void main() {
     url = faker.internet.httpUrl();
     uri = Uri.parse(url);
     body = ApiFactory.makeValidBody();
-    response = HttpFactory.makeResponse(HttpStatus.ok);
   });
 
   group('POST', () {
@@ -65,7 +63,7 @@ void main() {
       await sut.request(url: url, method: method);
       // Assert
       verify(() => client.post(
-            Uri.parse(url),
+            uri,
             headers: any(named: 'headers'),
           ));
     });
@@ -73,14 +71,6 @@ void main() {
     test('Should return data if post() returns 200', () async {
       // Arrange
       //client.mockPost(url);
-
-      when(() => client.post(
-            uri,
-            headers: HttpAdapter.headers,
-          )).thenAnswer(
-        (_) async => response,
-      );
-
       when(() => client.post(
             uri,
             headers: HttpAdapter.headers,
@@ -90,10 +80,22 @@ void main() {
       // Act
       final sutResponse = await sut.request(url: url, method: method);
       // Assert
-      expect(
-        sutResponse,
-        HttpFactory.makeBody(),
+      expect(sutResponse, HttpFactory.makeBody());
+    });
+
+    test('Should return null if post() returns 200 with no data', () async {
+      // Arrange
+      //client.mockPost(url);
+      when(() => client.post(
+            uri,
+            headers: HttpAdapter.headers,
+          )).thenAnswer(
+        (_) async => HttpFactory.makeEmptyResponse(HttpStatus.ok),
       );
+      // Act
+      final sutResponse = await sut.request(url: url, method: method);
+      // Assert
+      expect(sutResponse, null);
     });
   });
 }

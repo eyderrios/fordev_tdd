@@ -23,7 +23,11 @@ class RemoteAuthentication implements Authentication {
         method: 'post',
         body: RemoteAuthenticationParams.fromDomain(params).toJson(),
       );
-      return RemoteAccountModel.fromJson(response).toEntity();
+      if (response != null) {
+        return RemoteAccountModel.fromJson(response).toEntity();
+      } else {
+        throw HttpError.invalidData;
+      }
     } on HttpError catch (error) {
       throw (error == HttpError.unauthorized)
           ? DomainError.invalidCredentials

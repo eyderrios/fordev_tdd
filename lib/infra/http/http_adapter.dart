@@ -15,7 +15,8 @@ class HttpAdapter implements HttpClient {
 
   HttpAdapter(this.client);
 
-  Future<HttpClientBody> request({
+  @override
+  Future<HttpClientBody?> request({
     required String url,
     required String method,
     HttpClientBody? body,
@@ -25,6 +26,6 @@ class HttpAdapter implements HttpClient {
       headers: HttpAdapter.headers,
       body: (body != null) ? jsonEncode(body) : null,
     );
-    return jsonDecode(response.body);
+    return response.body.isNotEmpty ? jsonDecode(response.body) : null;
   }
 }
