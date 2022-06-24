@@ -8,14 +8,14 @@
 5. ✅ No content - 204 e resposta sem dados
 
 > ## Erros
-1. Bad request (400)
+1. ✅ Bad request (400)
 2. Unauthorized (401)
 3. Forbidden (403)
 4. Not found (404)
-5. Internal server error (500)
+5. ✅ Internal server error (500)
 
 ## Exceção - Status code diferente dos listados acima
-1. Internal server error (500)
+1. ✅ Internal server error (500)
 
 ## Exceção - HTTP request levantou alguma exceção
 1. Internal server error (500)

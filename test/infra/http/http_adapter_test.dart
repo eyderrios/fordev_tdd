@@ -90,6 +90,16 @@ void main() {
       expect(sutResponse, null);
     });
 
+    test('Should return BadRequestError if post() returns 400 with no body',
+        () async {
+      // Arrange
+      client.mockResponse(HttpStatus.badRequest, '');
+      // Act
+      final future = sut.request(url: url, method: method);
+      // Assert
+      expect(future, throwsA(HttpError.badRequest));
+    });
+
     test('Should return BadRequestError if post() returns 400', () async {
       // Arrange
       client.mockResponse(HttpStatus.badRequest, jsonBody);
@@ -97,6 +107,15 @@ void main() {
       final future = sut.request(url: url, method: method);
       // Assert
       expect(future, throwsA(HttpError.badRequest));
+    });
+
+    test('Should return ServerError if post() returns 500', () async {
+      // Arrange
+      client.mockResponse(HttpStatus.internalServerError, jsonBody);
+      // Act
+      final future = sut.request(url: url, method: method);
+      // Assert
+      expect(future, throwsA(HttpError.serverError));
     });
   });
 }
