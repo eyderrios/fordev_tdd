@@ -15,6 +15,22 @@ class HttpAdapter implements HttpClient {
 
   HttpAdapter(this.client);
 
+  HttpClientBody? _handleResponse(Response response) {
+    HttpClientBody? body;
+
+    switch (response.statusCode) {
+      case HttpStatus.ok:
+        body = response.body.isNotEmpty ? jsonDecode(response.body) : null;
+        break;
+      case HttpStatus.noContent:
+        body = null;
+        break;
+      default:
+        throw HttpError.badRequest;
+    }
+    return body;
+  }
+
   @override
   Future<HttpClientBody?> request({
     required String url,
@@ -27,9 +43,6 @@ class HttpAdapter implements HttpClient {
       headers: HttpAdapter.headers,
       body: jsonBody,
     );
-    if (response.statusCode == HttpStatus.ok) {
-      return response.body.isNotEmpty ? jsonDecode(response.body) : null;
-    }
-    return null;
+    return _handleResponse(response);
   }
 }

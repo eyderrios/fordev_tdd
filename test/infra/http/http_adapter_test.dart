@@ -80,6 +80,7 @@ void main() {
       // Assert
       expect(sutResponse, null);
     });
+
     test('Should return null if post() returns 204 with data', () async {
       // Arrange
       client.mockResponse(HttpStatus.noContent, jsonBody);
@@ -87,6 +88,15 @@ void main() {
       final sutResponse = await sut.request(url: url, method: method);
       // Assert
       expect(sutResponse, null);
+    });
+
+    test('Should return BadRequestError if post() returns 400', () async {
+      // Arrange
+      client.mockResponse(HttpStatus.badRequest, jsonBody);
+      // Act
+      final future = sut.request(url: url, method: method);
+      // Assert
+      expect(future, throwsA(HttpError.badRequest));
     });
   });
 }
