@@ -118,6 +118,23 @@ void main() {
       expect(future, throwsA(HttpError.unauthorized));
     });
 
+    test('Should return ForbiddenError if post() returns 403', () async {
+      // Arrange
+      client.mockResponse(HttpStatus.forbidden, jsonBody);
+      // Act
+      final future = sut.request(url: url, method: method);
+      // Assert
+      expect(future, throwsA(HttpError.forbidden));
+    });
+
+    test('Should return NotFoundError if post() returns 404', () async {
+      // Arrange
+      client.mockResponse(HttpStatus.notFound, jsonBody);
+      // Act
+      final future = sut.request(url: url, method: method);
+      // Assert
+      expect(future, throwsA(HttpError.notFound));
+    });
     test('Should return ServerError if post() returns 500', () async {
       // Arrange
       client.mockResponse(HttpStatus.internalServerError, jsonBody);
