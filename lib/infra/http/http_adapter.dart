@@ -21,11 +21,15 @@ class HttpAdapter implements HttpClient {
     required String method,
     HttpClientBody? body,
   }) async {
+    final jsonBody = (body != null) ? jsonEncode(body) : null;
     final response = await client.post(
       Uri.parse(url),
       headers: HttpAdapter.headers,
-      body: (body != null) ? jsonEncode(body) : null,
+      body: jsonBody,
     );
-    return response.body.isNotEmpty ? jsonDecode(response.body) : null;
+    if (response.statusCode == HttpStatus.ok) {
+      return response.body.isNotEmpty ? jsonDecode(response.body) : null;
+    }
+    return null;
   }
 }

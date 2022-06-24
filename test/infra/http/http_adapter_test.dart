@@ -80,5 +80,13 @@ void main() {
       // Assert
       expect(sutResponse, null);
     });
+    test('Should return null if post() returns 204 with data', () async {
+      // Arrange
+      client.mockResponse(HttpStatus.noContent, jsonBody);
+      // Act
+      final sutResponse = await sut.request(url: url, method: method);
+      // Assert
+      expect(sutResponse, null);
+    });
   });
 }
