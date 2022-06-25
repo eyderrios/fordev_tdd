@@ -1,10 +1,12 @@
 import 'package:mocktail/mocktail.dart';
 
-import 'package:fordev_tdd/validation/validators/validation.dart';
+import 'package:fordev_tdd/presentation/protocols/protocols.dart';
 
 class ValidationSpy extends Mock implements Validation {
-  void mockValidate(String? error) {
-    when(() => validate(field: any(named: 'field'), value: any(named: 'value')))
-        .thenReturn(error);
+  void mockValidation({String? field, String? value}) {
+    when(() => validate(
+          field: (field == null) ? any(named: 'field') : field,
+          value: any(named: 'value'),
+        )).thenReturn(value);
   }
 }

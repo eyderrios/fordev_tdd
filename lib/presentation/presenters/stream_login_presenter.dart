@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
+
 import '../../ui/pages/login/login_presenter.dart';
-import '../../validation/validators/validation.dart';
+import '../protocols/validation.dart';
 
 class LoginState {
   String? emailError;
@@ -24,7 +26,7 @@ class StreamLoginPresenter implements LoginPresenter {
 
   @override
   Stream<String> get emailErrorStream =>
-      _controller.stream.map((state) => state.emailError ?? '');
+      _controller.stream.map((state) => state.emailError ?? '').distinct();
 
   @override
   Stream<bool> get isFormValidStream => throw UnimplementedError();
@@ -41,6 +43,7 @@ class StreamLoginPresenter implements LoginPresenter {
   @override
   void validateEmail(String email) {
     _state.emailError = validation.validate(field: 'email', value: email);
+    debugPrint('_state: ${_state.emailError}, value: $email');
     _controller.add(_state);
   }
 
