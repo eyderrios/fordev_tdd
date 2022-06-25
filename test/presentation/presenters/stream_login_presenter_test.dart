@@ -10,6 +10,7 @@ void main() {
   late ValidationSpy validation;
   late StreamLoginPresenter sut;
   late String email;
+  const String error = 'Some error message';
 
   setUp(() {
     validation = ValidationSpy();
@@ -18,8 +19,19 @@ void main() {
   });
 
   test('Should call validation with correct email', () {
+    validation.mockValidate(null);
+
     sut.validateEmail(email);
 
     verify(() => validation.validate(field: 'email', value: email)).called(1);
+  });
+
+  test('Should emit email error if validation fails', () {
+    // Arrange
+    validation.mockValidate(error);
+    // Late Assert
+    expectLater(sut.emailErrorStream, emits(error));
+    // Act
+    sut.validateEmail(email);
   });
 }
