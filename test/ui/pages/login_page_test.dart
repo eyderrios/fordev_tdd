@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -10,13 +12,17 @@ import 'package:mocktail/mocktail.dart';
 import '../mocks/login_presenter_spy.dart';
 
 void main() {
-  late LoginPresenter presenter;
+  late LoginPresenterSpy presenter;
 
   Future<void> loadPage(WidgetTester tester) async {
     presenter = LoginPresenterSpy();
     final loginPage = MaterialApp(home: LoginPage(presenter));
     await tester.pumpWidget(loginPage);
   }
+
+  tearDown(() {
+    presenter.dispose();
+  });
 
   testWidgets('Should load with correct initial state',
       (WidgetTester tester) async {
@@ -58,5 +64,17 @@ void main() {
     await tester.enterText(find.bySemanticsLabel(R.strings.password), password);
 
     verify(() => presenter.validatePassword(password));
+  });
+
+  testWidgets('Should present error if email is invalid',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    const error = 'some_error';
+
+    presenter.emitEmailError(error);
+    await tester.pump();
+
+    expect(find.text(error), findsOneWidget);
   });
 }
