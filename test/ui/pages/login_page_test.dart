@@ -5,10 +5,15 @@ import 'package:fordev_tdd/ui/pages/login_page.dart';
 import 'package:fordev_tdd/utils/i18n/i18n.dart';
 
 void main() {
-  testWidgets('', (WidgetTester tester) async {
-    // Arrange
+  Future<void> loadPage(WidgetTester tester) async {
     const loginPage = MaterialApp(home: LoginPage());
     await tester.pumpWidget(loginPage);
+  }
+
+  testWidgets('Should load with correct initial state',
+      (WidgetTester tester) async {
+    // Arrange
+    await loadPage(tester);
 
     // When a TextFormField has only one text child, means it has no errors,
     // since one of the children is always the labelText widget
@@ -29,5 +34,11 @@ void main() {
     // When app starts login button should be disabled
     final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
     expect(button.onPressed, null);
+  });
+
+  testWidgets('Should call validate with correct values',
+      (WidgetTester tester) async {
+    // Arrange
+    await loadPage(tester);
   });
 }
