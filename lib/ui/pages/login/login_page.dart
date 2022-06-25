@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fordev_tdd/ui/components/error_snackbar.dart';
 import 'package:fordev_tdd/ui/components/spinner_dialog.dart';
 
 import '../../../utils/i18n/i18n.dart';
@@ -35,13 +36,7 @@ class _LoginPageState extends State<LoginPage> {
         });
 
         widget.presenter!.mainErrorStream.listen((error) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            backgroundColor: Colors.red.shade900,
-            content: Text(
-              error,
-              textAlign: TextAlign.center,
-            ),
-          ));
+          showErrorMessage(context, error);
         });
 
         return SingleChildScrollView(
