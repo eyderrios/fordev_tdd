@@ -27,6 +27,17 @@ void main() {
     mapBody = jsonDecode(jsonBody);
   });
 
+  group('COMMON', () {
+    test('Should throw ServerError if invalid method is provided', () async {
+      // Arrange
+      client.mockResponse(HttpStatus.ok, jsonBody);
+      // Act
+      final future = sut.request(url: url, method: 'invalid_method');
+      // Assert
+      expect(future, throwsA(HttpError.serverError));
+    });
+  });
+
   group('POST', () {
     test('Should call post() with correct parameters (url, method, body)',
         () async {
@@ -135,6 +146,7 @@ void main() {
       // Assert
       expect(future, throwsA(HttpError.notFound));
     });
+
     test('Should return ServerError if post() returns 500', () async {
       // Arrange
       client.mockResponse(HttpStatus.internalServerError, jsonBody);

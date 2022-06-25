@@ -6,6 +6,8 @@ import 'package:http/http.dart';
 import '../../data/http/http.dart';
 
 class HttpAdapter implements HttpClient {
+  static const postMethod = 'post';
+
   static const Map<String, String> headers = {
     HttpHeaders.contentTypeHeader: 'application/json',
     HttpHeaders.acceptHeader: 'application/json',
@@ -45,12 +47,18 @@ class HttpAdapter implements HttpClient {
     required String method,
     HttpClientBody? body,
   }) async {
+    Response response;
     final jsonBody = (body != null) ? jsonEncode(body) : null;
-    final response = await client.post(
-      Uri.parse(url),
-      headers: HttpAdapter.headers,
-      body: jsonBody,
-    );
+
+    if (method == HttpAdapter.postMethod) {
+      response = await client.post(
+        Uri.parse(url),
+        headers: HttpAdapter.headers,
+        body: jsonBody,
+      );
+    } else {
+      response = Response('', HttpStatus.internalServerError);
+    }
     return _handleResponse(response);
   }
 }
