@@ -11,12 +11,14 @@ void main() {
   late ValidationSpy validation;
   late StreamLoginPresenter sut;
   late String email;
+  late String password;
   const String error = 'Some error message';
 
   setUp(() {
     validation = ValidationSpy();
     sut = StreamLoginPresenter(validation: validation);
     email = faker.internet.email();
+    password = faker.internet.password();
   });
 
   test('Should call validation with correct email', () {
@@ -54,5 +56,15 @@ void main() {
     }); // Act
     sut.validateEmail(email);
     sut.validateEmail(email);
+  });
+
+  test('Should call validation with correct password', () {
+    // Arrange
+    validation.mockValidation();
+    // Act
+    sut.validatePassword(password);
+    // Assert
+    verify(() => validation.validate(field: 'password', value: password))
+        .called(1);
   });
 }

@@ -7,6 +7,7 @@ import '../protocols/validation.dart';
 
 class LoginState {
   String? emailError;
+  String? passwordError;
 
   bool get isFormValid => false;
 }
@@ -46,10 +47,13 @@ class StreamLoginPresenter implements LoginPresenter {
   @override
   void validateEmail(String email) {
     _state.emailError = validation.validate(field: 'email', value: email);
-    debugPrint('_state: ${_state.emailError}, value: $email');
     _controller.add(_state);
   }
 
   @override
-  void validatePassword(String password) {}
+  void validatePassword(String password) {
+    _state.passwordError =
+        validation.validate(field: 'password', value: password);
+    //_controller.add(_state);
+  }
 }
