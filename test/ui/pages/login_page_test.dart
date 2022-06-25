@@ -105,4 +105,20 @@ void main() {
 
     expect(find.text(error), findsOneWidget);
   });
+
+  testWidgets('Should present no error if password is valid',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    presenter.emitPasswordError('');
+    await tester.pump();
+
+    // When a TextFormField has only one text child, means it has no errors,
+    // since one of the children is always the labelText widget
+    final passwordText = find.descendant(
+      of: find.bySemanticsLabel(R.strings.password),
+      matching: find.byType(Text),
+    );
+    expect(passwordText, findsOneWidget);
+  });
 }

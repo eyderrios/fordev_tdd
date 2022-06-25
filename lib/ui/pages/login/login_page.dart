@@ -57,7 +57,9 @@ class LoginPage extends StatelessWidget {
                                   Icons.lock,
                                   color: Theme.of(context).primaryColorLight,
                                 ),
-                                errorText: snapshot.data,
+                                errorText: (snapshot.data?.isNotEmpty) == true
+                                    ? snapshot.data
+                                    : null,
                               ),
                               obscureText: true,
                               onChanged: presenter!.validatePassword,
