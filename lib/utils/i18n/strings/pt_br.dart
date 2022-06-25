@@ -4,17 +4,20 @@ import './translations.dart';
 
 class PtBr implements Translations {
   @override
+  String get appName => '4Dev';
+
+  @override
   String get addAccount => 'Criar Conta';
 
   @override
   String get enter => 'entrar';
 
   @override
-  String get email => 'e-mail';
+  String get email => 'E-mail';
 
   @override
   String get login => 'login';
 
   @override
-  String get password => 'senha';
+  String get password => 'Senha';
 }

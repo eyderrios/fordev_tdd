@@ -2,10 +2,13 @@ import './translations.dart';
 
 class EnUs implements Translations {
   @override
+  String get appName => '4Dev';
+
+  @override
   String get addAccount => 'Create Account';
 
   @override
-  String get email => 'email';
+  String get email => 'E-mail';
 
   @override
   String get enter => 'enter';
@@ -14,5 +17,5 @@ class EnUs implements Translations {
   String get login => 'login';
 
   @override
-  String get password => 'password';
+  String get password => 'Password';
 }
