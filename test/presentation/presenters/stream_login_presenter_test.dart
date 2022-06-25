@@ -33,11 +33,26 @@ void main() {
     validation.mockValidation(value: error);
     // Late Assert
     sut.emailErrorStream.listen((error) {
-      debugPrint('>>>>> sut.emailErrorStream.listen($error)');
       expectAsync1((errorMsg) => expect(errorMsg, error));
     });
-    // Act
+    sut.isFormValidStream.listen((error) {
+      expectAsync1((isValid) => expect(isValid, false));
+    }); // Act
     sut.validateEmail(email);
-    //sut.validateEmail(email);
+    sut.validateEmail(email);
+  });
+
+  test('Should emit null if validation succeeds', skip: 'Not working', () {
+    // Arrange
+    validation.mockValidation();
+    // Late Assert
+    sut.emailErrorStream.listen((error) {
+      expectAsync1((errorMsg) => expect(errorMsg, null));
+    });
+    sut.isFormValidStream.listen((error) {
+      expectAsync1((isValid) => expect(isValid, false));
+    }); // Act
+    sut.validateEmail(email);
+    sut.validateEmail(email);
   });
 }
