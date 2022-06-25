@@ -7,6 +7,8 @@ import '../protocols/validation.dart';
 
 class LoginState {
   String? emailError;
+
+  bool get isFormValid => false;
 }
 
 class StreamLoginPresenter implements LoginPresenter {
@@ -29,7 +31,8 @@ class StreamLoginPresenter implements LoginPresenter {
       _controller.stream.map((state) => state.emailError ?? '').distinct();
 
   @override
-  Stream<bool> get isFormValidStream => throw UnimplementedError();
+  Stream<bool> get isFormValidStream =>
+      _controller.stream.map((state) => state.isFormValid).distinct();
 
   @override
   Stream<bool> get isLoadingStream => throw UnimplementedError();
