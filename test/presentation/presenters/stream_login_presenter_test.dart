@@ -67,4 +67,19 @@ void main() {
     verify(() => validation.validate(field: 'password', value: password))
         .called(1);
   });
+
+  test('Should emit password error if validation fails', skip: 'Not working',
+      () {
+    // Arrange
+    validation.mockValidation(value: error);
+    // Late Assert
+    sut.passwordErrorStream.listen((error) {
+      expectAsync1((errorMsg) => expect(errorMsg, error));
+    });
+    sut.isFormValidStream.listen((error) {
+      expectAsync1((isValid) => expect(isValid, false));
+    }); // Act
+    sut.validatePassword(password);
+    sut.validatePassword(password);
+  });
 }
