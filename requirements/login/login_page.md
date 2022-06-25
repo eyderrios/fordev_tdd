@@ -14,6 +14,6 @@
 11. ✅ Desabilitar o botão de fzer login se algum campo for invalidado
 12. ✅ Exibir loading no início da ação de login
 13. ✅ Chamar método de autenticação do usuário
-14. Exibir mensagem de erro caso o login falhe
+14. ✅ Exibir mensagem de erro caso o login falhe
 15. ✅ Esconder loading ao final da ação de login
 16. fechar streams quando a página for encerrada

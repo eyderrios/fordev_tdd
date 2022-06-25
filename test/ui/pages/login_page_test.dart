@@ -169,4 +169,15 @@ void main() {
 
     expect(find.byType(CircularProgressIndicator), findsNothing);
   });
+
+  testWidgets('Should present error message if authentication fails',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    const error = 'Some error message';
+    presenter.emitMainError(error);
+    await tester.pump();
+
+    expect(find.text(error), findsOneWidget);
+  });
 }
