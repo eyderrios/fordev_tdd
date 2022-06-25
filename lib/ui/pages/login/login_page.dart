@@ -60,26 +60,7 @@ class _LoginPageState extends State<LoginPage> {
                             top: 8.0,
                             bottom: 32.0,
                           ),
-                          child: StreamBuilder<String?>(
-                              stream: widget.presenter!.passwordErrorStream,
-                              builder: (context, snapshot) {
-                                return TextFormField(
-                                  decoration: InputDecoration(
-                                    labelText: R.strings.password,
-                                    icon: Icon(
-                                      Icons.lock,
-                                      color:
-                                          Theme.of(context).primaryColorLight,
-                                    ),
-                                    errorText:
-                                        (snapshot.data?.isNotEmpty) == true
-                                            ? snapshot.data
-                                            : null,
-                                  ),
-                                  obscureText: true,
-                                  onChanged: widget.presenter!.validatePassword,
-                                );
-                              }),
+                          child: PasswordInput(),
                         ),
                         StreamBuilder<bool>(
                             stream: widget.presenter!.isFormValidStream,
