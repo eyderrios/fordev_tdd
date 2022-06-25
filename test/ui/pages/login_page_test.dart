@@ -48,6 +48,9 @@ void main() {
     // When app starts login button should be disabled
     final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
     expect(button.onPressed, null);
+
+    // No loading on start
+    expect(find.byType(CircularProgressIndicator), findsNothing);
   });
 
   testWidgets('Should call validate with correct values',
@@ -156,12 +159,14 @@ void main() {
     verify(() => presenter.auth()).called(1);
   });
 
-  testWidgets('Should present loading', (WidgetTester tester) async {
+  testWidgets('Should hide loading', (WidgetTester tester) async {
     await loadPage(tester);
 
     presenter.emitLoadind(true);
     await tester.pump();
+    presenter.emitLoadind(false);
+    await tester.pump();
 
-    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    expect(find.byType(CircularProgressIndicator), findsNothing);
   });
 }
