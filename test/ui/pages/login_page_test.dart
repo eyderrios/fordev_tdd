@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:fordev_tdd/ui/pages/login/login_page.dart';
-import 'package:fordev_tdd/ui/pages/login/login_presenter.dart';
 import 'package:fordev_tdd/utils/i18n/i18n.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -179,5 +178,13 @@ void main() {
     await tester.pump();
 
     expect(find.text(error), findsOneWidget);
+  });
+
+  testWidgets('Should close streams on dispose', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    addTearDown(() {
+      verify(() => presenter.dispose()).called(1);
+    });
   });
 }

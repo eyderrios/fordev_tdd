@@ -28,6 +28,7 @@ class LoginPresenterSpy extends Mock implements LoginPresenter {
   void emitLoadind(bool show) => isLoadingController.add(show);
   void emitMainError(String error) => mainErrorController.add(error);
 
+  @override
   void dispose() {
     emailErrorController.close();
     passwordErrorController.close();
