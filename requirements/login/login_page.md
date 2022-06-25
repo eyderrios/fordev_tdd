@@ -10,7 +10,7 @@
 7. ✅ Validar senha quando o usuário digitar no campo
 8. ✅ Mostrar mensagem de erro se a senha for inválida
 9. ✅ Remover mensagem de erro se a senha for válida
-10. Habilitar o botão de fzer login se todos os campos forem válidos
+10. ✅ Habilitar o botão de fzer login se todos os campos forem válidos
 11. Desabilitar o botão de fzer login se algum campo for invalidado
 12. Exibir mensagem de erro caso o login falhe
 13. Autenticar usuário com email e senha informados no formulário
