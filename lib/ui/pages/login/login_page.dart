@@ -2,12 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../utils/i18n/i18n.dart';
-import '../../components/error_snackbar.dart';
-import '../../components/headline1.dart';
-import '../../components/login_header.dart';
-import '../../components/spinner_dialog.dart';
-import './components/components.dart';
-import './login_presenter.dart';
+import '../../components/components.dart';
+import 'components/components.dart';
+import 'login_presenter.dart';
 
 class LoginPage extends StatefulWidget {
   final LoginPresenter? presenter;
@@ -55,23 +52,14 @@ class _LoginPageState extends State<LoginPage> {
                     child: Column(
                       children: [
                         const EmailInput(),
-                        Padding(
-                          padding: const EdgeInsets.only(
+                        const Padding(
+                          padding: EdgeInsets.only(
                             top: 8.0,
                             bottom: 32.0,
                           ),
                           child: PasswordInput(),
                         ),
-                        StreamBuilder<bool>(
-                            stream: widget.presenter!.isFormValidStream,
-                            builder: (context, snapshot) {
-                              return ElevatedButton(
-                                onPressed: (snapshot.data == true)
-                                    ? widget.presenter!.auth
-                                    : null,
-                                child: Text(R.strings.enter.toUpperCase()),
-                              );
-                            }),
+                        const LoginButton(),
                         TextButton.icon(
                           onPressed: () {},
                           icon: const Icon(Icons.person),
