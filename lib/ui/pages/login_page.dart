@@ -46,7 +46,7 @@ class LoginPage extends StatelessWidget {
                       ),
                     ),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: null,
                       child: Text(R.strings.enter.toUpperCase()),
                     ),
                     TextButton.icon(
