@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../utils/i18n/resources.dart';
-import '../pages/login_page.dart';
+import '../pages/login/login_page.dart';
 
 class ForDevApp extends StatelessWidget {
   const ForDevApp({Key? key}) : super(key: key);
@@ -55,7 +55,7 @@ class ForDevApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const LoginPage(),
+      home: const LoginPage(null),
     );
   }
 }

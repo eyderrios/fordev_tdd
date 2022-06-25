@@ -1,12 +1,20 @@
+import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:fordev_tdd/ui/pages/login_page.dart';
+import 'package:fordev_tdd/ui/pages/login/login_page.dart';
+import 'package:fordev_tdd/ui/pages/login/login_presenter.dart';
 import 'package:fordev_tdd/utils/i18n/i18n.dart';
+import 'package:mocktail/mocktail.dart';
+
+import '../mocks/login_presenter_spy.dart';
 
 void main() {
+  late LoginPresenter presenter;
+
   Future<void> loadPage(WidgetTester tester) async {
-    const loginPage = MaterialApp(home: LoginPage());
+    presenter = LoginPresenterSpy();
+    final loginPage = MaterialApp(home: LoginPage(presenter));
     await tester.pumpWidget(loginPage);
   }
 
@@ -38,7 +46,17 @@ void main() {
 
   testWidgets('Should call validate with correct values',
       (WidgetTester tester) async {
-    // Arrange
     await loadPage(tester);
+
+    // Should call validateEmail by typing in email field
+    final email = faker.internet.email();
+    await tester.enterText(find.bySemanticsLabel(R.strings.email), email);
+    verify(() => presenter.validateEmail(email));
+
+    // Should call validatePassword by typing in email field
+    final password = faker.internet.password();
+    await tester.enterText(find.bySemanticsLabel(R.strings.password), password);
+
+    verify(() => presenter.validatePassword(password));
   });
 }
