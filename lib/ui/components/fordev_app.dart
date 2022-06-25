@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../utils/i18n/resources.dart';
 import '../pages/login_page.dart';
@@ -12,6 +13,8 @@ class ForDevApp extends StatelessWidget {
     const primaryColorDark = Color.fromRGBO(96, 0, 39, 1.0);
     const primaryColorLight = Color.fromRGBO(188, 71, 123, 1.0);
     const backgroundColor = Colors.white;
+
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
