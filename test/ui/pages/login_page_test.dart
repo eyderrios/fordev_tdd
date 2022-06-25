@@ -93,4 +93,16 @@ void main() {
     );
     expect(emailText, findsOneWidget);
   });
+
+  testWidgets('Should present error if password is invalid',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    const error = 'some_error';
+
+    presenter.emitPasswordError(error);
+    await tester.pump();
+
+    expect(find.text(error), findsOneWidget);
+  });
 }
