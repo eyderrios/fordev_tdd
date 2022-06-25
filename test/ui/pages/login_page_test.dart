@@ -77,4 +77,20 @@ void main() {
 
     expect(find.text(error), findsOneWidget);
   });
+
+  testWidgets('Should present no error if email is valid',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    presenter.emitEmailError('');
+    await tester.pump();
+
+    // When a TextFormField has only one text child, means it has no errors,
+    // since one of the children is always the labelText widget
+    final emailText = find.descendant(
+      of: find.bySemanticsLabel(R.strings.email),
+      matching: find.byType(Text),
+    );
+    expect(emailText, findsOneWidget);
+  });
 }
