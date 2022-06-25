@@ -82,4 +82,19 @@ void main() {
     sut.validatePassword(password);
     sut.validatePassword(password);
   });
+
+  test('Should emit password error if validation fails', skip: 'Not working',
+      () {
+    // Arrange
+    validation.mockValidation();
+    // Late Assert
+    sut.passwordErrorStream.listen((error) {
+      expectAsync1((errorMsg) => expect(errorMsg, null));
+    });
+    sut.isFormValidStream.listen((error) {
+      expectAsync1((isValid) => expect(isValid, false));
+    }); // Act
+    sut.validatePassword(password);
+    sut.validatePassword(password);
+  });
 }
