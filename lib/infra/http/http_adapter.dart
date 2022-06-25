@@ -49,15 +49,18 @@ class HttpAdapter implements HttpClient {
   }) async {
     Response response;
     final jsonBody = (body != null) ? jsonEncode(body) : null;
-
-    if (method == HttpAdapter.postMethod) {
-      response = await client.post(
-        Uri.parse(url),
-        headers: HttpAdapter.headers,
-        body: jsonBody,
-      );
-    } else {
-      response = Response('', HttpStatus.internalServerError);
+    try {
+      if (method == HttpAdapter.postMethod) {
+        response = await client.post(
+          Uri.parse(url),
+          headers: HttpAdapter.headers,
+          body: jsonBody,
+        );
+      } else {
+        response = Response('', HttpStatus.internalServerError);
+      }
+    } catch (error) {
+      throw HttpError.serverError;
     }
     return _handleResponse(response);
   }

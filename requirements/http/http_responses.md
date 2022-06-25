@@ -18,7 +18,7 @@
 1. ✅ Internal server error (500)
 
 ## Exceção - HTTP request levantou alguma exceção
-1. Internal server error (500)
+1. ✅ Internal server error (500)
 
 ## Exceção - Verbo HTTP inválido
 1. ✅ Internal server error (500)

@@ -15,4 +15,6 @@ class ClientSpy extends Mock implements http.Client {
 
   void mockResponse(int statusCode, String body) => _mockPostCall()
       .thenAnswer((_) async => HttpFactory.makeResponse(statusCode, body));
+
+  void mockError() => _mockPostCall().thenThrow(Exception());
 }

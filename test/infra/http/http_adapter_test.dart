@@ -155,5 +155,14 @@ void main() {
       // Assert
       expect(future, throwsA(HttpError.serverError));
     });
+
+    test('Should return ServerError if post() throws', () async {
+      // Arrange
+      client.mockError();
+      // Act
+      final future = sut.request(url: url, method: method);
+      // Assert
+      expect(future, throwsA(HttpError.serverError));
+    });
   });
 }
