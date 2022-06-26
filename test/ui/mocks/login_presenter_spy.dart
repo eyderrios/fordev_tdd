@@ -5,9 +5,9 @@ import 'package:mocktail/mocktail.dart';
 import 'package:fordev_tdd/ui/pages/login/login_presenter.dart';
 
 class LoginPresenterSpy extends Mock implements LoginPresenter {
-  final emailErrorController = StreamController<String>();
-  final passwordErrorController = StreamController<String>();
-  final mainErrorController = StreamController<String>();
+  final emailErrorController = StreamController<String?>();
+  final passwordErrorController = StreamController<String?>();
+  final mainErrorController = StreamController<String?>();
   final isFormValidController = StreamController<bool>();
   final isLoadingController = StreamController<bool>();
 

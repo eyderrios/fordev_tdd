@@ -1,9 +1,7 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
-
 import '../../ui/pages/login/login_presenter.dart';
-import '../protocols/validation.dart';
+import '../protocols/validator.dart';
 
 class LoginState {
   String? emailError;
@@ -13,11 +11,15 @@ class LoginState {
 }
 
 class StreamLoginPresenter implements LoginPresenter {
-  final Validation validation;
-  final _controller = StreamController<LoginState>.broadcast();
-  final _state = LoginState();
+  static const emailFieldName = 'email';
+  static const passwordFieldName = 'password';
 
-  StreamLoginPresenter({required this.validation});
+  final _state = LoginState();
+  final _controller = StreamController<LoginState>.broadcast();
+
+  final Validator validator;
+
+  StreamLoginPresenter({required this.validator});
 
   @override
   Future<void> auth() {
@@ -28,16 +30,16 @@ class StreamLoginPresenter implements LoginPresenter {
   void dispose() {}
 
   @override
-  Stream<String> get emailErrorStream =>
-      _controller.stream.map((state) => state.emailError ?? '').distinct();
+  Stream<String?> get emailErrorStream =>
+      _controller.stream.map((state) => state.emailError).distinct();
+
+  @override
+  Stream<String?> get passwordErrorStream =>
+      _controller.stream.map((state) => state.passwordError).distinct();
 
   @override
   Stream<bool> get isFormValidStream =>
       _controller.stream.map((state) => state.isFormValid).distinct();
-
-  @override
-  Stream<String> get passwordErrorStream =>
-      _controller.stream.map((state) => state.passwordError ?? '').distinct();
 
   @override
   Stream<bool> get isLoadingStream => throw UnimplementedError();
@@ -49,14 +51,19 @@ class StreamLoginPresenter implements LoginPresenter {
 
   @override
   void validateEmail(String email) {
-    _state.emailError = validation.validate(field: 'email', value: email);
+    _state.emailError = validator.validate(
+      field: StreamLoginPresenter.emailFieldName,
+      value: email,
+    );
     _updatestate();
   }
 
   @override
   void validatePassword(String password) {
-    _state.passwordError =
-        validation.validate(field: 'password', value: password);
+    _state.passwordError = validator.validate(
+      field: StreamLoginPresenter.passwordFieldName,
+      value: password,
+    );
     _updatestate();
   }
 }
