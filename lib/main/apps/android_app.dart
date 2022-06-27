@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-import '../ui/components/app_theme.dart';
-import '../utils/i18n/resources.dart';
+import '../../ui/components/app_theme.dart';
+import '../../utils/i18n/resources.dart';
+import '../factories/factories.dart';
 import './app_routes.dart';
-import './factories/factories.dart';
 
 class AndroidApp extends StatelessWidget {
   const AndroidApp({Key? key}) : super(key: key);

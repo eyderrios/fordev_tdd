@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
-import '../utils/i18n/resources.dart';
-import '../ui/pages/login/login_page.dart';
-import '../ui/components/app_theme.dart';
+import '../../utils/i18n/resources.dart';
+import '../../ui/pages/login/login_page.dart';
+import '../../ui/components/app_theme.dart';
 
 class IOSApp extends StatelessWidget {
   const IOSApp({Key? key}) : super(key: key);
