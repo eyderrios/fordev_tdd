@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:fordev_tdd/domain/usecases/usecases.dart';
+
 import '../../ui/pages/login/login_presenter.dart';
 import '../protocols/validator.dart';
 
@@ -25,13 +27,12 @@ class StreamLoginPresenter implements LoginPresenter {
   final _controller = StreamController<LoginState>.broadcast();
 
   final Validator validator;
+  final Authentication authentication;
 
-  StreamLoginPresenter({required this.validator});
-
-  @override
-  Future<void> auth() {
-    throw UnimplementedError();
-  }
+  StreamLoginPresenter({
+    required this.validator,
+    required this.authentication,
+  });
 
   @override
   void dispose() {}
@@ -74,5 +75,13 @@ class StreamLoginPresenter implements LoginPresenter {
       value: password,
     );
     _updatestate();
+  }
+
+  @override
+  Future<void> auth() async {
+    await authentication.auth(AuthenticationParams(
+      email: _state.email!,
+      password: _state.password!,
+    ));
   }
 }

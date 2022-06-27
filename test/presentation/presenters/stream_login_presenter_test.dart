@@ -1,23 +1,30 @@
 import 'package:faker/faker.dart';
+import 'package:fordev_tdd/domain/usecases/authentication.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
 import 'package:fordev_tdd/presentation/presenters/presenters.dart';
 
+import '../../domain/mocks/mocks.dart';
 import '../../ui/mocks/mocks.dart';
 
 void main() {
-  late ValidationSpy validator;
-  late StreamLoginPresenter sut;
+  const String error = 'Some error message';
   late String email;
   late String password;
-  const String error = 'Some error message';
+
+  late AuthenticationParams params;
+  late ValidationSpy validator;
+  late AuthenticationSpy auth;
+  late StreamLoginPresenter sut;
 
   setUp(() {
-    validator = ValidationSpy();
-    sut = StreamLoginPresenter(validator: validator);
     email = faker.internet.email();
     password = faker.internet.password();
+    params = AuthenticationParams(email: email, password: password);
+    auth = AuthenticationSpy();
+    validator = ValidationSpy();
+    sut = StreamLoginPresenter(validator: validator, authentication: auth);
   });
 
   test('Should call validation with correct email', () {
@@ -113,7 +120,7 @@ void main() {
     sut.isFormValidStream
         .listen(expectAsync1((isValid) => expect(isValid, false)));
     // Act
-    sut.validateEmail(password);
+    sut.validateEmail(email);
     sut.validatePassword(password);
   });
 
@@ -134,8 +141,20 @@ void main() {
         .listen(expectAsync1((errorMsg) => expect(errorMsg, null)));
     expectLater(sut.isFormValidStream, emitsInOrder([false, true]));
     // Act
-    sut.validateEmail(password);
+    sut.validateEmail(email);
     await Future.delayed(Duration.zero);
     sut.validatePassword(password);
+  });
+
+  test('Should call Authentication if correct parameters', () async {
+    // Arrange
+    auth.mockAuth(params);
+
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+    // Act
+    await sut.auth();
+    // Assert
+    verify(() => auth.auth(params)).called(1);
   });
 }
