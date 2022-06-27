@@ -1,5 +1,6 @@
 import 'package:mocktail/mocktail.dart';
 
+import 'package:fordev_tdd/domain/helpers/domain_error.dart';
 import 'package:fordev_tdd/domain/usecases/usecases.dart';
 
 import 'entity_factory.dart';
@@ -10,10 +11,18 @@ class AuthenticationSpy extends Mock implements Authentication {
     registerFallbackValue(ParamsFactory.makeAuthenticationParams());
   }
 
-  void mockAuth(AuthenticationParams? params) {
+  When _mockAuth(AuthenticationParams? params) {
     params ??= any();
-    when(() => auth(params!)).thenAnswer(
+    return when(() => auth(params!));
+  }
+
+  void mockAuth(AuthenticationParams? params) {
+    _mockAuth(params).thenAnswer(
       (_) async => EntityFactory.makeAccountEntity(),
     );
+  }
+
+  void mockAuthError(AuthenticationParams? params, DomainError error) {
+    _mockAuth(params).thenThrow(error);
   }
 }

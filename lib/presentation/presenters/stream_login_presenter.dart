@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:fordev_tdd/domain/usecases/usecases.dart';
 
+import '../../domain/helpers/domain_error.dart';
 import '../../ui/pages/login/login_presenter.dart';
 import '../protocols/validator.dart';
 
@@ -11,6 +12,7 @@ class LoginState {
 
   String? emailError;
   String? passwordError;
+  String? mainError;
 
   bool isLoading = false;
 
@@ -48,15 +50,16 @@ class StreamLoginPresenter implements LoginPresenter {
       _controller.stream.map((state) => state.passwordError).distinct();
 
   @override
+  Stream<String?> get mainErrorStream =>
+      _controller.stream.map((state) => state.mainError).distinct();
+
+  @override
   Stream<bool> get isFormValidStream =>
       _controller.stream.map((state) => state.isFormValid).distinct();
 
   @override
   Stream<bool> get isLoadingStream =>
       _controller.stream.map((state) => state.isLoading).distinct();
-
-  @override
-  Stream<String> get mainErrorStream => throw UnimplementedError();
 
   void _updateState() => _controller.add(_state);
 
@@ -85,10 +88,14 @@ class StreamLoginPresenter implements LoginPresenter {
     _state.isLoading = true;
     _updateState();
 
-    await authentication.auth(AuthenticationParams(
-      email: _state.email!,
-      password: _state.password!,
-    ));
+    try {
+      await authentication.auth(AuthenticationParams(
+        email: _state.email!,
+        password: _state.password!,
+      ));
+    } on DomainError catch (error) {
+      _state.mainError = error.description;
+    }
 
     _state.isLoading = false;
     _updateState();
