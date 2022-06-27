@@ -1,16 +1,19 @@
 import 'package:mocktail/mocktail.dart';
 
-import 'package:fordev_tdd/domain/entities/entities.dart';
 import 'package:fordev_tdd/domain/usecases/usecases.dart';
 
-class AuthenticationSpy extends Mock implements Authentication {
-  static const token = 'some_auth_token';
+import 'entity_factory.dart';
+import 'params_factory.dart';
 
-  void mockAuth(AuthenticationParams params) {
-    when(() => auth(any())).thenAnswer(
-      (_) async => AccountEntity(
-        token: AuthenticationSpy.token,
-      ),
+class AuthenticationSpy extends Mock implements Authentication {
+  AuthenticationSpy() {
+    registerFallbackValue(ParamsFactory.makeAuthenticationParams());
+  }
+
+  void mockAuth(AuthenticationParams? params) {
+    params ??= any();
+    when(() => auth(params!)).thenAnswer(
+      (_) async => EntityFactory.makeAccountEntity(),
     );
   }
 }

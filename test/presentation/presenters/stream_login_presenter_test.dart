@@ -1,8 +1,8 @@
 import 'package:faker/faker.dart';
-import 'package:fordev_tdd/domain/usecases/authentication.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
+import 'package:fordev_tdd/domain/usecases/authentication.dart';
 import 'package:fordev_tdd/presentation/presenters/presenters.dart';
 
 import '../../domain/mocks/mocks.dart';
@@ -146,7 +146,7 @@ void main() {
     sut.validatePassword(password);
   });
 
-  test('Should call Authentication if correct parameters', () async {
+  test('Should call Authentication.auth() if correct parameters', () async {
     // Arrange
     auth.mockAuth(params);
 
@@ -156,5 +156,16 @@ void main() {
     await sut.auth();
     // Assert
     verify(() => auth.auth(params)).called(1);
+  });
+
+  test('Should emit correct events on authentication success', () async {
+    // Arrange
+    auth.mockAuth(params);
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+    // Assert Later
+    expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+    // Act
+    await sut.auth();
   });
 }

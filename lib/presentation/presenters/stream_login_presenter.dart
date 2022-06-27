@@ -12,6 +12,8 @@ class LoginState {
   String? emailError;
   String? passwordError;
 
+  bool isLoading = false;
+
   bool get isFormValid =>
       (email != null) &&
       (emailError == null) &&
@@ -50,12 +52,13 @@ class StreamLoginPresenter implements LoginPresenter {
       _controller.stream.map((state) => state.isFormValid).distinct();
 
   @override
-  Stream<bool> get isLoadingStream => throw UnimplementedError();
+  Stream<bool> get isLoadingStream =>
+      _controller.stream.map((state) => state.isLoading).distinct();
 
   @override
   Stream<String> get mainErrorStream => throw UnimplementedError();
 
-  void _updatestate() => _controller.add(_state);
+  void _updateState() => _controller.add(_state);
 
   @override
   void validateEmail(String email) {
@@ -64,7 +67,7 @@ class StreamLoginPresenter implements LoginPresenter {
       field: StreamLoginPresenter.emailFieldName,
       value: email,
     );
-    _updatestate();
+    _updateState();
   }
 
   @override
@@ -74,14 +77,20 @@ class StreamLoginPresenter implements LoginPresenter {
       field: StreamLoginPresenter.passwordFieldName,
       value: password,
     );
-    _updatestate();
+    _updateState();
   }
 
   @override
   Future<void> auth() async {
+    _state.isLoading = true;
+    _updateState();
+
     await authentication.auth(AuthenticationParams(
       email: _state.email!,
       password: _state.password!,
     ));
+
+    _state.isLoading = false;
+    _updateState();
   }
 }
