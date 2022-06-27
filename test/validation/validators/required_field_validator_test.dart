@@ -9,7 +9,7 @@ void main() {
   late RequiredFieldValidator sut;
 
   setUp(() {
-    sut = RequiredFieldValidator(fieldName);
+    sut = const RequiredFieldValidator(fieldName);
   });
 
   test('Should return null if value is not empty', () {

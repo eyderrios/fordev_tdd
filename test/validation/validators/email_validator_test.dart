@@ -9,7 +9,7 @@ void main() {
   late EmailValidator sut;
 
   setUp(() {
-    sut = EmailValidator(fieldName);
+    sut = const EmailValidator(fieldName);
   });
 
   test('Should return null if email is empty', () {

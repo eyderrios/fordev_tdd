@@ -16,6 +16,13 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  void _hideKeyboard() {
+    final focus = FocusScope.of(context);
+    if (!focus.hasPrimaryFocus) {
+      focus.unfocus();
+    }
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -40,39 +47,42 @@ class _LoginPageState extends State<LoginPage> {
           }
         });
 
-        return SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const LoginHeader(),
-              Headline1(R.strings.login.toUpperCase()),
-              Padding(
-                padding: const EdgeInsets.all(32.0),
-                child: Provider<LoginPresenter>(
-                  create: (_) => widget.presenter!,
-                  child: Form(
-                    child: Column(
-                      children: [
-                        const EmailInput(),
-                        const Padding(
-                          padding: EdgeInsets.only(
-                            top: 8.0,
-                            bottom: 32.0,
+        return GestureDetector(
+          onTap: _hideKeyboard,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const LoginHeader(),
+                Headline1(R.strings.login.toUpperCase()),
+                Padding(
+                  padding: const EdgeInsets.all(32.0),
+                  child: Provider<LoginPresenter>(
+                    create: (_) => widget.presenter!,
+                    child: Form(
+                      child: Column(
+                        children: [
+                          const EmailInput(),
+                          const Padding(
+                            padding: EdgeInsets.only(
+                              top: 8.0,
+                              bottom: 32.0,
+                            ),
+                            child: PasswordInput(),
                           ),
-                          child: PasswordInput(),
-                        ),
-                        const LoginButton(),
-                        TextButton.icon(
-                          onPressed: () {},
-                          icon: const Icon(Icons.person),
-                          label: Text(R.strings.addAccount),
-                        ),
-                      ],
+                          const LoginButton(),
+                          TextButton.icon(
+                            onPressed: () {},
+                            icon: const Icon(Icons.person),
+                            label: Text(R.strings.addAccount),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       }),
