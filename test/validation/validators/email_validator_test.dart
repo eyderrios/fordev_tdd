@@ -18,4 +18,11 @@ void main() {
     // Assert
     expect(error, null);
   });
+
+  test('Should return null if email is valid', () {
+    // Act
+    final error = sut.validate(email);
+    // Assert
+    expect(error, null);
+  });
 }
