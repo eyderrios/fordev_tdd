@@ -57,7 +57,7 @@ class _LoginPageState extends State<LoginPage> {
                 Headline1(R.strings.login.toUpperCase()),
                 Padding(
                   padding: const EdgeInsets.all(32.0),
-                  child: Provider<LoginPresenter>(
+                  child: Provider(
                     create: (_) => widget.presenter!,
                     child: Form(
                       child: Column(

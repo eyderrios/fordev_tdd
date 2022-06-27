@@ -5,6 +5,6 @@ import '../../factories.dart';
 
 class LoginPageFactory {
   static Widget makeLoginPage() {
-    return LoginPage(LoginPresenterFactory.makeStreamLoginPresenter());
+    return LoginPage(LoginPresenterFactory.makeGetxLoginPresenter());
   }
 }
