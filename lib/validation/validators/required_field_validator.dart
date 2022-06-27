@@ -1,3 +1,4 @@
+import '../../utils/i18n/resources.dart';
 import './protocols/protocols.dart';
 
 class RequiredFieldValidator implements FieldValidator {
@@ -10,6 +11,6 @@ class RequiredFieldValidator implements FieldValidator {
 
   @override
   String? validate(String value) {
-    return value.isEmpty ? 'Required field' : null;
+    return value.isEmpty ? R.strings.requiredField : null;
   }
 }

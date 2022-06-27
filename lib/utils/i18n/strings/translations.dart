@@ -1,4 +1,7 @@
 abstract class Translations {
+  //
+  // Strings
+  //
   String get appName;
 
   String get addAccount;
@@ -7,8 +10,14 @@ abstract class Translations {
   String get login;
   String get password;
   String get wait;
-
-  // DomainError
+  //
+  // DomainError messages
+  //
   String get invalidCredentialsError;
   String get unexpectedError;
+  //
+  // Validators error messagens
+  //
+  String get invalidField;
+  String get requiredField;
 }

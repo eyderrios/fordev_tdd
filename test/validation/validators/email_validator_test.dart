@@ -4,7 +4,7 @@ import 'package:test/test.dart';
 import 'package:fordev_tdd/validation/validators/validators.dart';
 
 void main() {
-  const fieldName = 'field_name';
+  const fieldName = 'email';
   final email = faker.internet.email();
   late EmailValidator sut;
 

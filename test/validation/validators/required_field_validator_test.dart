@@ -1,5 +1,6 @@
 import 'package:test/test.dart';
 
+import 'package:fordev_tdd/utils/i18n/resources.dart';
 import 'package:fordev_tdd/validation/validators/validators.dart';
 
 void main() {
@@ -13,15 +14,16 @@ void main() {
 
   test('Should return null if value is not empty', () {
     // Act
-    final error = sut.validate(fieldValue);
+    final result = sut.validate(fieldValue);
     // Assert
-    expect(error, null);
+    expect(result, null);
   });
 
   test('Should return error if value is empty', () {
+    final error = R.strings.requiredField;
     // Act
-    final error = sut.validate('');
+    final result = sut.validate('');
     // Assert
-    expect(error, 'Required field');
+    expect(result, error);
   });
 }
