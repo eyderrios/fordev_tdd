@@ -10,6 +10,6 @@ class RequiredFieldValidator implements FieldValidator {
 
   @override
   String? validate(String value) {
-    return null;
+    return value.isEmpty ? 'Required field' : null;
   }
 }
