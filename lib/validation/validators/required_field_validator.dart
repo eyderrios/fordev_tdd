@@ -1,5 +1,5 @@
 import '../../utils/i18n/resources.dart';
-import './protocols/protocols.dart';
+import '../protocols/protocols.dart';
 
 class RequiredFieldValidator implements FieldValidator {
   final String _field;

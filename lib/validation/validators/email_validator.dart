@@ -1,5 +1,5 @@
 import '../../utils/i18n/resources.dart';
-import './protocols/field_validator.dart';
+import '../protocols/field_validator.dart';
 
 class EmailValidator implements FieldValidator {
   static final regex = RegExp(
