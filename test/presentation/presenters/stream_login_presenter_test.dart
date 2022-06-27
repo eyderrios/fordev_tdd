@@ -203,4 +203,14 @@ void main() {
     // Act
     await sut.auth();
   });
+
+  test('Should not emit after dispose() is called', () async {
+    // Arrange
+    auth.mockAuth(params);
+    // Assert Later
+    expectLater(sut.emailErrorStream, neverEmits(null));
+    // Act
+    sut.dispose();
+    sut.validateEmail(email);
+  });
 }
