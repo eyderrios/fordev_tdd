@@ -21,4 +21,11 @@ class EnUs implements Translations {
 
   @override
   String get wait => 'Please wait';
+
+  // DomainError
+  @override
+  String get invalidCredentialsError => 'Invalid credentials';
+
+  @override
+  String get unexpectedError => 'Unexpected error';
 }

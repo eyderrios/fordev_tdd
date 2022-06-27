@@ -1,8 +1,7 @@
 import 'dart:async';
 
-import 'package:fordev_tdd/domain/usecases/usecases.dart';
-
 import '../../domain/helpers/domain_error.dart';
+import '../../domain/usecases/usecases.dart';
 import '../../ui/pages/login/login_presenter.dart';
 import '../protocols/validator.dart';
 

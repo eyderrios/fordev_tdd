@@ -7,4 +7,8 @@ abstract class Translations {
   String get login;
   String get password;
   String get wait;
+
+  // DomainError
+  String get invalidCredentialsError;
+  String get unexpectedError;
 }

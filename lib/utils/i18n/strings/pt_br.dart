@@ -23,4 +23,11 @@ class PtBr implements Translations {
 
   @override
   String get wait => 'Aguarde';
+
+  // DomainError
+  @override
+  String get invalidCredentialsError => 'Credenciais inválidas';
+
+  @override
+  String get unexpectedError => 'Erro inesperado';
 }
