@@ -1,32 +1,44 @@
-import 'package:faker/faker.dart';
 import 'package:test/test.dart';
 
 import 'package:fordev_tdd/validation/validators/validator_composite.dart';
-import 'package:fordev_tdd/validation/validators/validators.dart';
 
 import '../mocks/field_validator_spy.dart';
 
 void main() {
-  const fieldName = 'field_name';
-  const fieldValue = 'field_value';
   late ValidatorComposite sut;
   late FieldValidatorSpy validator1;
   late FieldValidatorSpy validator2;
+  late FieldValidatorSpy validator3;
 
   setUp(() {
-    validator1 = FieldValidatorSpy(fieldName, fieldValue);
-    validator2 = FieldValidatorSpy(fieldName, null);
+    validator1 = FieldValidatorSpy('field1_name');
+    validator2 = FieldValidatorSpy('field1_name');
+    validator3 = FieldValidatorSpy('field3_name');
 
     sut = ValidatorComposite([
       validator1,
       validator2,
+      validator3,
     ]);
   });
 
   test('Should return null if all validations returns null or empty', () {
+    // Arrange
+    validator2.mockValidate('');
     // Act
-    final result = sut.validate(field: fieldName, value: fieldValue);
+    final result = sut.validate(field: 'field1_name', value: 'some_value');
     // Assert
     expect(result, null);
+  });
+
+  test('Should return the first error', () {
+    // Arrange
+    validator1.mockValidate('error1_message');
+    validator2.mockValidate('error2_message');
+    validator3.mockValidate('error3_message');
+    // Act
+    final result = sut.validate(field: 'field1_name', value: 'some_value');
+    // Assert
+    expect(result, 'error1_message');
   });
 }

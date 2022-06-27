@@ -9,6 +9,14 @@ class ValidatorComposite implements Validator {
 
   @override
   String? validate({required String field, required String value}) {
+    String? error;
+
+    for (var validator in validators) {
+      error = validator.validate(value);
+      if ((error != null) && error.isNotEmpty) {
+        return error;
+      }
+    }
     return null;
   }
 }

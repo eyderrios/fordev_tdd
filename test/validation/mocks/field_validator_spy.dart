@@ -3,12 +3,13 @@ import 'package:mocktail/mocktail.dart';
 import 'package:fordev_tdd/validation/protocols/field_validator.dart';
 
 class FieldValidatorSpy extends Mock implements FieldValidator {
-  FieldValidatorSpy(String fieldName, String? fieldValue) {
-    _mockMethods(fieldName, fieldValue);
+  FieldValidatorSpy(String fieldName) {
+    mockField(fieldName);
+    mockValidate(null);
   }
 
-  void _mockMethods(String fieldName, String? fieldValue) {
-    when(() => field).thenReturn(fieldName);
-    when(() => validate(any())).thenReturn(fieldValue);
-  }
+  void mockField(String fieldName) => when(() => field).thenReturn(fieldName);
+
+  void mockValidate(String? fieldValue) =>
+      when(() => validate(any())).thenReturn(fieldValue);
 }
