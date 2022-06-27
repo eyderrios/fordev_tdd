@@ -95,7 +95,7 @@ void main() {
     sut.validatePassword(password);
   });
 
-  test('Should ', () {
+  test('Should emit error if validations fails', () {
     // Arrange
     validator.mockValidate(
       field: StreamLoginPresenter.emailFieldName,
@@ -114,6 +114,28 @@ void main() {
         .listen(expectAsync1((isValid) => expect(isValid, false)));
     // Act
     sut.validateEmail(password);
+    sut.validatePassword(password);
+  });
+
+  test('Should emit null if validation succeed', () async {
+    // Arrange
+    validator.mockValidate(
+      field: StreamLoginPresenter.emailFieldName,
+      value: null,
+    );
+    validator.mockValidate(
+      field: StreamLoginPresenter.passwordFieldName,
+      value: null,
+    );
+    // Late Assert
+    sut.emailErrorStream
+        .listen(expectAsync1((errorMsg) => expect(errorMsg, null)));
+    sut.passwordErrorStream
+        .listen(expectAsync1((errorMsg) => expect(errorMsg, null)));
+    expectLater(sut.isFormValidStream, emitsInOrder([false, true]));
+    // Act
+    sut.validateEmail(password);
+    await Future.delayed(Duration.zero);
     sut.validatePassword(password);
   });
 }
