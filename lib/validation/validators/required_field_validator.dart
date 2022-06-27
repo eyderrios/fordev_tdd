@@ -1,4 +1,4 @@
-import 'package:fordev_tdd/validation/validators/field_validator.dart';
+import './protocols/protocols.dart';
 
 class RequiredFieldValidator implements FieldValidator {
   final String _field;
