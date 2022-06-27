@@ -26,7 +26,7 @@ void main() {
     // Arrange
     validator2.mockValidate('');
     // Act
-    final result = sut.validate(field: 'field1_name', value: 'some_value');
+    final result = sut.validate(field: validator1.field, value: 'some_value');
     // Assert
     expect(result, null);
   });
@@ -37,8 +37,19 @@ void main() {
     validator2.mockValidate('error2_message');
     validator3.mockValidate('error3_message');
     // Act
-    final result = sut.validate(field: 'field1_name', value: 'some_value');
+    final result = sut.validate(field: validator1.field, value: 'some_value');
     // Assert
     expect(result, 'error1_message');
+  });
+
+  test('Should return the first error on some field', () {
+    // Arrange
+    validator1.mockValidate('error1_message');
+    validator2.mockValidate('error2_message');
+    validator3.mockValidate('error3_message');
+    // Act
+    final result = sut.validate(field: validator3.field, value: 'some_value');
+    // Assert
+    expect(result, 'error3_message');
   });
 }

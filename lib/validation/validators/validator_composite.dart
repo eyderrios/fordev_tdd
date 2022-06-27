@@ -11,7 +11,7 @@ class ValidatorComposite implements Validator {
   String? validate({required String field, required String value}) {
     String? error;
 
-    for (var validator in validators) {
+    for (var validator in validators.where((val) => val.field == field)) {
       error = validator.validate(value);
       if ((error != null) && error.isNotEmpty) {
         return error;
