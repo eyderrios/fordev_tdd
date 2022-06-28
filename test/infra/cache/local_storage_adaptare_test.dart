@@ -22,19 +22,39 @@ class FlutterSecureStorageSpy extends Mock implements FlutterSecureStorage {
     when(() => write(key: key, value: value))
         .thenAnswer((_) => Future<void>(() {}));
   }
+
+  void mockWriteError(String key, String value) {
+    when(() => write(key: any(named: 'key'), value: any(named: 'value')))
+        .thenThrow(Exception());
+  }
 }
 
 void main() {
-  test('Should call SaveSecure with correct params', () async {
-    final key = faker.lorem.word();
-    final value = faker.guid.guid();
-    final storage = FlutterSecureStorageSpy();
-    final sut = LocalStorageAdapter(secureStorage: storage);
+  late String key;
+  late String value;
+  late FlutterSecureStorageSpy storage;
+  late LocalStorageAdapter sut;
 
+  setUp(() {
+    key = faker.lorem.word();
+    value = faker.guid.guid();
+    storage = FlutterSecureStorageSpy();
+    sut = LocalStorageAdapter(secureStorage: storage);
+  });
+
+  test('Should call SaveSecure with correct params', () async {
     storage.mockWrite(key, value);
 
     await sut.saveSecure(key: key, value: value);
 
     verify(() => storage.write(key: key, value: value)).called(1);
+  });
+
+  test('Should throw if SaveSecure throws', () async {
+    storage.mockWriteError(key, value);
+
+    final future = sut.saveSecure(key: key, value: value);
+
+    expect(future, throwsA(const TypeMatcher<Exception>()));
   });
 }
