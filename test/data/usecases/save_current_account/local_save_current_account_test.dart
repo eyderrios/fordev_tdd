@@ -41,11 +41,17 @@ class SaveSecureCacheStorageSpy extends Mock implements SaveSecureCacheStorage {
 }
 
 void main() {
-  test('Should call SaveCacheStorage with correct params', () async {
-    final cache = SaveSecureCacheStorageSpy();
-    final sut = LocalSaveCurrentAccount(saveSecureCacheStorage: cache);
-    final account = AccountEntity(token: faker.guid.guid());
+  late AccountEntity account;
+  late SaveSecureCacheStorageSpy cache;
+  late LocalSaveCurrentAccount sut;
 
+  setUp(() {
+    cache = SaveSecureCacheStorageSpy();
+    sut = LocalSaveCurrentAccount(saveSecureCacheStorage: cache);
+    account = AccountEntity(token: faker.guid.guid());
+  });
+
+  test('Should call SaveCacheStorage with correct params', () async {
     // Arrange
     cache.mockSaveSecure();
     // Act
@@ -56,10 +62,6 @@ void main() {
 
   test('Should throws UnexpectedError if SaveSecureCacheStorage throws',
       () async {
-    final cache = SaveSecureCacheStorageSpy();
-    final sut = LocalSaveCurrentAccount(saveSecureCacheStorage: cache);
-    final account = AccountEntity(token: faker.guid.guid());
-
     // Arrange
     cache.mockSaveSecureError();
     // Act
