@@ -8,9 +8,9 @@ import 'package:fordev_tdd/domain/usecases/usecases.dart';
 import 'package:fordev_tdd/data/usecases/usecases.dart';
 import 'package:fordev_tdd/data/http/http.dart';
 
-import '../../domain/mocks/mocks.dart';
-import '../../infra/mocks/mocks.dart';
-import '../mocks/mocks.dart';
+import '../../../domain/mocks/mocks.dart';
+import '../../../infra/mocks/mocks.dart';
+import '../../mocks/mocks.dart';
 
 void main() {
   late String url;
