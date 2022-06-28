@@ -1,4 +1,5 @@
 import 'package:faker/faker.dart';
+import 'package:fordev_tdd/domain/entities/account_entity.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
@@ -7,25 +8,34 @@ import 'package:fordev_tdd/domain/usecases/authentication.dart';
 import 'package:fordev_tdd/presentation/presenters/presenters.dart';
 
 import '../../domain/mocks/mocks.dart';
+import '../../domain/mocks/save_current_account_spy.dart';
 import '../../ui/mocks/mocks.dart';
 
 void main() {
   const String error = 'Some error message';
   late String email;
   late String password;
+  late String token;
 
   late AuthenticationParams params;
-  late ValidationSpy validator;
   late AuthenticationSpy auth;
+  late ValidationSpy validator;
+  late SaveCurrentAccountSpy saveCurrentAccount;
   late GetxLoginPresenter sut;
 
   setUp(() {
     email = faker.internet.email();
     password = faker.internet.password();
+    token = faker.guid.guid();
     params = AuthenticationParams(email: email, password: password);
     auth = AuthenticationSpy();
     validator = ValidationSpy();
-    sut = GetxLoginPresenter(validator: validator, authentication: auth);
+    saveCurrentAccount = SaveCurrentAccountSpy();
+    sut = GetxLoginPresenter(
+      validator: validator,
+      authentication: auth,
+      saveCurrentAccount: saveCurrentAccount,
+    );
   });
 
   test('Should call validation with correct email', () {
@@ -147,9 +157,10 @@ void main() {
     sut.validatePassword(password);
   });
 
-  test('Should call Authentication.auth() if correct parameters', () async {
+  test('Should call Authentication.auth() with correct parameters', () async {
     // Arrange
     auth.mockAuth(params);
+    saveCurrentAccount.mockSave();
 
     sut.validateEmail(email);
     sut.validatePassword(password);
@@ -159,9 +170,25 @@ void main() {
     verify(() => auth.auth(params)).called(1);
   });
 
+  test('Should call SaveCurrentAccount with correct parameter', () async {
+    // Arrange
+    auth.mockAuth(params, token: token);
+    saveCurrentAccount.mockSave();
+
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+    // Act
+    await sut.auth();
+    // Assert
+    verify(() => saveCurrentAccount.save(AccountEntity(token: token)))
+        .called(1);
+  });
+
   test('Should emit correct events on authentication success', () async {
     // Arrange
     auth.mockAuth(params);
+    saveCurrentAccount.mockSave();
+
     sut.validateEmail(email);
     sut.validatePassword(password);
     // Assert Later

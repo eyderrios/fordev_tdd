@@ -11,5 +11,7 @@ class LoginPresenterFactory {
   static LoginPresenter makeGetxLoginPresenter() => GetxLoginPresenter(
         validator: LoginValidatorFactory.makeLoginValidator(),
         authentication: AuthenticationFactory.makeRemoteAuthentication(),
+        saveCurrentAccount:
+            SaveCurrentAccountFactory.makeLocalSaveCurrentAccount(),
       );
 }

@@ -16,9 +16,9 @@ class AuthenticationSpy extends Mock implements Authentication {
     return when(() => auth(params!));
   }
 
-  void mockAuth(AuthenticationParams? params) {
+  void mockAuth(AuthenticationParams? params, {String? token}) {
     _mockAuth(params).thenAnswer(
-      (_) async => EntityFactory.makeAccountEntity(),
+      (_) async => EntityFactory.makeAccountEntity(token: token),
     );
   }
 
