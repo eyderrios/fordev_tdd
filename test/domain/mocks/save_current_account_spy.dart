@@ -1,4 +1,5 @@
 import 'package:faker/faker.dart';
+import 'package:fordev_tdd/domain/helpers/domain_error.dart';
 import 'package:mocktail/mocktail.dart';
 
 import 'package:fordev_tdd/domain/entities/entities.dart';
@@ -11,5 +12,9 @@ class SaveCurrentAccountSpy extends Mock implements SaveCurrentAccount {
 
   void mockSave() {
     when(() => save(any())).thenAnswer((_) => Future(() {}));
+  }
+
+  void mockError() {
+    when(() => save(any())).thenThrow(DomainError.unexpected);
   }
 }

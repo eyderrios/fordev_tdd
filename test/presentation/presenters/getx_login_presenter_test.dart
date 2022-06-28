@@ -184,6 +184,24 @@ void main() {
         .called(1);
   });
 
+  test('Should emit UnexpectedError if SaveCurrentAccount fails', () async {
+    // Arrange
+    const domainError = DomainError.unexpected;
+    auth.mockAuthError(params, domainError);
+    saveCurrentAccount.mockError();
+
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+    // Assert Later
+    expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+    sut.mainErrorStream.listen(expectAsync1((errorMsg) => expect(
+          errorMsg,
+          domainError.description,
+        )));
+    // Act
+    await sut.auth();
+  });
+
   test('Should emit correct events on authentication success', () async {
     // Arrange
     auth.mockAuth(params);
