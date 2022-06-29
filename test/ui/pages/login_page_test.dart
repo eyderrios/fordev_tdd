@@ -1,9 +1,11 @@
 import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:fordev_tdd/main/apps/app_routes.dart';
 
 import 'package:fordev_tdd/ui/pages/login/login_page.dart';
 import 'package:fordev_tdd/utils/i18n/i18n.dart';
+import 'package:get/get.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../mocks/login_presenter_spy.dart';
@@ -13,7 +15,16 @@ void main() {
 
   Future<void> loadPage(WidgetTester tester) async {
     presenter = LoginPresenterSpy();
-    final loginPage = MaterialApp(home: LoginPage(presenter));
+    final loginPage = GetMaterialApp(
+      initialRoute: AppRoutes.login,
+      getPages: [
+        GetPage(name: AppRoutes.login, page: () => LoginPage(presenter)),
+        GetPage(
+          name: AppRoutes.surveys,
+          page: () => const Scaffold(body: Text(AppRoutes.surveys)),
+        ),
+      ],
+    );
     await tester.pumpWidget(loginPage);
   }
 
@@ -178,12 +189,13 @@ void main() {
     expect(find.text(error), findsOneWidget);
   });
 
-  testWidgets('Should close streams on dispose', skip: true,
-      (WidgetTester tester) async {
+  testWidgets('Should change page', (WidgetTester tester) async {
     await loadPage(tester);
 
-    addTearDown(() {
-      verify(() => presenter.dispose()).called(1);
-    });
+    presenter.emitNavigateTo(AppRoutes.surveys);
+    await tester.pumpAndSettle();
+
+    expect(Get.currentRoute, AppRoutes.surveys);
+    expect(find.text(AppRoutes.surveys), findsOneWidget);
   });
 }

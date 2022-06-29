@@ -21,6 +21,10 @@ class AndroidApp extends StatelessWidget {
       initialRoute: AppRoutes.login,
       getPages: [
         GetPage(name: AppRoutes.login, page: LoginPageFactory.makeLoginPage),
+        GetPage(
+          name: AppRoutes.surveys,
+          page: () => const Scaffold(body: Text('Enquetes')),
+        ),
       ],
     );
   }

@@ -1,5 +1,6 @@
 import 'package:faker/faker.dart';
 import 'package:fordev_tdd/domain/entities/account_entity.dart';
+import 'package:fordev_tdd/main/apps/app_routes.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
@@ -211,6 +212,20 @@ void main() {
     sut.validatePassword(password);
     // Assert Later
     expectLater(sut.isLoadingStream, emits(true));
+    // Act
+    await sut.auth();
+  });
+
+  test('Should change page on success', () async {
+    // Arrange
+    auth.mockAuth(params);
+    saveCurrentAccount.mockSave();
+
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+    // Assert Later
+    sut.navigateToStream
+        .listen(expectAsync1((page) => expect(page, AppRoutes.surveys)));
     // Act
     await sut.auth();
   });

@@ -8,6 +8,7 @@ class LoginPresenterSpy extends Mock implements LoginPresenter {
   final emailErrorController = StreamController<String?>();
   final passwordErrorController = StreamController<String?>();
   final mainErrorController = StreamController<String?>();
+  final navigateToController = StreamController<String?>();
   final isFormValidController = StreamController<bool>();
   final isLoadingController = StreamController<bool>();
 
@@ -21,6 +22,7 @@ class LoginPresenterSpy extends Mock implements LoginPresenter {
     when(() => passwordErrorStream)
         .thenAnswer((_) => passwordErrorController.stream);
     when(() => mainErrorStream).thenAnswer((_) => mainErrorController.stream);
+    when(() => navigateToStream).thenAnswer((_) => navigateToController.stream);
     when(() => isFormValidStream)
         .thenAnswer((_) => isFormValidController.stream);
     when(() => isLoadingStream).thenAnswer((_) => isLoadingController.stream);
@@ -32,12 +34,14 @@ class LoginPresenterSpy extends Mock implements LoginPresenter {
   void emitFormError() => isFormValidController.add(false);
   void emitLoadind(bool show) => isLoadingController.add(show);
   void emitMainError(String error) => mainErrorController.add(error);
+  void emitNavigateTo(String route) => navigateToController.add(route);
 
   @override
   void dispose() {
     emailErrorController.close();
     passwordErrorController.close();
     mainErrorController.close();
+    navigateToController.close();
     isFormValidController.close();
     isLoadingController.close();
   }

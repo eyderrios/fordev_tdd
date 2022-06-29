@@ -1,3 +1,4 @@
+import 'package:fordev_tdd/main/apps/app_routes.dart';
 import 'package:get/get.dart';
 
 import '../../domain/helpers/domain_error.dart';
@@ -11,7 +12,7 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
 
   final Validator validator;
   final Authentication authentication;
-  final SaveCurrentAccount? saveCurrentAccount;
+  final SaveCurrentAccount saveCurrentAccount;
 
   String? _email;
   String? _password;
@@ -19,6 +20,7 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
   final Rx<String?> _emailError = Rx<String?>(null);
   final Rx<String?> _passwordError = Rx<String?>(null);
   final Rx<String?> _mainError = Rx<String?>(null);
+  final Rx<String?> _navigateTo = Rx<String?>(null);
   final _isFormValid = RxBool(false);
   final _isLoading = RxBool(false);
 
@@ -36,6 +38,9 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
 
   @override
   Stream<String?> get mainErrorStream => _mainError.stream;
+
+  @override
+  Stream<String?> get navigateToStream => _navigateTo.stream;
 
   @override
   Stream<bool> get isFormValidStream => _isFormValid.stream;
@@ -78,7 +83,8 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
         email: _email!,
         password: _password!,
       ));
-      await saveCurrentAccount?.save(account);
+      await saveCurrentAccount.save(account);
+      _navigateTo.value = AppRoutes.surveys;
     } on DomainError catch (error) {
       _mainError.value = error.description;
       _isLoading.value = false;

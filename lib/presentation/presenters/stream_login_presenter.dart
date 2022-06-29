@@ -12,6 +12,7 @@ class LoginState {
   String? emailError;
   String? passwordError;
   String? mainError;
+  String? navigateTo;
 
   bool isLoading = false;
 
@@ -56,33 +57,15 @@ class StreamLoginPresenter implements LoginPresenter {
   Stream<String?> get mainErrorStream => _mapStream((state) => state.mainError);
 
   @override
+  Stream<String?> get navigateToStream =>
+      _mapStream((state) => state.navigateTo);
+
+  @override
   Stream<bool> get isFormValidStream =>
       _mapStream((state) => state.isFormValid);
 
   @override
   Stream<bool> get isLoadingStream => _mapStream((state) => state.isLoading);
-
-/*
-  @override
-  Stream<String?> get emailErrorStream =>
-      _controller.stream.map((state) => state.emailError).distinct();
-
-  @override
-  Stream<String?> get passwordErrorStream =>
-      _controller.stream.map((state) => state.passwordError).distinct();
-
-  @override
-  Stream<String?> get mainErrorStream =>
-      _controller.stream.map((state) => state.mainError).distinct();
-
-  @override
-  Stream<bool> get isFormValidStream =>
-      _controller.stream.map((state) => state.isFormValid).distinct();
-
-  @override
-  Stream<bool> get isLoadingStream =>
-      _controller.stream.map((state) => state.isLoading).distinct();
-*/
 
   void _updateState() {
     if (!_controller.isClosed) {
