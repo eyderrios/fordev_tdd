@@ -1,42 +1,59 @@
+import 'package:faker/faker.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
-class LocalLoadCurrentAccount {
+import 'package:fordev_tdd/domain/entities/account_entity.dart';
+import 'package:fordev_tdd/domain/usecases/usecases.dart';
+
+class LocalLoadCurrentAccount implements LoadCurrentAccount {
   final FetchSecureCacheStorage fetchSecureCacheStorage;
 
   LocalLoadCurrentAccount({required this.fetchSecureCacheStorage});
 
-  Future<void> load() {
-    return fetchSecureCacheStorage.fetchSecure('token');
+  Future<AccountEntity> load() async {
+    final token = await fetchSecureCacheStorage.fetchSecure('token');
+    return AccountEntity(token: token);
   }
 }
 
 abstract class FetchSecureCacheStorage {
-  Future<void> fetchSecure(String key);
+  Future<String> fetchSecure(String key);
 }
 
 class FetchSecureCacheStorageSpy extends Mock
     implements FetchSecureCacheStorage {
-  void mockFecthSecure(String? key) {
-    when(() => fetchSecure(key ?? any())).thenAnswer((_) => Future(() {}));
+  void mockFecthSecure({required String? key, required String token}) {
+    when(() => fetchSecure(key ?? any())).thenAnswer((_) async => token);
   }
 }
 
 void main() {
   late FetchSecureCacheStorageSpy fetchSecureCacheStorage;
   late LocalLoadCurrentAccount sut;
+  late String token;
 
   setUp(() {
+    token = faker.guid.guid();
     fetchSecureCacheStorage = FetchSecureCacheStorageSpy();
     sut = LocalLoadCurrentAccount(
         fetchSecureCacheStorage: fetchSecureCacheStorage);
   });
 
   test('Should call FetchSecureCacheStorage with correct parameter', () async {
-    fetchSecureCacheStorage.mockFecthSecure(null);
-
+    // Arrange
+    fetchSecureCacheStorage.mockFecthSecure(key: null, token: token);
+    // Act
     await sut.load();
-
+    // Assert
     verify(() => fetchSecureCacheStorage.fetchSecure('token')).called(1);
+  });
+
+  test('Should return an AccountEntity', () async {
+    // Arrange
+    fetchSecureCacheStorage.mockFecthSecure(key: null, token: token);
+    // Act
+    final account = await sut.load();
+    // Assert
+    expect(account, AccountEntity(token: token));
   });
 }
