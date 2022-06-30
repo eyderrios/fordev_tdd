@@ -1,42 +1,12 @@
 import 'package:faker/faker.dart';
-import 'package:fordev_tdd/domain/helpers/domain_error.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
+import 'package:fordev_tdd/data/usecases/load_current_account/load_current_account.dart';
 import 'package:fordev_tdd/domain/entities/account_entity.dart';
-import 'package:fordev_tdd/domain/usecases/usecases.dart';
+import 'package:fordev_tdd/domain/helpers/domain_error.dart';
 
-class LocalLoadCurrentAccount implements LoadCurrentAccount {
-  final FetchSecureCacheStorage fetchSecureCacheStorage;
-
-  LocalLoadCurrentAccount({required this.fetchSecureCacheStorage});
-
-  Future<AccountEntity> load() async {
-    try {
-      final token = await fetchSecureCacheStorage.fetchSecure('token');
-      return AccountEntity(token: token);
-    } catch (error) {
-      throw DomainError.unexpected;
-    }
-  }
-}
-
-abstract class FetchSecureCacheStorage {
-  Future<String> fetchSecure(String key);
-}
-
-class FetchSecureCacheStorageSpy extends Mock
-    implements FetchSecureCacheStorage {
-  When _fetchSecureCall(String? key) => when(() => fetchSecure(key ?? any()));
-
-  void mockFecthSecure({required String? key, required String token}) {
-    _fetchSecureCall(key).thenAnswer((_) async => token);
-  }
-
-  void mockFecthSecureError({required String? key}) {
-    _fetchSecureCall(key).thenThrow(Exception());
-  }
-}
+import '../../mocks/mocks.dart';
 
 void main() {
   late FetchSecureCacheStorageSpy fetchSecureCacheStorage;
