@@ -1,56 +1,11 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 import 'package:mocktail/mocktail.dart';
 
-class SplashPage extends StatelessWidget {
-  final SplashPresenter presenter;
+import 'package:fordev_tdd/ui/pages/splash/splash_page.dart';
 
-  const SplashPage({Key? key, required this.presenter}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    presenter.loadCurrentAccount();
-    return Scaffold(
-      appBar: AppBar(title: const Text('4Dev')),
-      body: Builder(builder: (context) {
-        presenter.navigateToStream.listen((page) {
-          if (page.isNotEmpty == true) {
-            Get.offAllNamed(page);
-          }
-        });
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      }),
-    );
-  }
-}
-
-abstract class SplashPresenter {
-  Stream<String> get navigateToStream;
-
-  Future<void> loadCurrentAccount();
-}
-
-class SplashPresenterSpy extends Mock implements SplashPresenter {
-  final navigateToController = StreamController<String>();
-
-  void mockMethods() {
-    mockNavigateToStream();
-    mockLoadCurrentAccount();
-  }
-
-  void mockNavigateToStream() {
-    when(() => navigateToStream).thenAnswer((_) => navigateToController.stream);
-  }
-
-  void mockLoadCurrentAccount() {
-    when(() => loadCurrentAccount()).thenAnswer((invocation) async => () {});
-  }
-}
+import '../mocks/mocks.dart';
 
 void main() {
   const route = '/some_route';
