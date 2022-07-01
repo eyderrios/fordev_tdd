@@ -20,29 +20,41 @@ void main() {
 
   group('saveSecure', () {
     test('Should call saveSecure with correct params', () async {
+      // Arrange
       storage.mockWrite(key, value);
-
+      // Act
       await sut.saveSecure(key: key, value: value);
-
+      // Assert
       verify(() => storage.write(key: key, value: value)).called(1);
     });
 
     test('Should throw if saveSecure throws', () async {
+      // Arrange
       storage.mockWriteError(key, value);
-
+      // Act
       final future = sut.saveSecure(key: key, value: value);
-
+      // Assert
       expect(future, throwsA(const TypeMatcher<Exception>()));
     });
   });
 
   group('fetchSecure', () {
     test('Should call fetchSecure with correct param', () async {
-      storage.mockRead(key);
-
+      // Arrange
+      storage.mockRead(value);
+      // Act
       await sut.fetchSecure(key);
-
+      // Assert
       verify(() => storage.read(key: key)).called(1);
+    });
+
+    test('Should return correct value on success', () async {
+      // Arrange
+      storage.mockRead(value);
+      // Act
+      final fetchedValue = await sut.fetchSecure(key);
+      // Assert
+      expect(fetchedValue, value);
     });
   });
 }
