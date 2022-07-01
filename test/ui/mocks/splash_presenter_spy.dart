@@ -16,6 +16,6 @@ class SplashPresenterSpy extends Mock implements SplashPresenter {
   }
 
   void mockLoadCurrentAccount() {
-    when(() => loadCurrentAccount()).thenAnswer((invocation) async => () {});
+    when(() => checkAccount()).thenAnswer((invocation) async => () {});
   }
 }

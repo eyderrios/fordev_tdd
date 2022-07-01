@@ -48,7 +48,7 @@ void main() {
     // Act
     await loadPage(tester);
     // Assert
-    verify(() => presenter.loadCurrentAccount()).called(1);
+    verify(() => presenter.checkAccount()).called(1);
   });
 
   testWidgets('Should load page after spinner', (WidgetTester tester) async {
