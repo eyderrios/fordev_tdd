@@ -56,5 +56,14 @@ void main() {
       // Assert
       expect(fetchedValue, value);
     });
+
+    test('Should throw if fetchSecure throws', () async {
+      // Arrange
+      storage.mockReadError();
+      // Act
+      final future = sut.fetchSecure(key);
+      // Assert
+      expect(future, throwsA(const TypeMatcher<Exception>()));
+    });
   });
 }
