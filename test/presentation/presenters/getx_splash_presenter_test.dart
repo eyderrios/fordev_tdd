@@ -1,8 +1,9 @@
-import 'package:fordev_tdd/domain/usecases/load_current_account.dart';
 import 'package:get/get.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
+import 'package:fordev_tdd/domain/usecases/load_current_account.dart';
+import 'package:fordev_tdd/main/apps/app_routes.dart';
 import 'package:fordev_tdd/ui/pages/splash/splash.dart';
 
 import '../../domain/mocks/entity_factory.dart';
@@ -19,6 +20,7 @@ class GetxSplashPresenter implements SplashPresenter {
   @override
   Future<void> checkAccount() async {
     await loadCurrentAccount.load();
+    _navigateTo.value = AppRoutes.surveys;
     return Future<void>(() {});
   }
 }
@@ -46,5 +48,15 @@ void main() {
     await sut.checkAccount();
     // Assert
     verify(() => loadCurrentAccount.load()).called(1);
+  });
+
+  test('Should go to surveys page on success', () async {
+    // Arrange
+    loadCurrentAccount.mockLoad();
+    // Late Assert
+    sut.navigateToStream
+        .listen(expectAsync1((page) => expect(page, AppRoutes.surveys)));
+    // Act
+    await sut.checkAccount();
   });
 }
