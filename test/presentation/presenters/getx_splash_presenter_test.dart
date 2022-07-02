@@ -20,8 +20,13 @@ class GetxSplashPresenter implements SplashPresenter {
 
   @override
   Future<void> checkAccount() async {
-    final account = await loadCurrentAccount.load();
-    _navigateTo.value = (account == null) ? AppRoutes.login : AppRoutes.surveys;
+    try {
+      final account = await loadCurrentAccount.load();
+      _navigateTo.value =
+          (account == null) ? AppRoutes.login : AppRoutes.surveys;
+    } catch (error) {
+      _navigateTo.value = AppRoutes.login;
+    }
     return Future<void>(() {});
   }
 }
@@ -30,6 +35,10 @@ class LoadCurrentAccountSpy extends Mock implements LoadCurrentAccount {
   void mockLoad({required AccountEntity? account}) {
     when(() => load())
         .thenAnswer((_) async => (account != null) ? account : null);
+  }
+
+  void mockLoadError() {
+    when(() => load()).thenThrow(Exception());
   }
 }
 
@@ -66,6 +75,17 @@ void main() {
   test('Should go to login page on null result', () async {
     // Arrange
     loadCurrentAccount.mockLoad(account: null);
+    // Late Assert
+    sut.navigateToStream
+        .listen(expectAsync1((page) => expect(page, AppRoutes.login)));
+    // Act
+    await sut.checkAccount();
+  });
+
+  test('Should go to login page on error', () async {
+    // Arrange
+    loadCurrentAccount.mockLoad(account: null);
+    loadCurrentAccount.mockLoadError();
     // Late Assert
     sut.navigateToStream
         .listen(expectAsync1((page) => expect(page, AppRoutes.login)));
