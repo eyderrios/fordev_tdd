@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
-import '../../utils/i18n/resources.dart';
+import '../../ui/helpers/i18n/resources.dart';
 import '../../ui/pages/login/login_page.dart';
 import '../../ui/components/app_theme.dart';
 

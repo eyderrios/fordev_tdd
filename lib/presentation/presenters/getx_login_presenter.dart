@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 import '../../domain/helpers/domain_error.dart';
 import '../../domain/usecases/usecases.dart';
+import '../../ui/helpers/errors/errors.dart';
 import '../../ui/pages/login/login_presenter.dart';
 import '../protocols/validator.dart';
 
@@ -17,10 +18,10 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
   String? _email;
   String? _password;
 
-  final Rx<String?> _emailError = Rx<String?>(null);
-  final Rx<String?> _passwordError = Rx<String?>(null);
-  final Rx<String?> _mainError = Rx<String?>(null);
-  final Rx<String?> _navigateTo = Rx<String?>(null);
+  final _emailError = Rx<UIError?>(null);
+  final _passwordError = Rx<UIError?>(null);
+  final _mainError = Rx<UIError?>(null);
+  final _navigateTo = Rx<String?>(null);
   final _isFormValid = RxBool(false);
   final _isLoading = RxBool(false);
 
@@ -31,13 +32,13 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
   });
 
   @override
-  Stream<String?> get emailErrorStream => _emailError.stream;
+  Stream<UIError?> get emailErrorStream => _emailError.stream;
 
   @override
-  Stream<String?> get passwordErrorStream => _passwordError.stream;
+  Stream<UIError?> get passwordErrorStream => _passwordError.stream;
 
   @override
-  Stream<String?> get mainErrorStream => _mainError.stream;
+  Stream<UIError?> get mainErrorStream => _mainError.stream;
 
   @override
   Stream<String?> get navigateToStream => _navigateTo.stream;
@@ -55,10 +56,28 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
         (_passwordError.value == null);
   }
 
+  UIError? _validateField({required String field, required String value}) {
+    UIError? uiError;
+
+    final error = validator.validate(field: field, value: value);
+
+    switch (error) {
+      case ValidatorError.invalidField:
+        uiError = UIError.invalidField;
+        break;
+      case ValidatorError.requiredField:
+        uiError = UIError.requiredField;
+        break;
+      default:
+        uiError = null;
+    }
+    return uiError;
+  }
+
   @override
   void validateEmail(String email) {
     _email = email;
-    _emailError.value = validator.validate(
+    _emailError.value = _validateField(
       field: GetxLoginPresenter.emailFieldName,
       value: email,
     );
@@ -68,7 +87,7 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
   @override
   void validatePassword(String password) {
     _password = password;
-    _passwordError.value = validator.validate(
+    _passwordError.value = _validateField(
       field: GetxLoginPresenter.passwordFieldName,
       value: password,
     );
@@ -86,7 +105,7 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
       await saveCurrentAccount.save(account);
       _navigateTo.value = AppRoutes.surveys;
     } on DomainError catch (error) {
-      _mainError.value = error.description;
+      _mainError.value = domainErrorToUIError(error);
       _isLoading.value = false;
     }
   }

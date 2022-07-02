@@ -1,4 +1,5 @@
 import 'package:faker/faker.dart';
+import 'package:fordev_tdd/presentation/protocols/validator.dart';
 import 'package:test/test.dart';
 
 import 'package:fordev_tdd/validation/validators/validators.dart';
@@ -24,5 +25,12 @@ void main() {
     final error = sut.validate(email);
     // Assert
     expect(error, null);
+  });
+
+  test('Should return error if email is invalid', () {
+    // Act
+    final error = sut.validate('user.name');
+    // Assert
+    expect(error, ValidatorError.invalidField);
   });
 }

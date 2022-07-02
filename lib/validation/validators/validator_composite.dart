@@ -8,12 +8,12 @@ class ValidatorComposite implements Validator {
   ValidatorComposite(this.validators);
 
   @override
-  String? validate({required String field, required String value}) {
-    String? error;
+  ValidatorError? validate({required String field, required String value}) {
+    ValidatorError? error;
 
     for (var validator in validators.where((val) => val.field == field)) {
       error = validator.validate(value);
-      if ((error != null) && error.isNotEmpty) {
+      if (error != null) {
         return error;
       }
     }

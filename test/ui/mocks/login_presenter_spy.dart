@@ -1,13 +1,14 @@
 import 'dart:async';
 
+import 'package:fordev_tdd/ui/helpers/errors/errors.dart';
 import 'package:mocktail/mocktail.dart';
 
 import 'package:fordev_tdd/ui/pages/login/login_presenter.dart';
 
 class LoginPresenterSpy extends Mock implements LoginPresenter {
-  final emailErrorController = StreamController<String?>();
-  final passwordErrorController = StreamController<String?>();
-  final mainErrorController = StreamController<String?>();
+  final emailErrorController = StreamController<UIError?>();
+  final passwordErrorController = StreamController<UIError?>();
+  final mainErrorController = StreamController<UIError?>();
   final navigateToController = StreamController<String?>();
   final isFormValidController = StreamController<bool>();
   final isLoadingController = StreamController<bool>();
@@ -28,12 +29,14 @@ class LoginPresenterSpy extends Mock implements LoginPresenter {
     when(() => isLoadingStream).thenAnswer((_) => isLoadingController.stream);
   }
 
-  void emitEmailError(String error) => emailErrorController.add(error);
-  void emitPasswordError(String error) => passwordErrorController.add(error);
+  void emitEmailError(UIError? error) => emailErrorController.add(error);
+  void emitPasswordError(UIError? error) => passwordErrorController.add(error);
+  void emitMainError(UIError? error) => mainErrorController.add(error);
+
   void emitFormValid() => isFormValidController.add(true);
   void emitFormError() => isFormValidController.add(false);
+
   void emitLoadind(bool show) => isLoadingController.add(show);
-  void emitMainError(String error) => mainErrorController.add(error);
   void emitNavigateTo(String route) => navigateToController.add(route);
 
   @override

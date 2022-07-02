@@ -1,4 +1,4 @@
-import '../../utils/i18n/resources.dart';
+import '../../ui/helpers/i18n/i18n.dart';
 
 enum DomainError {
   unexpected,

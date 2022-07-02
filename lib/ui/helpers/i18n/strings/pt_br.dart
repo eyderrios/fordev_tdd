@@ -1,6 +1,4 @@
-import 'package:fordev_tdd/utils/i18n/strings/translations.dart';
-
-import './translations.dart';
+import 'translations.dart';
 
 class PtBr implements Translations {
   //
@@ -29,6 +27,8 @@ class PtBr implements Translations {
   String get invalidCredentialsError => 'Credenciais inválidas';
   @override
   String get unexpectedError => 'Erro inesperado';
+  @override
+  String get unknowError => 'Erro desconhecido';
   //
   // Validators error messages
   //

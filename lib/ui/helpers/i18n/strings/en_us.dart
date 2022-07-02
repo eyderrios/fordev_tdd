@@ -27,6 +27,8 @@ class EnUs implements Translations {
   String get invalidCredentialsError => 'Invalid credentials';
   @override
   String get unexpectedError => 'Unexpected error';
+  @override
+  String get unknowError => 'Unknow error';
   //
   // Validators error messsages
   //

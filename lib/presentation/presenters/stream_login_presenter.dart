@@ -2,6 +2,7 @@ import 'dart:async';
 
 import '../../domain/helpers/domain_error.dart';
 import '../../domain/usecases/usecases.dart';
+import '../../ui/helpers/errors/errors.dart';
 import '../../ui/pages/login/login_presenter.dart';
 import '../protocols/validator.dart';
 
@@ -9,9 +10,9 @@ class LoginState {
   String? email;
   String? password;
 
-  String? emailError;
-  String? passwordError;
-  String? mainError;
+  UIError? emailError;
+  UIError? passwordError;
+  UIError? mainError;
   String? navigateTo;
 
   bool isLoading = false;
@@ -46,15 +47,16 @@ class StreamLoginPresenter implements LoginPresenter {
   }
 
   @override
-  Stream<String?> get emailErrorStream =>
+  Stream<UIError?> get emailErrorStream =>
       _mapStream((state) => state.emailError);
 
   @override
-  Stream<String?> get passwordErrorStream =>
+  Stream<UIError?> get passwordErrorStream =>
       _mapStream((state) => state.passwordError);
 
   @override
-  Stream<String?> get mainErrorStream => _mapStream((state) => state.mainError);
+  Stream<UIError?> get mainErrorStream =>
+      _mapStream((state) => state.mainError);
 
   @override
   Stream<String?> get navigateToStream =>
@@ -73,10 +75,28 @@ class StreamLoginPresenter implements LoginPresenter {
     }
   }
 
+  UIError? _validateField({required String field, required String value}) {
+    UIError? uiError;
+
+    final error = validator.validate(field: field, value: value);
+
+    switch (error) {
+      case ValidatorError.invalidField:
+        uiError = UIError.invalidField;
+        break;
+      case ValidatorError.requiredField:
+        uiError = UIError.requiredField;
+        break;
+      default:
+        uiError = null;
+    }
+    return uiError;
+  }
+
   @override
   void validateEmail(String email) {
     _state.email = email;
-    _state.emailError = validator.validate(
+    _state.emailError = _validateField(
       field: StreamLoginPresenter.emailFieldName,
       value: email,
     );
@@ -86,7 +106,7 @@ class StreamLoginPresenter implements LoginPresenter {
   @override
   void validatePassword(String password) {
     _state.password = password;
-    _state.passwordError = validator.validate(
+    _state.passwordError = _validateField(
       field: StreamLoginPresenter.passwordFieldName,
       value: password,
     );
@@ -104,7 +124,7 @@ class StreamLoginPresenter implements LoginPresenter {
         password: _state.password!,
       ));
     } on DomainError catch (error) {
-      _state.mainError = error.description;
+      _state.mainError = domainErrorToUIError(error);
     }
 
     _state.isLoading = false;

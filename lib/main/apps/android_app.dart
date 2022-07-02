@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import '../../ui/components/app_theme.dart';
-import '../../utils/i18n/i18n.dart';
+import '../../ui/helpers/i18n/i18n.dart';
 import '../factories/factories.dart';
 import './app_routes.dart';
 
