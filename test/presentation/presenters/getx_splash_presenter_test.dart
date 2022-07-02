@@ -1,3 +1,4 @@
+import 'package:fordev_tdd/domain/entities/account_entity.dart';
 import 'package:get/get.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
@@ -19,31 +20,33 @@ class GetxSplashPresenter implements SplashPresenter {
 
   @override
   Future<void> checkAccount() async {
-    await loadCurrentAccount.load();
-    _navigateTo.value = AppRoutes.surveys;
+    final account = await loadCurrentAccount.load();
+    _navigateTo.value = (account == null) ? AppRoutes.login : AppRoutes.surveys;
     return Future<void>(() {});
   }
 }
 
 class LoadCurrentAccountSpy extends Mock implements LoadCurrentAccount {
-  void mockLoad() {
+  void mockLoad({required AccountEntity? account}) {
     when(() => load())
-        .thenAnswer((_) async => EntityFactory.makeAccountEntity());
+        .thenAnswer((_) async => (account != null) ? account : null);
   }
 }
 
 void main() {
+  late AccountEntity account;
   late LoadCurrentAccountSpy loadCurrentAccount;
   late GetxSplashPresenter sut;
 
   setUp(() {
+    account = EntityFactory.makeAccountEntity();
     loadCurrentAccount = LoadCurrentAccountSpy();
     sut = GetxSplashPresenter(loadCurrentAccount: loadCurrentAccount);
   });
 
   test('Should call LoadCurrentAccount', () async {
     // Arrange
-    loadCurrentAccount.mockLoad();
+    loadCurrentAccount.mockLoad(account: account);
     // Act
     await sut.checkAccount();
     // Assert
@@ -52,10 +55,20 @@ void main() {
 
   test('Should go to surveys page on success', () async {
     // Arrange
-    loadCurrentAccount.mockLoad();
+    loadCurrentAccount.mockLoad(account: account);
     // Late Assert
     sut.navigateToStream
         .listen(expectAsync1((page) => expect(page, AppRoutes.surveys)));
+    // Act
+    await sut.checkAccount();
+  });
+
+  test('Should go to login page on null result', () async {
+    // Arrange
+    loadCurrentAccount.mockLoad(account: null);
+    // Late Assert
+    sut.navigateToStream
+        .listen(expectAsync1((page) => expect(page, AppRoutes.login)));
     // Act
     await sut.checkAccount();
   });
