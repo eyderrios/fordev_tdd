@@ -1,46 +1,12 @@
-import 'package:fordev_tdd/domain/entities/account_entity.dart';
-import 'package:get/get.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
-import 'package:fordev_tdd/domain/usecases/load_current_account.dart';
+import 'package:fordev_tdd/domain/entities/account_entity.dart';
+import 'package:fordev_tdd/presentation/presenters/getx_splash_presenter.dart';
 import 'package:fordev_tdd/main/apps/app_routes.dart';
-import 'package:fordev_tdd/ui/pages/splash/splash.dart';
 
 import '../../domain/mocks/entity_factory.dart';
-
-class GetxSplashPresenter implements SplashPresenter {
-  final LoadCurrentAccount loadCurrentAccount;
-  final _navigateTo = RxString('');
-
-  GetxSplashPresenter({required this.loadCurrentAccount});
-
-  @override
-  Stream<String> get navigateToStream => _navigateTo.stream;
-
-  @override
-  Future<void> checkAccount() async {
-    try {
-      final account = await loadCurrentAccount.load();
-      _navigateTo.value =
-          (account == null) ? AppRoutes.login : AppRoutes.surveys;
-    } catch (error) {
-      _navigateTo.value = AppRoutes.login;
-    }
-    return Future<void>(() {});
-  }
-}
-
-class LoadCurrentAccountSpy extends Mock implements LoadCurrentAccount {
-  void mockLoad({required AccountEntity? account}) {
-    when(() => load())
-        .thenAnswer((_) async => (account != null) ? account : null);
-  }
-
-  void mockLoadError() {
-    when(() => load()).thenThrow(Exception());
-  }
-}
+import '../mocks/load_current_account_spy.dart';
 
 void main() {
   late AccountEntity account;

@@ -20,10 +20,15 @@ class AndroidApp extends StatelessWidget {
       theme: AppTheme.makeMaterialTheme(),
       initialRoute: AppRoutes.login,
       getPages: [
-        GetPage(name: AppRoutes.login, page: LoginPageFactory.makeLoginPage),
+        GetPage(
+          name: AppRoutes.login,
+          page: LoginPageFactory.makeLoginPage,
+        ),
         GetPage(
           name: AppRoutes.surveys,
-          page: () => const Scaffold(body: Text('Enquetes')),
+          page: () => const Scaffold(
+            body: Text('Enquetes'),
+          ),
         ),
       ],
     );

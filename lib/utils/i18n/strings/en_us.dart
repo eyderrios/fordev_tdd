@@ -17,6 +17,8 @@ class EnUs implements Translations {
   @override
   String get password => 'Password';
   @override
+  String get surveys => 'Surveys';
+  @override
   String get wait => 'Please wait';
   //
   // DomainError messages

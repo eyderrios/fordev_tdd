@@ -19,6 +19,8 @@ class PtBr implements Translations {
   @override
   String get password => 'Senha';
   @override
+  String get surveys => 'Enquetes';
+  @override
   String get wait => 'Aguarde';
   //
   // DomainError
