@@ -2,6 +2,7 @@ import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fordev_tdd/main/apps/app_routes.dart';
+import 'package:fordev_tdd/ui/helpers/errors/errors.dart';
 
 import 'package:fordev_tdd/ui/pages/login/login_page.dart';
 import 'package:fordev_tdd/utils/i18n/i18n.dart';
@@ -81,19 +82,27 @@ void main() {
       (WidgetTester tester) async {
     await loadPage(tester);
 
-    const error = 'some_error';
-
-    presenter.emitEmailError(error);
+    presenter.emitEmailError(UIError.invalidField);
     await tester.pump();
 
-    expect(find.text(error), findsOneWidget);
+    expect(find.text(UIError.invalidField.description), findsOneWidget);
+  });
+
+  testWidgets('Should present error if email is empty',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    presenter.emitEmailError(UIError.requiredField);
+    await tester.pump();
+
+    expect(find.text(UIError.requiredField.description), findsOneWidget);
   });
 
   testWidgets('Should present no error if email is valid',
       (WidgetTester tester) async {
     await loadPage(tester);
 
-    presenter.emitEmailError('');
+    presenter.emitEmailError(null);
     await tester.pump();
 
     // When a TextFormField has only one text child, means it has no errors,
@@ -105,23 +114,21 @@ void main() {
     expect(emailText, findsOneWidget);
   });
 
-  testWidgets('Should present error if password is invalid',
+  testWidgets('Should present error if password is empty',
       (WidgetTester tester) async {
     await loadPage(tester);
 
-    const error = 'some_error';
-
-    presenter.emitPasswordError(error);
+    presenter.emitPasswordError(UIError.requiredField);
     await tester.pump();
 
-    expect(find.text(error), findsOneWidget);
+    expect(find.text(UIError.requiredField.description), findsOneWidget);
   });
 
   testWidgets('Should present no error if password is valid',
       (WidgetTester tester) async {
     await loadPage(tester);
 
-    presenter.emitPasswordError('');
+    presenter.emitPasswordError(null);
     await tester.pump();
 
     // When a TextFormField has only one text child, means it has no errors,
@@ -182,11 +189,20 @@ void main() {
       (WidgetTester tester) async {
     await loadPage(tester);
 
-    const error = 'Some error message';
-    presenter.emitMainError(error);
+    presenter.emitMainError(UIError.invalidCredentials);
     await tester.pump();
 
-    expect(find.text(error), findsOneWidget);
+    expect(find.text(UIError.invalidCredentials.description), findsOneWidget);
+  });
+
+  testWidgets('Should present error message if authentication throws',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    presenter.emitMainError(UIError.unexpected);
+    await tester.pump();
+
+    expect(find.text(UIError.unexpected.description), findsOneWidget);
   });
 
   testWidgets('Should change page', (WidgetTester tester) async {

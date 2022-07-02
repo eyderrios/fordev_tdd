@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
+import 'package:fordev_tdd/presentation/protocols/validator.dart';
 
-import '../../utils/i18n/resources.dart';
 import '../protocols/protocols.dart';
 
 class RequiredFieldValidator extends Equatable implements FieldValidator {
@@ -12,8 +12,8 @@ class RequiredFieldValidator extends Equatable implements FieldValidator {
   String get field => _field;
 
   @override
-  String? validate(String value) {
-    return value.isEmpty ? R.strings.requiredField : null;
+  ValidatorError? validate(String value) {
+    return value.isEmpty ? ValidatorError.requiredField : null;
   }
 
   @override

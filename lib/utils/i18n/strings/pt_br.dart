@@ -29,6 +29,8 @@ class PtBr implements Translations {
   String get invalidCredentialsError => 'Credenciais inválidas';
   @override
   String get unexpectedError => 'Erro inesperado';
+  @override
+  String get unknowError => 'Erro desconhecido';
   //
   // Validators error messages
   //

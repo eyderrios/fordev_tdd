@@ -16,6 +16,7 @@ abstract class Translations {
   //
   String get invalidCredentialsError;
   String get unexpectedError;
+  String get unknowError;
   //
   // Validators error messagens
   //

@@ -1,6 +1,6 @@
+import 'package:fordev_tdd/presentation/protocols/validator.dart';
 import 'package:test/test.dart';
 
-import 'package:fordev_tdd/utils/i18n/resources.dart';
 import 'package:fordev_tdd/validation/validators/validators.dart';
 
 void main() {
@@ -20,10 +20,9 @@ void main() {
   });
 
   test('Should return error if value is empty', () {
-    final error = R.strings.requiredField;
     // Act
     final result = sut.validate('');
     // Assert
-    expect(result, error);
+    expect(result, ValidatorError.requiredField);
   });
 }

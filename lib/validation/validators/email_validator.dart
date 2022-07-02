@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import '../../utils/i18n/resources.dart';
+import '../../presentation/protocols/validator.dart';
 import '../protocols/field_validator.dart';
 
 class EmailValidator extends Equatable implements FieldValidator {
@@ -18,9 +18,9 @@ class EmailValidator extends Equatable implements FieldValidator {
   List<Object?> get props => [_field];
 
   @override
-  String? validate(String value) {
+  ValidatorError? validate(String value) {
     return (value.isNotEmpty && !regex.hasMatch(value))
-        ? R.strings.invalidField
+        ? ValidatorError.invalidField
         : null;
   }
 }
