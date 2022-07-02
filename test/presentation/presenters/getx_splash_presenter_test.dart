@@ -23,7 +23,7 @@ void main() {
     // Arrange
     loadCurrentAccount.mockLoad(account: account);
     // Act
-    await sut.checkAccount();
+    await sut.checkAccount(durationInSeconds: 0);
     // Assert
     verify(() => loadCurrentAccount.load()).called(1);
   });
@@ -35,7 +35,7 @@ void main() {
     sut.navigateToStream
         .listen(expectAsync1((page) => expect(page, AppRoutes.surveys)));
     // Act
-    await sut.checkAccount();
+    await sut.checkAccount(durationInSeconds: 0);
   });
 
   test('Should go to login page on null result', () async {
@@ -45,7 +45,7 @@ void main() {
     sut.navigateToStream
         .listen(expectAsync1((page) => expect(page, AppRoutes.login)));
     // Act
-    await sut.checkAccount();
+    await sut.checkAccount(durationInSeconds: 0);
   });
 
   test('Should go to login page on error', () async {
@@ -56,6 +56,6 @@ void main() {
     sut.navigateToStream
         .listen(expectAsync1((page) => expect(page, AppRoutes.login)));
     // Act
-    await sut.checkAccount();
+    await sut.checkAccount(durationInSeconds: 0);
   });
 }
