@@ -37,6 +37,11 @@ class SignUpPresenterSpy extends Mock implements SignUpPresenter {
   void emitFormError() => isFormValidController.add(false);
 
   @override
+  Future<void> signUp() {
+    return Future(() {});
+  }
+
+  @override
   void dispose() {
     nameErrorController.close();
     emailErrorController.close();

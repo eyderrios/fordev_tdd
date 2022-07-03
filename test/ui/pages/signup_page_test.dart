@@ -192,12 +192,20 @@ void main() {
 
   testWidgets('Should enable button if form is valid',
       (WidgetTester tester) async {
+    ElevatedButton button;
+
     await loadPage(tester);
 
     presenter.emitFormValid();
     await tester.pump();
 
-    final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
+    button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
     expect(button.onPressed, isNotNull);
+
+    presenter.emitFormError();
+    await tester.pump();
+
+    button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
+    expect(button.onPressed, isNull);
   });
 }
