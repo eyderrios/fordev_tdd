@@ -1,22 +1,24 @@
+import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:get/get.dart';
 
 import 'package:fordev_tdd/main/apps/app_routes.dart';
 import 'package:fordev_tdd/ui/helpers/i18n/i18n.dart';
 import 'package:fordev_tdd/ui/pages/pages.dart';
 
-import '../mocks/login_presenter_spy.dart';
+import '../mocks/mocks.dart';
 
 void main() {
-  late SignupPresenterSpy presenter;
+  late SignUpPresenterSpy presenter;
 
   Future<void> loadPage(WidgetTester tester) async {
-    presenter = SignupPresenterSpy();
+    presenter = SignUpPresenterSpy();
     final signupPage = GetMaterialApp(
       initialRoute: AppRoutes.signup,
       getPages: [
-        GetPage(name: AppRoutes.signup, page: () => const SignUpPage()),
+        GetPage(name: AppRoutes.signup, page: () => SignUpPage(presenter)),
       ],
     );
     await tester.pumpWidget(signupPage);
@@ -26,7 +28,7 @@ void main() {
     presenter.dispose();
   });
 
-  testWidgets('Should load with correct initial state',
+  testWidgets('Should load SigUpPage with correct initial state',
       (WidgetTester tester) async {
     // Arrange
     await loadPage(tester);
@@ -63,5 +65,27 @@ void main() {
 
     // No loading on start
     expect(find.byType(CircularProgressIndicator), findsNothing);
+  });
+
+  testWidgets('Should call validate when any field changed',
+      (WidgetTester tester) async {
+    // Arrange
+    await loadPage(tester);
+    // Act & Assert
+    final name = faker.person.name();
+    await tester.enterText(find.bySemanticsLabel(R.strings.name), name);
+    verify(() => presenter.validateName(name));
+
+    final email = faker.internet.email();
+    await tester.enterText(find.bySemanticsLabel(R.strings.email), email);
+    verify(() => presenter.validateEmail(email));
+
+    final password = faker.internet.password();
+    await tester.enterText(find.bySemanticsLabel(R.strings.password), password);
+    verify(() => presenter.validatePassword(password));
+
+    await tester.enterText(
+        find.bySemanticsLabel(R.strings.passwordConfirmation), password);
+    verify(() => presenter.validatePasswordConfirmation(password));
   });
 }

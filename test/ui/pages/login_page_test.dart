@@ -12,10 +12,10 @@ import 'package:fordev_tdd/ui/pages/login/login_page.dart';
 import '../mocks/login_presenter_spy.dart';
 
 void main() {
-  late SignupPresenterSpy presenter;
+  late LoginPresenterSpy presenter;
 
   Future<void> loadPage(WidgetTester tester) async {
-    presenter = SignupPresenterSpy();
+    presenter = LoginPresenterSpy();
     final loginPage = GetMaterialApp(
       initialRoute: AppRoutes.login,
       getPages: [
