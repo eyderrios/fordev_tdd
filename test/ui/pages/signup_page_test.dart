@@ -90,6 +90,30 @@ void main() {
     verify(() => presenter.validatePasswordConfirmation(password));
   });
 
+  testWidgets('Should present name error', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    // Invalid e-mail
+    presenter.emitNameError(UIError.invalidField);
+    await tester.pump();
+    expect(find.text(UIError.invalidField.description), findsOneWidget);
+
+    // Empty e-mail
+    presenter.emitNameError(UIError.requiredField);
+    await tester.pump();
+    expect(find.text(UIError.requiredField.description), findsOneWidget);
+
+    // No e-mail error
+    presenter.emitNameError(null);
+    await tester.pump();
+    // When a TextFormField has only one text child, means it has no errors,
+    // since one of the children is always the labelText widget
+    final emailText = find.descendant(
+      of: find.bySemanticsLabel(R.strings.name),
+      matching: find.byType(Text),
+    );
+    expect(emailText, findsOneWidget);
+  });
   testWidgets('Should present email error', (WidgetTester tester) async {
     await loadPage(tester);
 
@@ -110,6 +134,57 @@ void main() {
     // since one of the children is always the labelText widget
     final emailText = find.descendant(
       of: find.bySemanticsLabel(R.strings.email),
+      matching: find.byType(Text),
+    );
+    expect(emailText, findsOneWidget);
+  });
+
+  testWidgets('Should present password error', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    // Invalid e-mail
+    presenter.emitPasswordError(UIError.invalidField);
+    await tester.pump();
+    expect(find.text(UIError.invalidField.description), findsOneWidget);
+
+    // Empty e-mail
+    presenter.emitPasswordError(UIError.requiredField);
+    await tester.pump();
+    expect(find.text(UIError.requiredField.description), findsOneWidget);
+
+    // No e-mail error
+    presenter.emitPasswordError(null);
+    await tester.pump();
+    // When a TextFormField has only one text child, means it has no errors,
+    // since one of the children is always the labelText widget
+    final emailText = find.descendant(
+      of: find.bySemanticsLabel(R.strings.password),
+      matching: find.byType(Text),
+    );
+    expect(emailText, findsOneWidget);
+  });
+
+  testWidgets('Should present password confirmation error',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    // Invalid e-mail
+    presenter.emitPasswordConfirmationError(UIError.invalidField);
+    await tester.pump();
+    expect(find.text(UIError.invalidField.description), findsOneWidget);
+
+    // Empty e-mail
+    presenter.emitPasswordConfirmationError(UIError.requiredField);
+    await tester.pump();
+    expect(find.text(UIError.requiredField.description), findsOneWidget);
+
+    // No e-mail error
+    presenter.emitPasswordConfirmationError(null);
+    await tester.pump();
+    // When a TextFormField has only one text child, means it has no errors,
+    // since one of the children is always the labelText widget
+    final emailText = find.descendant(
+      of: find.bySemanticsLabel(R.strings.passwordConfirmation),
       matching: find.byType(Text),
     );
     expect(emailText, findsOneWidget);
