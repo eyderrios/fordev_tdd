@@ -24,6 +24,8 @@ class EnUs implements Translations {
   // DomainError messages
   //
   @override
+  String get emailInUseError => 'E-mail in use';
+  @override
   String get invalidCredentialsError => 'Invalid credentials';
   @override
   String get unexpectedError => 'Unexpected error';
