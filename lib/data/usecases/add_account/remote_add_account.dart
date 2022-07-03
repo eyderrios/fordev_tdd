@@ -1,3 +1,5 @@
+import 'package:fordev_tdd/domain/helpers/domain_error.dart';
+
 import '../../../domain/usecases/usecases.dart';
 import '../../http/http.dart';
 
@@ -12,8 +14,12 @@ class RemoteAddAccount {
 
   Future<void> add(AddAccountParams params) async {
     final body = RemoteAddAccountParams.fromDomain(params).toJson();
-    await httpClient.request(url: url, method: 'post', body: body);
-    return Future<void>(() {});
+    try {
+      await httpClient.request(url: url, method: 'post', body: body);
+      return Future<void>(() {});
+    } on HttpError {
+      throw DomainError.unexpected;
+    }
   }
 }
 

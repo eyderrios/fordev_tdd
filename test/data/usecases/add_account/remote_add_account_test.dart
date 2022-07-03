@@ -1,4 +1,5 @@
 import 'package:faker/faker.dart';
+import 'package:fordev_tdd/domain/helpers/helpers.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
@@ -42,5 +43,14 @@ void main() {
           method: 'post',
           body: body,
         )).called(1);
+  });
+
+  test('Should throw UnexpectedError if HttpClient returns 400', () {
+    // Arrange
+    client.mockRequestError(HttpError.badRequest);
+    // Act
+    final future = sut.add(params);
+    // Assert
+    expect(future, throwsA(DomainError.unexpected));
   });
 }
