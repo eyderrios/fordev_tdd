@@ -208,4 +208,32 @@ void main() {
     button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
     expect(button.onPressed, isNull);
   });
+
+  testWidgets('Should call signUp() on form submit',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    presenter.emitFormValid();
+    await tester.pump();
+
+    final button = find.byType(ElevatedButton);
+    await tester.ensureVisible(button);
+    await tester.tap(button);
+    await tester.pump();
+
+    verify(() => presenter.signUp()).called(1);
+  });
+
+  testWidgets('Should present/hide loading', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    // Show loading
+    presenter.emitLoadind(true);
+    await tester.pump();
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    // Hide loading
+    presenter.emitLoadind(false);
+    await tester.pump();
+    expect(find.byType(CircularProgressIndicator), findsNothing);
+  });
 }

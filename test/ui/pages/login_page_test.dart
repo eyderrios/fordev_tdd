@@ -168,7 +168,9 @@ void main() {
 
     presenter.emitFormValid();
     await tester.pump();
-    await tester.tap(find.byType(ElevatedButton));
+    final button = find.byType(ElevatedButton);
+    await tester.ensureVisible(button);
+    await tester.tap(button);
     await tester.pump();
 
     verify(() => presenter.auth()).called(1);
