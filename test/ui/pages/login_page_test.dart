@@ -12,6 +12,8 @@ import 'package:fordev_tdd/ui/pages/login/login_page.dart';
 import '../mocks/login_presenter_spy.dart';
 
 void main() {
+  const fakeRoute = '/fake_route';
+  const fakePageTitle = 'Fake Page Title';
   late LoginPresenterSpy presenter;
 
   Future<void> loadPage(WidgetTester tester) async {
@@ -21,8 +23,8 @@ void main() {
       getPages: [
         GetPage(name: AppRoutes.login, page: () => LoginPage(presenter)),
         GetPage(
-          name: AppRoutes.surveys,
-          page: () => const Scaffold(body: Text(AppRoutes.surveys)),
+          name: fakeRoute,
+          page: () => const Scaffold(body: Text(fakePageTitle)),
         ),
       ],
     );
@@ -210,10 +212,10 @@ void main() {
   testWidgets('Should change page', (WidgetTester tester) async {
     await loadPage(tester);
 
-    presenter.emitNavigateTo(AppRoutes.surveys);
+    presenter.emitNavigateTo(fakeRoute);
     await tester.pumpAndSettle();
 
-    expect(Get.currentRoute, AppRoutes.surveys);
-    expect(find.text(AppRoutes.surveys), findsOneWidget);
+    expect(Get.currentRoute, fakeRoute);
+    expect(find.text(fakePageTitle), findsOneWidget);
   });
 }

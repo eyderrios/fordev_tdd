@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fordev_tdd/ui/pages/signup/sigup_presenter.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 import '../../../ui/helpers/i18n/i18n.dart';
@@ -37,14 +38,20 @@ class SignUpPage extends StatelessWidget {
           }
         });
 
+        presenter.navigateToStream.listen((page) {
+          if (page?.isNotEmpty == true) {
+            Get.offAllNamed(page!);
+          }
+        });
+
         return GestureDetector(
           onTap: () => _hideKeyboard(context),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const LoginHeader(),
-                Headline1(R.strings.addAccount.toUpperCase()),
+                // const LoginHeader(),
+                // Headline1(R.strings.addAccount.toUpperCase()),
                 Padding(
                   padding: const EdgeInsets.all(32.0),
                   child: Provider<SignUpPresenter>.value(
@@ -66,7 +73,7 @@ class SignUpPage extends StatelessWidget {
                           TextButton.icon(
                             onPressed: () {},
                             icon: const Icon(Icons.exit_to_app),
-                            label: Text(R.strings.login),
+                            label: Text(R.strings.signUp),
                           ),
                         ],
                       ),

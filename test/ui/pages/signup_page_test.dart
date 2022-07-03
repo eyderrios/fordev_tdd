@@ -12,14 +12,20 @@ import 'package:fordev_tdd/ui/pages/pages.dart';
 import '../mocks/mocks.dart';
 
 void main() {
+  const fakeRoute = '/fake_route';
+  const fakePageTitle = 'Fake Page Title';
   late SignUpPresenterSpy presenter;
 
   Future<void> loadPage(WidgetTester tester) async {
     presenter = SignUpPresenterSpy();
     final signupPage = GetMaterialApp(
-      initialRoute: AppRoutes.signup,
+      initialRoute: AppRoutes.signUp,
       getPages: [
-        GetPage(name: AppRoutes.signup, page: () => SignUpPage(presenter)),
+        GetPage(name: AppRoutes.signUp, page: () => SignUpPage(presenter)),
+        GetPage(
+          name: fakeRoute,
+          page: () => const Scaffold(body: Text(fakePageTitle)),
+        ),
       ],
     );
     await tester.pumpWidget(signupPage);
@@ -255,5 +261,27 @@ void main() {
     await tester.pump();
 
     expect(find.text(UIError.unexpected.description), findsOneWidget);
+  });
+
+  testWidgets('Should change page', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    presenter.emitNavigateTo(fakeRoute);
+    await tester.pumpAndSettle();
+
+    expect(Get.currentRoute, fakeRoute);
+    expect(find.text(fakePageTitle), findsOneWidget);
+  });
+
+  testWidgets('Should not change page', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    presenter.emitNavigateTo('');
+    await tester.pumpAndSettle();
+    expect(Get.currentRoute, AppRoutes.signUp);
+
+    presenter.emitNavigateTo(null);
+    await tester.pumpAndSettle();
+    expect(Get.currentRoute, AppRoutes.signUp);
   });
 }
