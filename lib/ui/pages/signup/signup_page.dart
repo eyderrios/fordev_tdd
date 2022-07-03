@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../../ui/helpers/i18n/i18n.dart';
 import '../../components/components.dart';
+import '../../helpers/errors/ui_error.dart';
 import 'components/components.dart';
 
 class SignUpPage extends StatelessWidget {
@@ -27,6 +28,12 @@ class SignUpPage extends StatelessWidget {
             showLoadingSpinner(context);
           } else {
             hideLoadingSpinner(context);
+          }
+        });
+
+        presenter.mainErrorStream.listen((error) {
+          if (error != null) {
+            showErrorMessage(context, error.description);
           }
         });
 

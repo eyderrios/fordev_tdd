@@ -5,6 +5,7 @@ import 'package:fordev_tdd/ui/pages/signup/sigup_presenter.dart';
 import 'package:mocktail/mocktail.dart';
 
 class SignUpPresenterSpy extends Mock implements SignUpPresenter {
+  final mainErrorController = StreamController<UIError?>();
   final nameErrorController = StreamController<UIError?>();
   final emailErrorController = StreamController<UIError?>();
   final passwordErrorController = StreamController<UIError?>();
@@ -17,6 +18,7 @@ class SignUpPresenterSpy extends Mock implements SignUpPresenter {
   }
 
   void _mockMethods() {
+    when(() => mainErrorStream).thenAnswer((_) => mainErrorController.stream);
     when(() => nameErrorStream).thenAnswer((_) => nameErrorController.stream);
     when(() => emailErrorStream).thenAnswer((_) => emailErrorController.stream);
     when(() => passwordErrorStream)
@@ -31,6 +33,7 @@ class SignUpPresenterSpy extends Mock implements SignUpPresenter {
     when(() => signUp()).thenAnswer((_) async => _);
   }
 
+  void emitMainError(UIError? error) => mainErrorController.add(error);
   void emitNameError(UIError? error) => nameErrorController.add(error);
   void emitEmailError(UIError? error) => emailErrorController.add(error);
   void emitPasswordError(UIError? error) => passwordErrorController.add(error);
@@ -44,6 +47,7 @@ class SignUpPresenterSpy extends Mock implements SignUpPresenter {
 
   @override
   void dispose() {
+    mainErrorController.close();
     nameErrorController.close();
     emailErrorController.close();
     passwordErrorController.close();

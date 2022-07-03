@@ -6,6 +6,7 @@ enum UIError {
   requiredField,
   invalidField,
   invalidCredentials,
+  emailInUse,
   unexpected,
   unknow,
 }
@@ -15,6 +16,7 @@ extension UIErrorExtension on UIError {
     UIError.requiredField: R.strings.requiredField,
     UIError.invalidField: R.strings.invalidField,
     UIError.invalidCredentials: R.strings.invalidCredentialsError,
+    UIError.emailInUse: R.strings.emailInUseError,
     UIError.unexpected: R.strings.unexpectedError,
   };
 
@@ -29,6 +31,9 @@ UIError domainErrorToUIError(DomainError error) {
   switch (error) {
     case DomainError.invalidCredentials:
       uiError = UIError.invalidCredentials;
+      break;
+    case DomainError.emailInUse:
+      uiError = UIError.emailInUse;
       break;
     case DomainError.unexpected:
       uiError = UIError.unexpected;
