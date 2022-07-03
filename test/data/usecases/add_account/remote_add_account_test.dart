@@ -38,7 +38,7 @@ void main() {
 
   test('Should call HttpClient with correct URL', () {
     // Arrange
-    client.mockRequest(body);
+    client.mockRequest(bodyToken);
     // Act
     sut.add(params);
     // Assert
@@ -92,5 +92,16 @@ void main() {
     final account = await sut.add(params);
     // Assert
     expect(account.token, bodyToken['accessToken']);
+  });
+
+  test(
+      'Should throw UnexpectedError if HttpClient returns 200 with invalid data',
+      () async {
+    // Arrange
+    client.mockRequest(ApiFactory.makeInvalidBody());
+    // Act
+    final future = sut.add(params);
+    // Assert
+    expect(future, throwsA(DomainError.unexpected));
   });
 }
