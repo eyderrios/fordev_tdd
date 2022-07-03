@@ -1,6 +1,7 @@
 import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:fordev_tdd/ui/helpers/errors/ui_error.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:get/get.dart';
 
@@ -87,5 +88,30 @@ void main() {
     await tester.enterText(
         find.bySemanticsLabel(R.strings.passwordConfirmation), password);
     verify(() => presenter.validatePasswordConfirmation(password));
+  });
+
+  testWidgets('Should present email error', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    // Invalid e-mail
+    presenter.emitEmailError(UIError.invalidField);
+    await tester.pump();
+    expect(find.text(UIError.invalidField.description), findsOneWidget);
+
+    // Empty e-mail
+    presenter.emitEmailError(UIError.requiredField);
+    await tester.pump();
+    expect(find.text(UIError.requiredField.description), findsOneWidget);
+
+    // No e-mail error
+    presenter.emitEmailError(null);
+    await tester.pump();
+    // When a TextFormField has only one text child, means it has no errors,
+    // since one of the children is always the labelText widget
+    final emailText = find.descendant(
+      of: find.bySemanticsLabel(R.strings.email),
+      matching: find.byType(Text),
+    );
+    expect(emailText, findsOneWidget);
   });
 }
