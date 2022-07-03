@@ -18,6 +18,7 @@ void main() {
   late RemoteAddAccount sut;
   late AddAccountParams params;
   late HttpClientBody body;
+  late HttpClientBody bodyToken;
 
   setUp(() {
     url = faker.internet.httpUrl();
@@ -29,6 +30,9 @@ void main() {
       'email': params.email,
       'password': params.password,
       'passwordConfirmation': params.passwordConfirmation,
+    };
+    bodyToken = {
+      'accessToken': faker.guid.guid(),
     };
   });
 
@@ -79,5 +83,14 @@ void main() {
     final future = sut.add(params);
     // Assert
     expect(future, throwsA(DomainError.emailInUse));
+  });
+
+  test('Should return an Account if HttpClient returns 200', () async {
+    // Arrange
+    client.mockRequest(bodyToken);
+    // Act
+    final account = await sut.add(params);
+    // Assert
+    expect(account.token, bodyToken['accessToken']);
   });
 }
