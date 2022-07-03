@@ -7,12 +7,10 @@ import '../../models/models.dart';
 class RemoteAuthentication implements Authentication {
   final HttpClient httpClient;
   final String url;
-  Map? body;
 
   RemoteAuthentication({
     required this.httpClient,
     required this.url,
-    this.body,
   });
 
   @override

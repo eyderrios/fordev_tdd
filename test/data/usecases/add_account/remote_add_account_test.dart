@@ -1,0 +1,46 @@
+import 'package:faker/faker.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:test/test.dart';
+
+import 'package:fordev_tdd/domain/usecases/usecases.dart';
+
+import 'package:fordev_tdd/data/usecases/usecases.dart';
+import 'package:fordev_tdd/data/http/http.dart';
+
+import '../../../domain/mocks/mocks.dart';
+import '../../../infra/mocks/mocks.dart';
+import '../../mocks/mocks.dart';
+
+void main() {
+  late String url;
+  late HttpClientSpy client;
+  late RemoteAddAccount sut;
+  late AddAccountParams params;
+  late HttpClientBody body;
+
+  setUp(() {
+    url = faker.internet.httpUrl();
+    client = HttpClientSpy();
+    sut = RemoteAddAccount(httpClient: client, url: url);
+    params = ParamsFactory.makeAddAccountParams();
+    body = {
+      'name': params.name,
+      'email': params.email,
+      'password': params.password,
+      'passwordConfirmation': params.passwordConfirmation,
+    };
+  });
+
+  test('Should call HttpClient with correct URL', () {
+    // Arrange
+    client.mockRequest(body);
+    // Act
+    sut.add(params);
+    // Assert
+    verify(() => client.request(
+          url: url,
+          method: 'post',
+          body: body,
+        )).called(1);
+  });
+}

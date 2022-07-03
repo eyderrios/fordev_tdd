@@ -28,7 +28,6 @@ void main() {
       'email': params.email,
       'password': params.password,
     };
-    registerFallbackValue(Uri.parse(url));
     client.mockRequest(ApiFactory.makeAccountBody());
   });
 
