@@ -9,6 +9,7 @@ class SignUpPresenterSpy extends Mock implements SignUpPresenter {
   final emailErrorController = StreamController<UIError?>();
   final passwordErrorController = StreamController<UIError?>();
   final passwordConfirmationErrorController = StreamController<UIError?>();
+  final isFormValidController = StreamController<bool>();
 
   SignUpPresenterSpy() {
     _mockMethods();
@@ -21,6 +22,9 @@ class SignUpPresenterSpy extends Mock implements SignUpPresenter {
         .thenAnswer((_) => passwordErrorController.stream);
     when(() => passwordConfirmationErrorStream)
         .thenAnswer((_) => passwordConfirmationErrorController.stream);
+
+    when(() => isFormValidStream)
+        .thenAnswer((_) => isFormValidController.stream);
   }
 
   void emitNameError(UIError? error) => nameErrorController.add(error);
@@ -29,11 +33,15 @@ class SignUpPresenterSpy extends Mock implements SignUpPresenter {
   void emitPasswordConfirmationError(UIError? error) =>
       passwordConfirmationErrorController.add(error);
 
+  void emitFormValid() => isFormValidController.add(true);
+  void emitFormError() => isFormValidController.add(false);
+
   @override
   void dispose() {
     nameErrorController.close();
     emailErrorController.close();
     passwordErrorController.close();
     passwordConfirmationErrorController.close();
+    isFormValidController.close();
   }
 }

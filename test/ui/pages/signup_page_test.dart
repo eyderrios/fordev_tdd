@@ -189,4 +189,15 @@ void main() {
     );
     expect(emailText, findsOneWidget);
   });
+
+  testWidgets('Should enable button if form is valid',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    presenter.emitFormValid();
+    await tester.pump();
+
+    final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
+    expect(button.onPressed, isNotNull);
+  });
 }
