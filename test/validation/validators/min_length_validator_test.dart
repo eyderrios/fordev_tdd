@@ -1,3 +1,4 @@
+import 'package:faker/faker.dart';
 import 'package:test/test.dart';
 
 import 'package:fordev_tdd/presentation/protocols/validator.dart';
@@ -16,7 +17,19 @@ void main() {
     expect(sut.validate(''), ValidatorError.invalidField);
   });
 
-  test('', () {
-    //
+  test('Should return error if value length is less than minLength', () {
+    final value = faker.randomGenerator.string(fieldLength - 1, min: 1);
+    expect(sut.validate(value), ValidatorError.invalidField);
+  });
+
+  test('Should return error if value length is equal to minLength', () {
+    final value = faker.randomGenerator.string(fieldLength, min: fieldLength);
+    expect(sut.validate(value), isNull);
+  });
+
+  test('Should return error if value length is greater than minLength', () {
+    final value =
+        faker.randomGenerator.string(2 * fieldLength, min: fieldLength + 1);
+    expect(sut.validate(value), isNull);
   });
 }
