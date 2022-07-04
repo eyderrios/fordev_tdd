@@ -367,4 +367,11 @@ void main() {
     // Act
     await sut.signUp();
   });
+
+  test('Should login page on link success', () async {
+    // Assert Later
+    sut.navigateToStream
+        .listen(expectAsync1((page) => expect(page, AppRoutes.login)));
+    sut.goToLogin();
+  });
 }

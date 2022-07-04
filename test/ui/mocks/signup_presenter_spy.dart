@@ -33,6 +33,7 @@ class SignUpPresenterSpy extends Mock implements SignUpPresenter {
 
     when(() => navigateToStream).thenAnswer((_) => navigateToController.stream);
 
+    when(() => goToLogin()).thenReturn(null);
     when(() => signUp()).thenAnswer((_) async => _);
   }
 

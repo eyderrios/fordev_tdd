@@ -285,13 +285,15 @@ void main() {
     expect(Get.currentRoute, AppRoutes.signUp);
   });
 
-  testWidgets('Should call gotoSignUp on link click',
+  testWidgets('Should call goToLogin on link click',
       (WidgetTester tester) async {
     await loadPage(tester);
 
-    final button = find.byType(TextButton);
+    final button = find.text(R.strings.signUp);
     await tester.ensureVisible(button);
     await tester.tap(button);
     await tester.pump();
+
+    verify(() => presenter.goToLogin()).called(1);
   });
 }
