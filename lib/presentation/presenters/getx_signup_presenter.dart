@@ -7,12 +7,14 @@ class GetxSignUpPresenter extends GetxController {
   static const nameFieldName = 'name';
   static const emailFieldName = 'email';
   static const passwordFieldName = 'password';
+  static const passwordConfirmationFieldName = 'passwordConfirmation';
 
   final Validator validator;
 
   final _nameError = Rx<UIError?>(null);
   final _emailError = Rx<UIError?>(null);
   final _passwordError = Rx<UIError?>(null);
+  final _passwordConfirmationError = Rx<UIError?>(null);
   final _isFormValid = RxBool(false);
 
   GetxSignUpPresenter({
@@ -22,6 +24,8 @@ class GetxSignUpPresenter extends GetxController {
   Stream<UIError?> get nameErrorStream => _nameError.stream;
   Stream<UIError?> get emailErrorStream => _emailError.stream;
   Stream<UIError?> get passwordErrorStream => _passwordError.stream;
+  Stream<UIError?> get passwordConfirmationErrorStream =>
+      _passwordConfirmationError.stream;
 
   Stream<bool> get isFormValidStream => _isFormValid.stream;
 
@@ -70,7 +74,16 @@ class GetxSignUpPresenter extends GetxController {
     );
     _validateForm();
   }
-/*
+
+  void validatePasswordConfirmation(String passwordConfirmation) {
+    _passwordConfirmationError.value = _validateField(
+      field: GetxSignUpPresenter.passwordConfirmationFieldName,
+      value: passwordConfirmation,
+    );
+    _validateForm();
+  }
+
+  /*
   @override
   Future<void> auth() async {
     try {

@@ -11,7 +11,6 @@ import 'package:fordev_tdd/domain/usecases/authentication.dart';
 import 'package:fordev_tdd/presentation/presenters/presenters.dart';
 
 import '../../domain/mocks/mocks.dart';
-import '../../domain/mocks/save_current_account_spy.dart';
 import '../../ui/mocks/mocks.dart';
 
 void main() {
