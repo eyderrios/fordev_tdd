@@ -284,4 +284,14 @@ void main() {
     await tester.pumpAndSettle();
     expect(Get.currentRoute, AppRoutes.signUp);
   });
+
+  testWidgets('Should call gotoSignUp on link click',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    final button = find.byType(TextButton);
+    await tester.ensureVisible(button);
+    await tester.tap(button);
+    await tester.pump();
+  });
 }

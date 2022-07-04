@@ -18,7 +18,10 @@ class LoginPresenterSpy extends Mock implements LoginPresenter {
   }
 
   void _mockMethods() {
+    when(() => goToSignUp()).thenReturn(null);
+
     when(() => auth()).thenAnswer((_) async => _);
+
     when(() => emailErrorStream).thenAnswer((_) => emailErrorController.stream);
     when(() => passwordErrorStream)
         .thenAnswer((_) => passwordErrorController.stream);

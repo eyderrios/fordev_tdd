@@ -218,4 +218,16 @@ void main() {
     expect(Get.currentRoute, fakeRoute);
     expect(find.text(fakePageTitle), findsOneWidget);
   });
+
+  testWidgets('Should call goToSignUp on link click',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    final button = find.text(R.strings.login);
+    await tester.ensureVisible(button);
+    await tester.tap(button);
+    await tester.pump();
+
+    verify(() => presenter.goToSignUp()).called(1);
+  });
 }

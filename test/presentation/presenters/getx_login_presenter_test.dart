@@ -251,4 +251,14 @@ void main() {
     // Act
     await sut.auth();
   });
+
+  test('Should signup page on link success', () async {
+    // Arrange
+    auth.mockAuth(params);
+    saveCurrentAccount.mockSave();
+    // Assert Later
+    sut.navigateToStream
+        .listen(expectAsync1((page) => expect(page, AppRoutes.signUp)));
+    sut.goToSignUp();
+  });
 }

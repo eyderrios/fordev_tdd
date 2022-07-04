@@ -110,6 +110,11 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
     }
   }
 
+  @override
+  void goToSignUp() {
+    _navigateTo.value = AppRoutes.signUp;
+  }
+
   // @override
   // void dispose() {
   //   super.dispose();

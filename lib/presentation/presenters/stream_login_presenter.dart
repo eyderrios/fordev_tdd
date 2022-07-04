@@ -135,4 +135,7 @@ class StreamLoginPresenter implements LoginPresenter {
   void dispose() {
     _controller.close();
   }
+
+  @override
+  void goToSignUp() {}
 }
