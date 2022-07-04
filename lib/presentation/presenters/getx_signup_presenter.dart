@@ -12,6 +12,7 @@ class GetxSignUpPresenter extends GetxController {
 
   final Validator validator;
   final AddAccount addAccount;
+  final SaveCurrentAccount saveCurrentAccount;
 
   String? _name;
   String? _email;
@@ -27,6 +28,7 @@ class GetxSignUpPresenter extends GetxController {
   GetxSignUpPresenter({
     required this.validator,
     required this.addAccount,
+    required this.saveCurrentAccount,
   });
 
   Stream<UIError?> get nameErrorStream => _nameError.stream;
@@ -109,7 +111,8 @@ class GetxSignUpPresenter extends GetxController {
       password: _password!,
       passwordConfirmation: _passwordConfirmation!,
     );
-    addAccount.add(params);
+    final account = await addAccount.add(params);
+    await saveCurrentAccount.save(account);
   }
 
   // @override

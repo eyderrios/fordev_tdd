@@ -1,4 +1,5 @@
 import 'package:faker/faker.dart';
+import 'package:fordev_tdd/domain/entities/entities.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
@@ -7,12 +8,14 @@ import 'package:fordev_tdd/presentation/protocols/validator.dart';
 import 'package:fordev_tdd/ui/helpers/errors/errors.dart';
 import 'package:fordev_tdd/presentation/presenters/presenters.dart';
 
+import '../../domain/mocks/mocks.dart';
 import '../../ui/mocks/mocks.dart';
 
 void main() {
   late GetxSignUpPresenter sut;
   late ValidationSpy validator;
   late AddAccountSpy addAccount;
+  late SaveCurrentAccountSpy saveCurrentAccount;
   late String name;
   late String email;
   late String password;
@@ -22,9 +25,11 @@ void main() {
   setUp(() {
     validator = ValidationSpy();
     addAccount = AddAccountSpy();
+    saveCurrentAccount = SaveCurrentAccountSpy();
     sut = GetxSignUpPresenter(
       validator: validator,
       addAccount: addAccount,
+      saveCurrentAccount: saveCurrentAccount,
     );
     token = faker.guid.guid();
     name = faker.person.name();
@@ -257,5 +262,21 @@ void main() {
     );
 
     verify(() => addAccount.add(params)).called(1);
+  });
+
+  test('Should call SaveCurrentAccount with correct parameter', () async {
+    // Arrange
+    addAccount.mockAdd(token);
+    saveCurrentAccount.mockSave();
+
+    sut.validateName(name);
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+    sut.validatePasswordConfirmation(passwordConfirmation);
+    // Act
+    await sut.signUp();
+    // Assert
+    verify(() => saveCurrentAccount.save(AccountEntity(token: token)))
+        .called(1);
   });
 }
