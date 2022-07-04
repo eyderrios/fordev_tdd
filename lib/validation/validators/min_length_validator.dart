@@ -18,7 +18,7 @@ class MinLengthValidator extends Equatable implements FieldValidator {
 
   @override
   ValidatorError? validate(FieldInput input) {
-    return (input[field].length < minLength)
+    return (input.containsKey(field) && (input[field].length < minLength))
         ? ValidatorError.invalidField
         : null;
   }

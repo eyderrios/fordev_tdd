@@ -17,6 +17,9 @@ class EmailValidator extends Equatable implements FieldValidator {
 
   @override
   ValidatorError? validate(FieldInput input) {
+    if (!input.containsKey(field)) {
+      return null;
+    }
     final String value = input[field];
     return (value.isNotEmpty && !_regex.hasMatch(value))
         ? ValidatorError.invalidField

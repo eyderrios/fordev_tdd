@@ -16,6 +16,8 @@ class RequiredFieldValidator extends Equatable implements FieldValidator {
 
   @override
   ValidatorError? validate(FieldInput input) {
-    return input[field].isEmpty ? ValidatorError.requiredField : null;
+    return (input.containsKey(field) && input[field].isEmpty)
+        ? ValidatorError.requiredField
+        : null;
   }
 }

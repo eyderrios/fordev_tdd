@@ -12,6 +12,10 @@ void main() {
     sut = const RequiredFieldValidator(fieldName);
   });
 
+  test('Should return null on invalid case', () {
+    expect(sut.validate({}), isNull);
+  });
+
   test('Should return null if value is not empty', () {
     // Act
     final result = sut.validate({fieldName: fieldValue});

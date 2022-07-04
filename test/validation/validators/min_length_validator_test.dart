@@ -13,6 +13,10 @@ void main() {
     sut = const MinLengthValidator(field: fieldName, minLength: fieldLength);
   });
 
+  test('Should return null on invalid case', () {
+    expect(sut.validate({}), isNull);
+  });
+
   test('Should return error if value is empty', () {
     expect(sut.validate({fieldName: ''}), ValidatorError.invalidField);
   });

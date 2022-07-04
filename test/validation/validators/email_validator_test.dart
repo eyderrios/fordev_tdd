@@ -13,18 +13,25 @@ void main() {
     sut = const EmailValidator(fieldName);
   });
 
+  test('Should return null on invalid case', () {
+    // Act
+    final error = sut.validate({});
+    // Assert
+    expect(error, isNull);
+  });
+
   test('Should return null if email is empty', () {
     // Act
     final error = sut.validate({fieldName: ''});
     // Assert
-    expect(error, null);
+    expect(error, isNull);
   });
 
   test('Should return null if email is valid', () {
     // Act
     final error = sut.validate({fieldName: email});
     // Assert
-    expect(error, null);
+    expect(error, isNull);
   });
 
   test('Should return error if email is invalid', () {
