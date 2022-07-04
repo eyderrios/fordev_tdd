@@ -1,9 +1,10 @@
 import 'package:faker/faker.dart';
-import 'package:fordev_tdd/presentation/protocols/validator.dart';
-import 'package:fordev_tdd/ui/helpers/errors/errors.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
+import 'package:fordev_tdd/domain/usecases/add_account.dart';
+import 'package:fordev_tdd/presentation/protocols/validator.dart';
+import 'package:fordev_tdd/ui/helpers/errors/errors.dart';
 import 'package:fordev_tdd/presentation/presenters/presenters.dart';
 
 import '../../ui/mocks/mocks.dart';
@@ -11,16 +12,21 @@ import '../../ui/mocks/mocks.dart';
 void main() {
   late GetxSignUpPresenter sut;
   late ValidationSpy validator;
+  late AddAccountSpy addAccount;
   late String name;
   late String email;
   late String password;
   late String passwordConfirmation;
+  late String token;
 
   setUp(() {
     validator = ValidationSpy();
+    addAccount = AddAccountSpy();
     sut = GetxSignUpPresenter(
       validator: validator,
+      addAccount: addAccount,
     );
+    token = faker.guid.guid();
     name = faker.person.name();
     email = faker.internet.email();
     password = faker.internet.password();
@@ -229,5 +235,27 @@ void main() {
     await Future.delayed(Duration.zero);
     sut.validatePasswordConfirmation(passwordConfirmation);
     await Future.delayed(Duration.zero);
+  });
+
+  test('Should call AddAccount.sigup() with correct parameters', () async {
+    // Arrange
+    addAccount.mockAdd(token);
+    // saveCurrentAccount.mockSave();
+
+    sut.validateName(name);
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+    sut.validatePasswordConfirmation(passwordConfirmation);
+    // Act
+    await sut.signUp();
+    // Assert
+    final params = AddAccountParams(
+      name: name,
+      email: email,
+      password: password,
+      passwordConfirmation: passwordConfirmation,
+    );
+
+    verify(() => addAccount.add(params)).called(1);
   });
 }

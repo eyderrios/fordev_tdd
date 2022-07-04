@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 
+import '../../domain/usecases/usecases.dart';
 import '../../ui/helpers/errors/errors.dart';
 import '../protocols/validator.dart';
 
@@ -10,6 +11,7 @@ class GetxSignUpPresenter extends GetxController {
   static const passwordConfirmationFieldName = 'passwordConfirmation';
 
   final Validator validator;
+  final AddAccount addAccount;
 
   String? _name;
   String? _email;
@@ -24,6 +26,7 @@ class GetxSignUpPresenter extends GetxController {
 
   GetxSignUpPresenter({
     required this.validator,
+    required this.addAccount,
   });
 
   Stream<UIError?> get nameErrorStream => _nameError.stream;
@@ -99,23 +102,15 @@ class GetxSignUpPresenter extends GetxController {
     _validateForm();
   }
 
-  /*
-  @override
-  Future<void> auth() async {
-    try {
-      _isLoading.value = true;
-      final account = await authentication.auth(AuthenticationParams(
-        email: _email!,
-        password: _password!,
-      ));
-      await saveCurrentAccount.save(account);
-      _navigateTo.value = AppRoutes.surveys;
-    } on DomainError catch (error) {
-      _mainError.value = domainErrorToUIError(error);
-      _isLoading.value = false;
-    }
+  Future<void> signUp() async {
+    final params = AddAccountParams(
+      name: _name!,
+      email: _email!,
+      password: _password!,
+      passwordConfirmation: _passwordConfirmation!,
+    );
+    addAccount.add(params);
   }
-*/
 
   // @override
   // void dispose() {
