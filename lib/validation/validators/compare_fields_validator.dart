@@ -24,10 +24,19 @@ class CompareFieldsValidator extends Equatable implements FieldValidator {
 
   @override
   ValidatorError? validate(FieldInput input) {
-    final value1 = ignoreCase ? input[field] : input[field].toLowerCase();
-    final value2 = ignoreCase
-        ? input[fieldToCompare]
-        : input[fieldToCompare].toLowerCase();
-    return (value1 != value2) ? ValidatorError.invalidField : null;
+    final value1 = input.containsKey(field)
+        ? ignoreCase
+            ? input[field]
+            : input[field].toLowerCase()
+        : null;
+    final value2 = input.containsKey(fieldToCompare)
+        ? ignoreCase
+            ? input[fieldToCompare]
+            : input[fieldToCompare].toLowerCase()
+        : null;
+
+    return ((value1 == null) && (value2 == null)) || (value1 != value2)
+        ? ValidatorError.invalidField
+        : null;
   }
 }

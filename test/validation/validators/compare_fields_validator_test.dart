@@ -15,6 +15,22 @@ void main() {
         field: field1Name, fieldToCompare: field2Name);
   });
 
+  test('Should return null on invalid cases', () {
+    expect(
+        sut.validate({
+          field1Name: someValue,
+        }),
+        ValidatorError.invalidField);
+
+    expect(
+        sut.validate({
+          field2Name: otherValue,
+        }),
+        ValidatorError.invalidField);
+
+    expect(sut.validate({}), ValidatorError.invalidField);
+  });
+
   test('Should return error if values are not equal', () {
     final input = {
       field1Name: someValue,
