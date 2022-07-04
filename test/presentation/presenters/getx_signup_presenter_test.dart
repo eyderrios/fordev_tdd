@@ -11,6 +11,7 @@ import '../../ui/mocks/mocks.dart';
 void main() {
   late GetxSignUpPresenter sut;
   late ValidationSpy validator;
+  late String name;
   late String email;
 
   setUp(() {
@@ -18,6 +19,7 @@ void main() {
     sut = GetxSignUpPresenter(
       validator: validator,
     );
+    name = faker.person.name();
     email = faker.internet.email();
   });
 
@@ -28,7 +30,7 @@ void main() {
     sut.validateEmail(email);
     // Assert
     verify(() => validator.validate(
-          field: StreamLoginPresenter.emailFieldName,
+          field: GetxSignUpPresenter.emailFieldName,
           value: email,
         )).called(1);
   });
@@ -67,5 +69,53 @@ void main() {
     // Act
     sut.validateEmail(email);
     sut.validateEmail(email);
+  });
+
+  test('Should call validation with correct name', () {
+    // Arrange
+    validator.mockValidate(value: null);
+    // Act
+    sut.validateName(name);
+    // Assert
+    verify(() => validator.validate(
+          field: GetxSignUpPresenter.nameFieldName,
+          value: name,
+        )).called(1);
+  });
+
+  test('Should emit invalidFieldError if name is invalid', () {
+    validator.mockValidate(value: ValidatorError.invalidField);
+
+    sut.nameErrorStream.listen(
+        expectAsync1((errorMsg) => expect(errorMsg, UIError.invalidField)));
+    sut.isFormValidStream.listen((isValid) => expect(isValid, false));
+
+    sut.validateName(name);
+    sut.validateName(name);
+  });
+
+  test('Should emit requiredFieldError if name is empty', () {
+    validator.mockValidate(value: ValidatorError.requiredField);
+
+    sut.nameErrorStream.listen(
+        expectAsync1((errorMsg) => expect(errorMsg, UIError.requiredField)));
+    sut.isFormValidStream.listen((isValid) => expect(isValid, false));
+
+    sut.validateName(name);
+    sut.validateName(name);
+  });
+
+  test('Should emit null if validation succeeds', () {
+    // Arrange
+    validator.mockValidate(value: null);
+    // Late Assert
+    sut.nameErrorStream.listen(expectAsync1((errorMsg) {
+      expect(errorMsg, null);
+    }));
+    sut.isFormValidStream
+        .listen(expectAsync1((isValid) => expect(isValid, false)));
+    // Act
+    sut.validateName(name);
+    sut.validateName(name);
   });
 }

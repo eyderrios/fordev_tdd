@@ -47,7 +47,7 @@ void main() {
     sut.validateEmail(email);
     // Assert
     verify(() => validator.validate(
-          field: StreamLoginPresenter.emailFieldName,
+          field: GetxLoginPresenter.emailFieldName,
           value: email,
         )).called(1);
   });
@@ -95,7 +95,7 @@ void main() {
     sut.validatePassword(password);
     // Assert
     verify(() => validator.validate(
-          field: StreamLoginPresenter.passwordFieldName,
+          field: GetxLoginPresenter.passwordFieldName,
           value: password,
         )).called(1);
   });
@@ -128,7 +128,7 @@ void main() {
   test('Should disable form buttom if any field is invalid', () {
     // Arrange
     validator.mockValidate(
-      field: StreamLoginPresenter.emailFieldName,
+      field: GetxLoginPresenter.emailFieldName,
       value: ValidatorError.invalidField,
     );
     // Late Assert
@@ -142,11 +142,11 @@ void main() {
   test('Should enable form buttom if all field are valid', () async {
     // Arrange
     // validator.mockValidate(
-    //   field: StreamLoginPresenter.emailFieldName,
+    //   field: GetxLoginPresenter.emailFieldName,
     //   value: null,
     // );
     // validator.mockValidate(
-    //   field: StreamLoginPresenter.passwordFieldName,
+    //   field: GetxLoginPresenter.passwordFieldName,
     //   value: null,
     // );
     // Late Assert

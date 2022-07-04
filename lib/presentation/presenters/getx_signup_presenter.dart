@@ -4,11 +4,13 @@ import '../../ui/helpers/errors/errors.dart';
 import '../protocols/validator.dart';
 
 class GetxSignUpPresenter extends GetxController {
+  static const nameFieldName = 'name';
   static const emailFieldName = 'email';
   static const passwordFieldName = 'password';
 
   final Validator validator;
 
+  final _nameError = Rx<UIError?>(null);
   final _emailError = Rx<UIError?>(null);
   final _isFormValid = RxBool(false);
 
@@ -16,6 +18,7 @@ class GetxSignUpPresenter extends GetxController {
     required this.validator,
   });
 
+  Stream<UIError?> get nameErrorStream => _nameError.stream;
   Stream<UIError?> get emailErrorStream => _emailError.stream;
 
   Stream<bool> get isFormValidStream => _isFormValid.stream;
@@ -40,6 +43,14 @@ class GetxSignUpPresenter extends GetxController {
         uiError = null;
     }
     return uiError;
+  }
+
+  void validateName(String name) {
+    _nameError.value = _validateField(
+      field: GetxSignUpPresenter.nameFieldName,
+      value: name,
+    );
+    _validateForm();
   }
 
   void validateEmail(String email) {
