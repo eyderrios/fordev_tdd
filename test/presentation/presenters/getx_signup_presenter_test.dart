@@ -298,4 +298,19 @@ void main() {
     // Act
     await sut.signUp();
   });
+
+  test('Should emit correct events on AddAccount success', () async {
+    // Arrange
+    addAccount.mockAdd(token);
+    saveCurrentAccount.mockSave();
+
+    sut.validateName(name);
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+    sut.validatePasswordConfirmation(passwordConfirmation);
+    // Assert Later
+    expectLater(sut.isLoadingStream, emits(true));
+    // Act
+    await sut.signUp();
+  });
 }
