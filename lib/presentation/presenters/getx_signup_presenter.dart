@@ -11,6 +11,11 @@ class GetxSignUpPresenter extends GetxController {
 
   final Validator validator;
 
+  String? _name;
+  String? _email;
+  String? _password;
+  String? _passwordConfirmation;
+
   final _nameError = Rx<UIError?>(null);
   final _emailError = Rx<UIError?>(null);
   final _passwordError = Rx<UIError?>(null);
@@ -30,7 +35,14 @@ class GetxSignUpPresenter extends GetxController {
   Stream<bool> get isFormValidStream => _isFormValid.stream;
 
   void _validateForm() {
-    _isFormValid.value = false;
+    _isFormValid.value = (_name != null) &&
+        (_nameError.value == null) &&
+        (_email != null) &&
+        (_emailError.value == null) &&
+        (_password != null) &&
+        (_passwordError.value == null) &&
+        (_passwordConfirmation != null) &&
+        (_passwordConfirmationError.value == null);
   }
 
   UIError? _validateField({required String field, required String value}) {
@@ -52,6 +64,7 @@ class GetxSignUpPresenter extends GetxController {
   }
 
   void validateName(String name) {
+    _name = name;
     _nameError.value = _validateField(
       field: GetxSignUpPresenter.nameFieldName,
       value: name,
@@ -60,6 +73,7 @@ class GetxSignUpPresenter extends GetxController {
   }
 
   void validateEmail(String email) {
+    _email = email;
     _emailError.value = _validateField(
       field: GetxSignUpPresenter.emailFieldName,
       value: email,
@@ -68,6 +82,7 @@ class GetxSignUpPresenter extends GetxController {
   }
 
   void validatePassword(String password) {
+    _password = password;
     _passwordError.value = _validateField(
       field: GetxSignUpPresenter.passwordFieldName,
       value: password,
@@ -76,6 +91,7 @@ class GetxSignUpPresenter extends GetxController {
   }
 
   void validatePasswordConfirmation(String passwordConfirmation) {
+    _passwordConfirmation = passwordConfirmation;
     _passwordConfirmationError.value = _validateField(
       field: GetxSignUpPresenter.passwordConfirmationFieldName,
       value: passwordConfirmation,

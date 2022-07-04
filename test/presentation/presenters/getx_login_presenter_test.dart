@@ -139,20 +139,6 @@ void main() {
   });
 
   test('Should enable form buttom if all field are valid', () async {
-    // Arrange
-    // validator.mockValidate(
-    //   field: GetxLoginPresenter.emailFieldName,
-    //   value: null,
-    // );
-    // validator.mockValidate(
-    //   field: GetxLoginPresenter.passwordFieldName,
-    //   value: null,
-    // );
-    // Late Assert
-    // sut.emailErrorStream
-    //     .listen(expectAsync1((errorMsg) => expect(errorMsg, null)));
-    // sut.passwordErrorStream
-    //     .listen(expectAsync1((errorMsg) => expect(errorMsg, null)));
     expectLater(sut.isFormValidStream, emitsInOrder([false, true]));
     // Act
     sut.validateEmail(email);
