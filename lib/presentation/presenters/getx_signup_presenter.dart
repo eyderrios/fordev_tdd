@@ -12,6 +12,7 @@ class GetxSignUpPresenter extends GetxController {
 
   final _nameError = Rx<UIError?>(null);
   final _emailError = Rx<UIError?>(null);
+  final _passwordError = Rx<UIError?>(null);
   final _isFormValid = RxBool(false);
 
   GetxSignUpPresenter({
@@ -20,6 +21,7 @@ class GetxSignUpPresenter extends GetxController {
 
   Stream<UIError?> get nameErrorStream => _nameError.stream;
   Stream<UIError?> get emailErrorStream => _emailError.stream;
+  Stream<UIError?> get passwordErrorStream => _passwordError.stream;
 
   Stream<bool> get isFormValidStream => _isFormValid.stream;
 
@@ -60,17 +62,15 @@ class GetxSignUpPresenter extends GetxController {
     );
     _validateForm();
   }
-/*
-  @override
+
   void validatePassword(String password) {
-    _password = password;
     _passwordError.value = _validateField(
-      field: GetxLoginPresenter.passwordFieldName,
+      field: GetxSignUpPresenter.passwordFieldName,
       value: password,
     );
     _validateForm();
   }
-
+/*
   @override
   Future<void> auth() async {
     try {
