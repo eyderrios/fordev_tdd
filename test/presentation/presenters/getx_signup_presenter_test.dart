@@ -1,5 +1,6 @@
 import 'package:faker/faker.dart';
 import 'package:fordev_tdd/domain/entities/entities.dart';
+import 'package:fordev_tdd/domain/helpers/domain_error.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
@@ -310,6 +311,42 @@ void main() {
     sut.validatePasswordConfirmation(passwordConfirmation);
     // Assert Later
     expectLater(sut.isLoadingStream, emits(true));
+    // Act
+    await sut.signUp();
+  });
+
+  test('Should emit correct events on EmailInUseError', () async {
+    // Arrange
+    addAccount.mockAddError(DomainError.emailInUse);
+
+    sut.validateName(name);
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+    sut.validatePasswordConfirmation(passwordConfirmation);
+    // Assert Later
+    expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+    sut.mainErrorStream.listen(expectAsync1((errorMsg) => expect(
+          errorMsg,
+          UIError.emailInUse,
+        )));
+    // Act
+    await sut.signUp();
+  });
+
+  test('Should emit correct events on UnexpectedError', () async {
+    // Arrange
+    addAccount.mockAddError(DomainError.unexpected);
+
+    sut.validateName(name);
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+    sut.validatePasswordConfirmation(passwordConfirmation);
+    // Assert Later
+    expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+    sut.mainErrorStream.listen(expectAsync1((errorMsg) => expect(
+          errorMsg,
+          UIError.unexpected,
+        )));
     // Act
     await sut.signUp();
   });
