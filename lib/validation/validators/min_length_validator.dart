@@ -11,7 +11,10 @@ class MinLengthValidator extends Equatable implements FieldValidator {
   const MinLengthValidator({required this.field, required this.minLength});
 
   @override
-  List<Object?> get props => [field];
+  List<Object?> get props => [
+        field,
+        minLength,
+      ];
 
   @override
   ValidatorError? validate(String value) {
