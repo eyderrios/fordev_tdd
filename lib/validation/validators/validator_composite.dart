@@ -1,6 +1,5 @@
-import 'package:fordev_tdd/validation/protocols/field_validator.dart';
-
 import '../../presentation/protocols/validator.dart';
+import '../protocols/field_validator.dart';
 
 class ValidatorComposite implements Validator {
   final List<FieldValidator> validators;
@@ -8,11 +7,14 @@ class ValidatorComposite implements Validator {
   ValidatorComposite(this.validators);
 
   @override
-  ValidatorError? validate({required String field, required String value}) {
+  ValidatorError? validate({
+    required String field,
+    required ValidatorFieldInput input,
+  }) {
     ValidatorError? error;
 
     for (var validator in validators.where((val) => val.field == field)) {
-      error = validator.validate(value);
+      error = validator.validate(input);
       if (error != null) {
         return error;
       }

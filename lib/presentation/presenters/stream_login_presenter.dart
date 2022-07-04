@@ -77,8 +77,11 @@ class StreamLoginPresenter implements LoginPresenter {
 
   UIError? _validateField({required String field, required String value}) {
     UIError? uiError;
-
-    final error = validator.validate(field: field, value: value);
+    final formData = {
+      emailFieldName: _state.email,
+      passwordFieldName: _state.password,
+    };
+    final error = validator.validate(field: field, input: formData);
 
     switch (error) {
       case ValidatorError.invalidField:

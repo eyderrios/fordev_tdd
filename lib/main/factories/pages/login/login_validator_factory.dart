@@ -10,5 +10,9 @@ class LoginValidatorFactory {
   static List<FieldValidator> makeLoginValidators() => [
         ...ValidatorBuilder.field('email').requiredField().email().build(),
         ...ValidatorBuilder.field('password').requiredField().min(5).build(),
+        ...ValidatorBuilder.field('passwordConfirmation')
+            .requiredField()
+            .sameAs('password')
+            .build(),
       ];
 }

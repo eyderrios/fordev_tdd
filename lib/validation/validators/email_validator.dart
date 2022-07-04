@@ -16,7 +16,8 @@ class EmailValidator extends Equatable implements FieldValidator {
   List<Object?> get props => [field];
 
   @override
-  ValidatorError? validate(String value) {
+  ValidatorError? validate(FieldInput input) {
+    final String value = input[field];
     return (value.isNotEmpty && !_regex.hasMatch(value))
         ? ValidatorError.invalidField
         : null;

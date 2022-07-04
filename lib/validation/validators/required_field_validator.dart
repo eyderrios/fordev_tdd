@@ -12,10 +12,10 @@ class RequiredFieldValidator extends Equatable implements FieldValidator {
   String get field => _field;
 
   @override
-  ValidatorError? validate(String value) {
-    return value.isEmpty ? ValidatorError.requiredField : null;
-  }
+  List<Object?> get props => [_field];
 
   @override
-  List<Object?> get props => [_field];
+  ValidatorError? validate(FieldInput input) {
+    return input[field].isEmpty ? ValidatorError.requiredField : null;
+  }
 }

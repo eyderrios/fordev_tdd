@@ -12,6 +12,9 @@ void main() {
       EmailValidator('email'),
       RequiredFieldValidator('password'),
       MinLengthValidator(field: 'password', minLength: 5),
+      RequiredFieldValidator('passwordConfirmation'),
+      CompareFieldsValidator(
+          field: 'passwordConfirmation', fieldToCompare: 'password'),
     ]);
   });
 }

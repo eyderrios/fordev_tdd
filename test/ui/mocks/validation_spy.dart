@@ -6,7 +6,7 @@ class ValidationSpy extends Mock implements Validator {
   void mockValidate({String? field, required ValidatorError? value}) {
     when(() => validate(
           field: (field == null) ? any(named: 'field') : field,
-          value: any(named: 'value'),
+          input: any(named: 'input'),
         )).thenReturn(value);
   }
 }

@@ -67,10 +67,15 @@ class GetxSignUpPresenter extends GetxController implements SignUpPresenter {
         (_passwordConfirmationError.value == null);
   }
 
-  UIError? _validateField({required String field, required String value}) {
+  UIError? _validateField(String field) {
     UIError? uiError;
-
-    final error = validator.validate(field: field, value: value);
+    final formData = {
+      nameFieldName: _name,
+      emailFieldName: _email,
+      passwordFieldName: _password,
+      passwordConfirmationFieldName: _passwordConfirmation,
+    };
+    final error = validator.validate(field: field, input: formData);
 
     switch (error) {
       case ValidatorError.invalidField:
@@ -88,40 +93,30 @@ class GetxSignUpPresenter extends GetxController implements SignUpPresenter {
   @override
   void validateName(String name) {
     _name = name;
-    _nameError.value = _validateField(
-      field: GetxSignUpPresenter.nameFieldName,
-      value: name,
-    );
+    _nameError.value = _validateField(GetxSignUpPresenter.nameFieldName);
     _validateForm();
   }
 
   @override
   void validateEmail(String email) {
     _email = email;
-    _emailError.value = _validateField(
-      field: GetxSignUpPresenter.emailFieldName,
-      value: email,
-    );
+    _emailError.value = _validateField(GetxSignUpPresenter.emailFieldName);
     _validateForm();
   }
 
   @override
   void validatePassword(String password) {
     _password = password;
-    _passwordError.value = _validateField(
-      field: GetxSignUpPresenter.passwordFieldName,
-      value: password,
-    );
+    _passwordError.value =
+        _validateField(GetxSignUpPresenter.passwordFieldName);
     _validateForm();
   }
 
   @override
   void validatePasswordConfirmation(String passwordConfirmation) {
     _passwordConfirmation = passwordConfirmation;
-    _passwordConfirmationError.value = _validateField(
-      field: GetxSignUpPresenter.passwordConfirmationFieldName,
-      value: passwordConfirmation,
-    );
+    _passwordConfirmationError.value =
+        _validateField(GetxSignUpPresenter.passwordConfirmationFieldName);
     _validateForm();
   }
 

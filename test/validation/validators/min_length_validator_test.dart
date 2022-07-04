@@ -14,22 +14,22 @@ void main() {
   });
 
   test('Should return error if value is empty', () {
-    expect(sut.validate(''), ValidatorError.invalidField);
+    expect(sut.validate({fieldName: ''}), ValidatorError.invalidField);
   });
 
   test('Should return error if value length is less than minLength', () {
     final value = faker.randomGenerator.string(fieldLength - 1, min: 1);
-    expect(sut.validate(value), ValidatorError.invalidField);
+    expect(sut.validate({fieldName: value}), ValidatorError.invalidField);
   });
 
   test('Should return error if value length is equal to minLength', () {
     final value = faker.randomGenerator.string(fieldLength, min: fieldLength);
-    expect(sut.validate(value), isNull);
+    expect(sut.validate({fieldName: value}), isNull);
   });
 
   test('Should return error if value length is greater than minLength', () {
     final value =
         faker.randomGenerator.string(2 * fieldLength, min: fieldLength + 1);
-    expect(sut.validate(value), isNull);
+    expect(sut.validate({fieldName: value}), isNull);
   });
 }

@@ -1,7 +1,9 @@
 import '../../presentation/protocols/validator.dart';
 
+typedef FieldInput = Map<String, dynamic>;
+
 abstract class FieldValidator {
   String get field;
 
-  ValidatorError? validate(String value);
+  ValidatorError? validate(FieldInput input);
 }

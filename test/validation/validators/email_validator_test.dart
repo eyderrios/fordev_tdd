@@ -15,21 +15,21 @@ void main() {
 
   test('Should return null if email is empty', () {
     // Act
-    final error = sut.validate('');
+    final error = sut.validate({fieldName: ''});
     // Assert
     expect(error, null);
   });
 
   test('Should return null if email is valid', () {
     // Act
-    final error = sut.validate(email);
+    final error = sut.validate({fieldName: email});
     // Assert
     expect(error, null);
   });
 
   test('Should return error if email is invalid', () {
     // Act
-    final error = sut.validate('user.name');
+    final error = sut.validate({fieldName: 'invalid.email'});
     // Assert
     expect(error, ValidatorError.invalidField);
   });

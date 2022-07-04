@@ -6,22 +6,28 @@ import '../protocols/field_validator.dart';
 class CompareFieldsValidator extends Equatable implements FieldValidator {
   @override
   final String field;
-  final String valueToCompare;
+  final String fieldToCompare;
   final bool ignoreCase;
 
   const CompareFieldsValidator({
     required this.field,
-    required this.valueToCompare,
+    required this.fieldToCompare,
     this.ignoreCase = false,
   });
 
   @override
-  List<Object?> get props => [field];
+  List<Object?> get props => [
+        field,
+        fieldToCompare,
+        ignoreCase,
+      ];
 
   @override
-  ValidatorError? validate(String value) {
-    final value1 = ignoreCase ? valueToCompare : valueToCompare.toLowerCase();
-    final value2 = ignoreCase ? value : value.toLowerCase();
+  ValidatorError? validate(FieldInput input) {
+    final value1 = ignoreCase ? input[field] : input[field].toLowerCase();
+    final value2 = ignoreCase
+        ? input[fieldToCompare]
+        : input[fieldToCompare].toLowerCase();
     return (value1 != value2) ? ValidatorError.invalidField : null;
   }
 }

@@ -3,6 +3,9 @@ enum ValidatorError {
   invalidField,
 }
 
+typedef ValidatorFieldInput = Map<String, dynamic>;
+
 abstract class Validator {
-  ValidatorError? validate({required String field, required String value});
+  ValidatorError? validate(
+      {required String field, required ValidatorFieldInput input});
 }

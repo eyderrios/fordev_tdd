@@ -6,6 +6,7 @@ import 'package:fordev_tdd/validation/validators/validator_composite.dart';
 import '../mocks/field_validator_spy.dart';
 
 void main() {
+  const input = {'some_field': 'some_value'};
   late ValidatorComposite sut;
   late FieldValidatorSpy validator1;
   late FieldValidatorSpy validator2;
@@ -23,13 +24,18 @@ void main() {
     ]);
   });
 
+  test('Should return null if all validators returns null or empty', () {
+    final error = sut.validate(field: 'some_field', input: input);
+    expect(error, isNull);
+  });
+
   test('Should return the first error', () {
     // Arrange
     validator1.mockValidate(ValidatorError.requiredField);
     validator2.mockValidate(ValidatorError.requiredField);
     validator3.mockValidate(ValidatorError.invalidField);
     // Act
-    final result = sut.validate(field: validator1.field, value: 'some_value');
+    final result = sut.validate(field: validator1.field, input: input);
     // Assert
     expect(result, ValidatorError.requiredField);
   });

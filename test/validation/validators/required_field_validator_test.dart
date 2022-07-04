@@ -14,14 +14,14 @@ void main() {
 
   test('Should return null if value is not empty', () {
     // Act
-    final result = sut.validate(fieldValue);
+    final result = sut.validate({fieldName: fieldValue});
     // Assert
     expect(result, null);
   });
 
   test('Should return error if value is empty', () {
     // Act
-    final result = sut.validate('');
+    final result = sut.validate({fieldName: ''});
     // Assert
     expect(result, ValidatorError.requiredField);
   });

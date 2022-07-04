@@ -42,13 +42,19 @@ void main() {
 
   test('Should call validation with correct email', () {
     // Arrange
+    final input = {
+      GetxSignUpPresenter.nameFieldName: null,
+      GetxSignUpPresenter.emailFieldName: email,
+      GetxSignUpPresenter.passwordFieldName: null,
+      GetxSignUpPresenter.passwordConfirmationFieldName: null,
+    };
     validator.mockValidate(value: null);
     // Act
     sut.validateEmail(email);
     // Assert
     verify(() => validator.validate(
           field: GetxSignUpPresenter.emailFieldName,
-          value: email,
+          input: input,
         )).called(1);
   });
 
@@ -90,13 +96,19 @@ void main() {
 
   test('Should call validation with correct name', () {
     // Arrange
+    final input = {
+      GetxSignUpPresenter.nameFieldName: name,
+      GetxSignUpPresenter.emailFieldName: null,
+      GetxSignUpPresenter.passwordFieldName: null,
+      GetxSignUpPresenter.passwordConfirmationFieldName: null,
+    };
     validator.mockValidate(value: null);
     // Act
     sut.validateName(name);
     // Assert
     verify(() => validator.validate(
           field: GetxSignUpPresenter.nameFieldName,
-          value: name,
+          input: input,
         )).called(1);
   });
 
@@ -138,13 +150,19 @@ void main() {
 
   test('Should call validation with correct password', () {
     // Arrange
+    final input = {
+      GetxSignUpPresenter.nameFieldName: null,
+      GetxSignUpPresenter.emailFieldName: null,
+      GetxSignUpPresenter.passwordFieldName: password,
+      GetxSignUpPresenter.passwordConfirmationFieldName: null,
+    };
     validator.mockValidate(value: null);
     // Act
     sut.validatePassword(password);
     // Assert
     verify(() => validator.validate(
           field: GetxSignUpPresenter.passwordFieldName,
-          value: password,
+          input: input,
         )).called(1);
   });
 
@@ -186,13 +204,19 @@ void main() {
 
   test('Should call validation with correct password confirmation', () {
     // Arrange
+    final input = {
+      GetxSignUpPresenter.nameFieldName: null,
+      GetxSignUpPresenter.emailFieldName: null,
+      GetxSignUpPresenter.passwordFieldName: null,
+      GetxSignUpPresenter.passwordConfirmationFieldName: passwordConfirmation,
+    };
     validator.mockValidate(value: null);
     // Act
     sut.validatePasswordConfirmation(passwordConfirmation);
     // Assert
     verify(() => validator.validate(
           field: GetxSignUpPresenter.passwordConfirmationFieldName,
-          value: passwordConfirmation,
+          input: input,
         )).called(1);
   });
 
@@ -247,7 +271,7 @@ void main() {
   test('Should call AddAccount.sigup() with correct parameters', () async {
     // Arrange
     addAccount.mockAdd(token);
-    // saveCurrentAccount.mockSave();
+    saveCurrentAccount.mockSave();
 
     sut.validateName(name);
     sut.validateEmail(email);

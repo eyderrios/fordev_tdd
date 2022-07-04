@@ -41,13 +41,17 @@ void main() {
 
   test('Should call validation with correct email', () {
     // Arrange
+    final input = {
+      GetxLoginPresenter.emailFieldName: email,
+      GetxLoginPresenter.passwordFieldName: null,
+    };
     validator.mockValidate(value: null);
     // Act
     sut.validateEmail(email);
     // Assert
     verify(() => validator.validate(
           field: GetxLoginPresenter.emailFieldName,
-          value: email,
+          input: input,
         )).called(1);
   });
 
@@ -89,13 +93,17 @@ void main() {
 
   test('Should call validation with correct password', () {
     // Arrange
+    final input = {
+      GetxLoginPresenter.emailFieldName: null,
+      GetxLoginPresenter.passwordFieldName: password,
+    };
     validator.mockValidate(value: null);
     // Act
     sut.validatePassword(password);
     // Assert
     verify(() => validator.validate(
           field: GetxLoginPresenter.passwordFieldName,
-          value: password,
+          input: input,
         )).called(1);
   });
 
