@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 
+import 'package:fordev_tdd/domain/helpers/domain_error.dart';
+
 import '../../domain/usecases/usecases.dart';
 import '../../ui/helpers/errors/errors.dart';
 import '../protocols/validator.dart';
@@ -23,7 +25,9 @@ class GetxSignUpPresenter extends GetxController {
   final _emailError = Rx<UIError?>(null);
   final _passwordError = Rx<UIError?>(null);
   final _passwordConfirmationError = Rx<UIError?>(null);
+  final _mainError = Rx<UIError?>(null);
   final _isFormValid = RxBool(false);
+  final _isLoading = RxBool(false);
 
   GetxSignUpPresenter({
     required this.validator,
@@ -31,6 +35,7 @@ class GetxSignUpPresenter extends GetxController {
     required this.saveCurrentAccount,
   });
 
+  Stream<UIError?> get mainErrorStream => _mainError.stream;
   Stream<UIError?> get nameErrorStream => _nameError.stream;
   Stream<UIError?> get emailErrorStream => _emailError.stream;
   Stream<UIError?> get passwordErrorStream => _passwordError.stream;
@@ -38,6 +43,7 @@ class GetxSignUpPresenter extends GetxController {
       _passwordConfirmationError.stream;
 
   Stream<bool> get isFormValidStream => _isFormValid.stream;
+  Stream<bool> get isLoadingStream => _isLoading.stream;
 
   void _validateForm() {
     _isFormValid.value = (_name != null) &&
@@ -105,14 +111,20 @@ class GetxSignUpPresenter extends GetxController {
   }
 
   Future<void> signUp() async {
-    final params = AddAccountParams(
-      name: _name!,
-      email: _email!,
-      password: _password!,
-      passwordConfirmation: _passwordConfirmation!,
-    );
-    final account = await addAccount.add(params);
-    await saveCurrentAccount.save(account);
+    try {
+      _isLoading.value = true;
+      final params = AddAccountParams(
+        name: _name!,
+        email: _email!,
+        password: _password!,
+        passwordConfirmation: _passwordConfirmation!,
+      );
+      final account = await addAccount.add(params);
+      await saveCurrentAccount.save(account);
+    } on DomainError catch (error) {
+      _mainError.value = domainErrorToUIError(error);
+      _isLoading.value = false;
+    }
   }
 
   // @override

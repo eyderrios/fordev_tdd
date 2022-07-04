@@ -279,4 +279,23 @@ void main() {
     verify(() => saveCurrentAccount.save(AccountEntity(token: token)))
         .called(1);
   });
+
+  test('Should emit UnexpectedError if SaveCurrentAccount fails', () async {
+    // Arrange
+    addAccount.mockAdd(token);
+    saveCurrentAccount.mockError();
+
+    sut.validateName(name);
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+    sut.validatePasswordConfirmation(passwordConfirmation);
+    // Assert Later
+    expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+    sut.mainErrorStream.listen(expectAsync1((errorMsg) => expect(
+          errorMsg,
+          UIError.unexpected,
+        )));
+    // Act
+    await sut.signUp();
+  });
 }
