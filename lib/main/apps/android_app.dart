@@ -30,6 +30,10 @@ class AndroidApp extends StatelessWidget {
           transition: Transition.fade,
         ),
         GetPage(
+          name: AppRoutes.signUp,
+          page: SignUpPageFactory.makeSignUpPage,
+        ),
+        GetPage(
           name: AppRoutes.surveys,
           page: () => Scaffold(
             body: Text(R.strings.surveys),
