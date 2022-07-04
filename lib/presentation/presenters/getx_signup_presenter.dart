@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:fordev_tdd/domain/helpers/domain_error.dart';
 
 import '../../domain/usecases/usecases.dart';
+import '../../main/apps/app_routes.dart';
 import '../../ui/helpers/errors/errors.dart';
 import '../protocols/validator.dart';
 
@@ -26,6 +27,7 @@ class GetxSignUpPresenter extends GetxController {
   final _passwordError = Rx<UIError?>(null);
   final _passwordConfirmationError = Rx<UIError?>(null);
   final _mainError = Rx<UIError?>(null);
+  final _navigateTo = Rx<String?>(null);
   final _isFormValid = RxBool(false);
   final _isLoading = RxBool(false);
 
@@ -44,6 +46,7 @@ class GetxSignUpPresenter extends GetxController {
 
   Stream<bool> get isFormValidStream => _isFormValid.stream;
   Stream<bool> get isLoadingStream => _isLoading.stream;
+  Stream<String?> get navigateToStream => _navigateTo.stream;
 
   void _validateForm() {
     _isFormValid.value = (_name != null) &&
@@ -121,6 +124,7 @@ class GetxSignUpPresenter extends GetxController {
       );
       final account = await addAccount.add(params);
       await saveCurrentAccount.save(account);
+      _navigateTo.value = AppRoutes.surveys;
     } on DomainError catch (error) {
       _mainError.value = domainErrorToUIError(error);
       _isLoading.value = false;

@@ -1,6 +1,7 @@
 import 'package:faker/faker.dart';
 import 'package:fordev_tdd/domain/entities/entities.dart';
 import 'package:fordev_tdd/domain/helpers/domain_error.dart';
+import 'package:fordev_tdd/main/apps/app_routes.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
@@ -347,6 +348,22 @@ void main() {
           errorMsg,
           UIError.unexpected,
         )));
+    // Act
+    await sut.signUp();
+  });
+
+  test('Should change page on success', () async {
+    // Arrange
+    addAccount.mockAdd(token);
+    saveCurrentAccount.mockSave();
+
+    sut.validateName(name);
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+    sut.validatePasswordConfirmation(passwordConfirmation);
+    // Assert Later
+    sut.navigateToStream
+        .listen(expectAsync1((page) => expect(page, AppRoutes.surveys)));
     // Act
     await sut.signUp();
   });
