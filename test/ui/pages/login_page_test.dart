@@ -223,7 +223,7 @@ void main() {
       (WidgetTester tester) async {
     await loadPage(tester);
 
-    final button = find.text(R.strings.login);
+    final button = find.text(R.strings.login.toUpperCase());
     await tester.ensureVisible(button);
     await tester.tap(button);
     await tester.pump();

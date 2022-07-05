@@ -46,41 +46,43 @@ class SignUpPage extends StatelessWidget {
 
         return GestureDetector(
           onTap: () => _hideKeyboard(context),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                // const LoginHeader(),
-                // Headline1(R.strings.addAccount.toUpperCase()),
-                Padding(
-                  padding: const EdgeInsets.all(32.0),
-                  child: Provider<SignUpPresenter>.value(
-                    value: presenter,
-                    child: Form(
-                      child: Column(
-                        children: [
-                          const NameInput(),
-                          const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 8.0),
-                            child: EmailInput(),
-                          ),
-                          const PasswordInput(),
-                          const Padding(
-                            padding: EdgeInsets.only(top: 8.0, bottom: 32.0),
-                            child: PasswordConfirmationInput(),
-                          ),
-                          const SignUpButton(),
-                          TextButton.icon(
-                            onPressed: presenter.goToLogin,
-                            icon: const Icon(Icons.exit_to_app),
-                            label: Text(R.strings.signUp),
-                          ),
-                        ],
+          child: SafeArea(
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const LogoHeader(),
+                  Headline1(R.strings.addAccount.toUpperCase()),
+                  Padding(
+                    padding: const EdgeInsets.all(32.0),
+                    child: Provider<SignUpPresenter>.value(
+                      value: presenter,
+                      child: Form(
+                        child: Column(
+                          children: [
+                            const NameInput(),
+                            const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 8.0),
+                              child: EmailInput(),
+                            ),
+                            const PasswordInput(),
+                            const Padding(
+                              padding: EdgeInsets.only(top: 8.0, bottom: 32.0),
+                              child: PasswordConfirmationInput(),
+                            ),
+                            const SignUpButton(),
+                            TextButton.icon(
+                              onPressed: presenter.goToLogin,
+                              icon: const Icon(Icons.exit_to_app),
+                              label: Text(R.strings.login),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         );

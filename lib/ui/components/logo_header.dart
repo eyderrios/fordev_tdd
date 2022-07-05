@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../assets/assets.dart';
 
-class LoginHeader extends StatelessWidget {
-  const LoginHeader({
+class LogoHeader extends StatelessWidget {
+  const LogoHeader({
     Key? key,
   }) : super(key: key);
 

@@ -46,39 +46,41 @@ class LoginPage extends StatelessWidget {
 
         return GestureDetector(
           onTap: () => _hideKeyboard(context),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const LoginHeader(),
-                Headline1(R.strings.login.toUpperCase()),
-                Padding(
-                  padding: const EdgeInsets.all(32.0),
-                  child: Provider(
-                    create: (_) => presenter!,
-                    child: Form(
-                      child: Column(
-                        children: [
-                          const EmailInput(),
-                          const Padding(
-                            padding: EdgeInsets.only(
-                              top: 8.0,
-                              bottom: 32.0,
+          child: SafeArea(
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const LogoHeader(),
+                  Headline1(R.strings.login.toUpperCase()),
+                  Padding(
+                    padding: const EdgeInsets.all(32.0),
+                    child: Provider(
+                      create: (_) => presenter!,
+                      child: Form(
+                        child: Column(
+                          children: [
+                            const EmailInput(),
+                            const Padding(
+                              padding: EdgeInsets.only(
+                                top: 8.0,
+                                bottom: 32.0,
+                              ),
+                              child: PasswordInput(),
                             ),
-                            child: PasswordInput(),
-                          ),
-                          const LoginButton(),
-                          TextButton.icon(
-                            onPressed: presenter!.goToSignUp,
-                            icon: const Icon(Icons.person),
-                            label: Text(R.strings.login),
-                          ),
-                        ],
+                            const LoginButton(),
+                            TextButton.icon(
+                              onPressed: presenter!.goToSignUp,
+                              icon: const Icon(Icons.person),
+                              label: Text(R.strings.signUp),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         );

@@ -316,11 +316,8 @@ void main() {
     sut.validatePassword(password);
     sut.validatePasswordConfirmation(passwordConfirmation);
     // Assert Later
+    expectLater(sut.mainErrorStream, emitsInOrder([null, UIError.unexpected]));
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
-    sut.mainErrorStream.listen(expectAsync1((errorMsg) => expect(
-          errorMsg,
-          UIError.unexpected,
-        )));
     // Act
     await sut.signUp();
   });
@@ -335,6 +332,7 @@ void main() {
     sut.validatePassword(password);
     sut.validatePasswordConfirmation(passwordConfirmation);
     // Assert Later
+    expectLater(sut.mainErrorStream, emits(null));
     expectLater(sut.isLoadingStream, emits(true));
     // Act
     await sut.signUp();
@@ -349,11 +347,8 @@ void main() {
     sut.validatePassword(password);
     sut.validatePasswordConfirmation(passwordConfirmation);
     // Assert Later
+    expectLater(sut.mainErrorStream, emitsInOrder([null, UIError.emailInUse]));
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
-    sut.mainErrorStream.listen(expectAsync1((errorMsg) => expect(
-          errorMsg,
-          UIError.emailInUse,
-        )));
     // Act
     await sut.signUp();
   });
@@ -367,11 +362,8 @@ void main() {
     sut.validatePassword(password);
     sut.validatePasswordConfirmation(passwordConfirmation);
     // Assert Later
+    expectLater(sut.mainErrorStream, emitsInOrder([null, UIError.unexpected]));
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
-    sut.mainErrorStream.listen(expectAsync1((errorMsg) => expect(
-          errorMsg,
-          UIError.unexpected,
-        )));
     // Act
     await sut.signUp();
   });
