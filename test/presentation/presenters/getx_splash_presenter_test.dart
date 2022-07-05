@@ -48,6 +48,16 @@ void main() {
     await sut.checkAccount(durationInSeconds: 0);
   });
 
+  test('Should go to login page on null token result', () async {
+    // Arrange
+    loadCurrentAccount.mockLoad(account: const AccountEntity(token: ''));
+    // Late Assert
+    sut.navigateToStream
+        .listen(expectAsync1((page) => expect(page, AppRoutes.login)));
+    // Act
+    await sut.checkAccount(durationInSeconds: 0);
+  });
+
   test('Should go to login page on error', () async {
     // Arrange
     loadCurrentAccount.mockLoad(account: null);
