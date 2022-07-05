@@ -6,6 +6,7 @@ import 'package:http/http.dart';
 import '../../data/http/http.dart';
 
 class HttpAdapter implements HttpClient {
+  static const getMethod = 'get';
   static const postMethod = 'post';
 
   static const Map<String, String> headers = {
