@@ -278,6 +278,13 @@ void main() {
       expect(future, throwsA(HttpError.serverError));
     });
 
-    //
+    test('Should return ServerError if get() throws', () async {
+      // Arrange
+      client.mockGetError();
+      // Act
+      final future = sut.request(url: url, method: HttpAdapter.getMethod);
+      // Assert
+      expect(future, throwsA(HttpError.serverError));
+    });
   });
 }
