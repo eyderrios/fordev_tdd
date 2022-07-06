@@ -202,5 +202,27 @@ void main() {
       // Assert
       expect(sutResponse, null);
     });
+
+    test('Should return null if get() returns 204', () async {
+      // Arrange
+      client.mockGet(HttpStatus.noContent, '');
+      // Act
+      final sutResponse =
+          await sut.request(url: url, method: HttpAdapter.getMethod);
+      // Assert
+      expect(sutResponse, null);
+    });
+
+    test('Should return null if get() returns 204 with data', () async {
+      // Arrange
+      client.mockGet(HttpStatus.noContent, jsonBody);
+      // Act
+      final sutResponse =
+          await sut.request(url: url, method: HttpAdapter.getMethod);
+      // Assert
+      expect(sutResponse, null);
+    });
+
+    //
   });
 }
