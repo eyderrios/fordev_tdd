@@ -5,6 +5,9 @@ class AppTheme {
   static const primaryColor = Color.fromRGBO(136, 14, 79, 1.0);
   static const primaryColorDark = Color.fromRGBO(96, 0, 39, 1.0);
   static const primaryColorLight = Color.fromRGBO(188, 71, 123, 1.0);
+
+  static const secondaryColorDark = Color.fromRGBO(0, 37, 26, 1.0);
+
   static const backgroundColor = Colors.white;
 
   static const textTheme = TextTheme(
@@ -44,6 +47,7 @@ class AppTheme {
       primaryColor: primaryColor,
       primaryColorDark: primaryColorDark,
       primaryColorLight: primaryColorLight,
+      secondaryHeaderColor: secondaryColorDark,
       colorScheme: const ColorScheme.light(primary: primaryColor),
       backgroundColor: backgroundColor,
       textTheme: textTheme,

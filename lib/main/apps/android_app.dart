@@ -35,9 +35,7 @@ class AndroidApp extends StatelessWidget {
         ),
         GetPage(
           name: AppRoutes.surveys,
-          page: () => Scaffold(
-            body: Text(R.strings.surveys),
-          ),
+          page: SurveysPageFactory.makeSurveysPage,
           transition: Transition.fadeIn,
         ),
       ],
