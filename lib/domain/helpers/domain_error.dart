@@ -4,6 +4,7 @@ enum DomainError {
   unexpected,
   invalidCredentials,
   emailInUse,
+  accessDenied,
 }
 
 extension DomainErrorExtension on DomainError {
@@ -11,6 +12,7 @@ extension DomainErrorExtension on DomainError {
     DomainError.unexpected: R.strings.unexpectedError,
     DomainError.invalidCredentials: R.strings.invalidCredentialsError,
     DomainError.emailInUse: R.strings.emailInUseError,
+    DomainError.accessDenied: R.strings.accessDeniedError,
   };
 
   String get description => _descriptions.containsKey(this)

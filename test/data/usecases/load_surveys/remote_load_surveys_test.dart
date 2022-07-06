@@ -76,11 +76,31 @@ void main() {
 
   test('Should throw UnexpectedError if HttpClient returns 404', () async {
     // Arrange
-    client.mockRequest(invalidData);
+    client.mockRequest(validData);
     client.mockRequestError(HttpError.notFound);
     // Act
     final future = sut.load();
     // Assert
     expect(future, throwsA(DomainError.unexpected));
+  });
+
+  test('Should throw UnexpectedError if HttpClient returns 500', () async {
+    // Arrange
+    client.mockRequest(validData);
+    client.mockRequestError(HttpError.serverError);
+    // Act
+    final future = sut.load();
+    // Assert
+    expect(future, throwsA(DomainError.unexpected));
+  });
+
+  test('Should throw AccessDeniedError if HttpClient returns 403', () async {
+    // Arrange
+    client.mockRequest(validData);
+    client.mockRequestError(HttpError.forbidden);
+    // Act
+    final future = sut.load();
+    // Assert
+    expect(future, throwsA(DomainError.accessDenied));
   });
 }

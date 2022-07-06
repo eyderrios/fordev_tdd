@@ -17,6 +17,7 @@ abstract class Translations {
   //
   // DomainError messages
   //
+  String get accessDeniedError;
   String get emailInUseError;
   String get invalidCredentialsError;
   String get unexpectedError;

@@ -30,6 +30,8 @@ class EnUs implements Translations {
   // DomainError messages
   //
   @override
+  String get accessDeniedError => 'Access denied';
+  @override
   String get emailInUseError => 'E-mail in use';
   @override
   String get invalidCredentialsError => 'Invalid credentials';

@@ -30,6 +30,8 @@ class PtBr implements Translations {
   // DomainError
   //
   @override
+  String get accessDeniedError => 'Acesso negado';
+  @override
   String get emailInUseError => 'E-mail em uso';
   @override
   String get invalidCredentialsError => 'Credenciais inválidas';

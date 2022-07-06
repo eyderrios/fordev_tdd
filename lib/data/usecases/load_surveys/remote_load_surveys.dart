@@ -1,11 +1,11 @@
-import 'package:fordev_tdd/domain/helpers/domain_error.dart';
+import 'package:fordev_tdd/domain/usecases/usecases.dart';
 
 import '../../../domain/entities/entities.dart';
+import '../../../domain/helpers/domain_error.dart';
 import '../../http/http.dart';
-import '../../http/http_client.dart';
 import '../../models/models.dart';
 
-class RemoteLoadSurveys {
+class RemoteLoadSurveys implements LoadSurveys {
   final String url;
   final HttpClient<List<HttpClientBody>> httpClient;
 
@@ -14,14 +14,17 @@ class RemoteLoadSurveys {
     required this.httpClient,
   });
 
+  @override
   Future<List<SurveyEntity>> load() async {
     try {
       final response = await httpClient.request(url: url, method: 'get');
       return response!
           .map((json) => RemoteSurveyModel.fromJson(json).toEntity())
           .toList();
-    } on HttpError {
-      throw DomainError.unexpected;
+    } on HttpError catch (error) {
+      throw error == HttpError.forbidden
+          ? DomainError.accessDenied
+          : DomainError.unexpected;
     }
   }
 }
