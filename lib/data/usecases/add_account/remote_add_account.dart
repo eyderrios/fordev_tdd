@@ -6,7 +6,7 @@ import '../../../domain/usecases/usecases.dart';
 import '../../http/http.dart';
 
 class RemoteAddAccount implements AddAccount {
-  final HttpClient httpClient;
+  final HttpClient<HttpClientBody> httpClient;
   final String url;
 
   RemoteAddAccount({

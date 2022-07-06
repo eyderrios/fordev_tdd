@@ -4,7 +4,6 @@ import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
 import 'package:fordev_tdd/domain/usecases/usecases.dart';
-
 import 'package:fordev_tdd/data/usecases/usecases.dart';
 import 'package:fordev_tdd/data/http/http.dart';
 
@@ -14,7 +13,7 @@ import '../../mocks/mocks.dart';
 
 void main() {
   late String url;
-  late HttpClientSpy client;
+  late HttpClientSpy<HttpClientBody> client;
   late RemoteAddAccount sut;
   late AddAccountParams params;
   late HttpClientBody body;

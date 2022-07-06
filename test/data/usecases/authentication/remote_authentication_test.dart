@@ -14,7 +14,7 @@ import '../../mocks/mocks.dart';
 
 void main() {
   late String url;
-  late HttpClientSpy client;
+  late HttpClientSpy<HttpClientBody> client;
   late RemoteAuthentication sut;
   late AuthenticationParams params;
   late HttpClientBody body;

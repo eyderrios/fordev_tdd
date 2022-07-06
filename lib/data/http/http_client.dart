@@ -1,7 +1,7 @@
 typedef HttpClientBody = Map<String, dynamic>;
 
-abstract class HttpClient {
-  Future<HttpClientBody?> request({
+abstract class HttpClient<ResponseType> {
+  Future<ResponseType?> request({
     required String url,
     required String method,
     HttpClientBody? body,

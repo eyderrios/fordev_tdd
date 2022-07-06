@@ -5,7 +5,7 @@ import 'package:http/http.dart';
 
 import '../../data/http/http.dart';
 
-class HttpAdapter implements HttpClient {
+class HttpAdapter implements HttpClient<HttpClientBody> {
   static const getMethod = 'get';
   static const postMethod = 'post';
 
