@@ -223,6 +223,25 @@ void main() {
       expect(sutResponse, null);
     });
 
+    test('Should return BadRequestError if get() returns 400 with no body',
+        () async {
+      // Arrange
+      client.mockGet(HttpStatus.badRequest, '');
+      // Act
+      final future = sut.request(url: url, method: HttpAdapter.getMethod);
+      // Assert
+      expect(future, throwsA(HttpError.badRequest));
+    });
+
+    test('Should return BadRequestError if get() returns 400', () async {
+      // Arrange
+      client.mockGet(HttpStatus.badRequest, jsonBody);
+      // Act
+      final future = sut.request(url: url, method: HttpAdapter.getMethod);
+      // Assert
+      expect(future, throwsA(HttpError.badRequest));
+    });
+
     //
   });
 }
