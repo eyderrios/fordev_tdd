@@ -1,4 +1,7 @@
+import 'package:fordev_tdd/domain/helpers/domain_error.dart';
+
 import '../../../domain/entities/entities.dart';
+import '../../http/http.dart';
 import '../../http/http_client.dart';
 import '../../models/models.dart';
 
@@ -12,9 +15,13 @@ class RemoteLoadSurveys {
   });
 
   Future<List<SurveyEntity>> load() async {
-    final response = await httpClient.request(url: url, method: 'get');
-    return response!
-        .map((json) => RemoteSurveyModel.fromJson(json).toEntity())
-        .toList();
+    try {
+      final response = await httpClient.request(url: url, method: 'get');
+      return response!
+          .map((json) => RemoteSurveyModel.fromJson(json).toEntity())
+          .toList();
+    } on HttpError {
+      throw DomainError.unexpected;
+    }
   }
 }

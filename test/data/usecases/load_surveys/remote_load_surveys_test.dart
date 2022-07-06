@@ -1,5 +1,6 @@
 import 'package:faker/faker.dart';
 import 'package:fordev_tdd/data/models/models.dart';
+import 'package:fordev_tdd/domain/helpers/domain_error.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
@@ -15,6 +16,7 @@ void main() {
   late RemoteLoadSurveys sut;
   late String url;
   late List<HttpClientBody> validData;
+  late List<HttpClientBody> invalidData;
 
   List<HttpClientBody> mockValidData(int count) =>
       List<HttpClientBody>.generate(
@@ -37,6 +39,9 @@ void main() {
     client = HttpClientSpy<List<HttpClientBody>>();
     sut = RemoteLoadSurveys(url: url, httpClient: client);
     validData = mockValidData(dataCount);
+    invalidData = [
+      {'invalid_key': 'invalid_value'}
+    ];
   });
 
   test('Should call HttpClient with correct params', () async {
@@ -56,5 +61,16 @@ void main() {
     final surveys = await sut.load();
     // Assert
     expect(surveys, expectedData);
+  });
+
+  test(
+      'Should throw UnexpectedError if HttpClient returns 200 with invalid data',
+      () async {
+    // Arrange
+    client.mockRequest(invalidData);
+    // Act
+    final future = sut.load();
+    // Assert
+    expect(future, throwsA(DomainError.unexpected));
   });
 }

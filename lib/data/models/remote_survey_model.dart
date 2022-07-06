@@ -14,7 +14,12 @@ class RemoteSurveyModel {
     required this.didAnswer,
   });
 
+  static List<String> get fields => ['id', 'question', 'date', 'didAnswer'];
+
   factory RemoteSurveyModel.fromJson(HttpClientBody json) {
+    if (!json.keys.toSet().containsAll(fields)) {
+      throw HttpError.invalidData;
+    }
     return RemoteSurveyModel(
       id: json['id'],
       question: json['question'],
