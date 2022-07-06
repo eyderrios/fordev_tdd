@@ -269,6 +269,15 @@ void main() {
       expect(future, throwsA(HttpError.notFound));
     });
 
+    test('Should return ServerError if get() returns 500', () async {
+      // Arrange
+      client.mockGet(HttpStatus.internalServerError, jsonBody);
+      // Act
+      final future = sut.request(url: url, method: HttpAdapter.getMethod);
+      // Assert
+      expect(future, throwsA(HttpError.serverError));
+    });
+
     //
   });
 }
