@@ -250,6 +250,16 @@ void main() {
       // Assert
       expect(future, throwsA(HttpError.unauthorized));
     });
+
+    test('Should return ForbiddenError if get() returns 403', () async {
+      // Arrange
+      client.mockGet(HttpStatus.forbidden, jsonBody);
+      // Act
+      final future = sut.request(url: url, method: HttpAdapter.getMethod);
+      // Assert
+      expect(future, throwsA(HttpError.forbidden));
+    });
+
     //
   });
 }
