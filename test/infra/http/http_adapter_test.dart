@@ -182,5 +182,25 @@ void main() {
             headers: HttpAdapter.headers,
           ));
     });
+
+    test('Should return data if get() returns 200', () async {
+      // Arrange
+      client.mockGet(HttpStatus.ok, jsonBody);
+      // Act
+      final sutResponse =
+          await sut.request(url: url, method: HttpAdapter.getMethod);
+      // Assert
+      expect(sutResponse, mapBody);
+    });
+
+    test('Should return null if get() returns 200 with no data', () async {
+      // Arrange
+      client.mockGet(HttpStatus.ok, '');
+      // Act
+      final sutResponse =
+          await sut.request(url: url, method: HttpAdapter.getMethod);
+      // Assert
+      expect(sutResponse, null);
+    });
   });
 }
