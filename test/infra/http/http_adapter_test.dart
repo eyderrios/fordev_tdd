@@ -260,6 +260,15 @@ void main() {
       expect(future, throwsA(HttpError.forbidden));
     });
 
+    test('Should return NotFoundError if get() returns 404', () async {
+      // Arrange
+      client.mockGet(HttpStatus.notFound, jsonBody);
+      // Act
+      final future = sut.request(url: url, method: HttpAdapter.getMethod);
+      // Assert
+      expect(future, throwsA(HttpError.notFound));
+    });
+
     //
   });
 }
