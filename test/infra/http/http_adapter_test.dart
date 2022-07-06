@@ -242,6 +242,14 @@ void main() {
       expect(future, throwsA(HttpError.badRequest));
     });
 
+    test('Should return BadRequestError if get() returns 401', () async {
+      // Arrange
+      client.mockGet(HttpStatus.unauthorized, jsonBody);
+      // Act
+      final future = sut.request(url: url, method: HttpAdapter.getMethod);
+      // Assert
+      expect(future, throwsA(HttpError.unauthorized));
+    });
     //
   });
 }
