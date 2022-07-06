@@ -13,8 +13,16 @@ class ClientSpy extends Mock implements http.Client {
         headers: any(named: 'headers'),
       ));
 
-  void mockResponse(int statusCode, String body) => _mockPostCall()
+  When _mockGetCall() => when(() => get(
+        any(),
+        headers: any(named: 'headers'),
+      ));
+
+  void mockPost(int statusCode, String body) => _mockPostCall()
       .thenAnswer((_) async => HttpFactory.makeResponse(statusCode, body));
 
-  void mockError() => _mockPostCall().thenThrow(Exception());
+  void mockPostError() => _mockPostCall().thenThrow(Exception());
+
+  void mockGet(int statusCode, String body) => _mockGetCall()
+      .thenAnswer((_) async => HttpFactory.makeResponse(statusCode, body));
 }

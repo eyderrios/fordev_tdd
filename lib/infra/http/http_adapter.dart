@@ -57,6 +57,11 @@ class HttpAdapter implements HttpClient<HttpClientBody> {
           headers: HttpAdapter.headers,
           body: jsonBody,
         );
+      } else if (method == HttpAdapter.getMethod) {
+        response = await client.get(
+          Uri.parse(url),
+          headers: HttpAdapter.headers,
+        );
       } else {
         response = Response('', HttpStatus.internalServerError);
       }

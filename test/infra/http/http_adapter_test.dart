@@ -11,8 +11,6 @@ import 'package:fordev_tdd/infra/mocks/mocks.dart';
 import '../mocks/mocks.dart';
 
 void main() {
-  const method = 'post';
-
   late String url;
   late HttpAdapter sut;
   late ClientSpy client;
@@ -30,7 +28,7 @@ void main() {
   group('COMMON', () {
     test('Should throw ServerError if invalid method is provided', () async {
       // Arrange
-      client.mockResponse(HttpStatus.ok, jsonBody);
+      client.mockPost(HttpStatus.ok, jsonBody);
       // Act
       final future = sut.request(url: url, method: 'invalid_method');
       // Assert
@@ -42,9 +40,10 @@ void main() {
     test('Should call post() with correct parameters (url, method, body)',
         () async {
       // Arrange
-      client.mockResponse(HttpStatus.ok, jsonBody);
+      client.mockPost(HttpStatus.ok, jsonBody);
       // Act
-      await sut.request(url: url, method: method, body: mapBody);
+      await sut.request(
+          url: url, method: HttpAdapter.postMethod, body: mapBody);
       // Assert
       verify(() => client.post(
             Uri.parse(url),
@@ -55,9 +54,9 @@ void main() {
 
     test('Should call post() without body', () async {
       // Arrange
-      client.mockResponse(HttpStatus.ok, '');
+      client.mockPost(HttpStatus.ok, '');
       // Act
-      await sut.request(url: url, method: method);
+      await sut.request(url: url, method: HttpAdapter.postMethod);
       // Assert
       verify(() => client.post(
             Uri.parse(url),
@@ -67,36 +66,40 @@ void main() {
 
     test('Should return data if post() returns 200', () async {
       // Arrange
-      client.mockResponse(HttpStatus.ok, jsonBody);
+      client.mockPost(HttpStatus.ok, jsonBody);
       // Act
-      final sutResponse = await sut.request(url: url, method: method);
+      final sutResponse =
+          await sut.request(url: url, method: HttpAdapter.postMethod);
       // Assert
       expect(sutResponse, mapBody);
     });
 
     test('Should return null if post() returns 200 with no data', () async {
       // Arrange
-      client.mockResponse(HttpStatus.ok, '');
+      client.mockPost(HttpStatus.ok, '');
       // Act
-      final sutResponse = await sut.request(url: url, method: method);
+      final sutResponse =
+          await sut.request(url: url, method: HttpAdapter.postMethod);
       // Assert
       expect(sutResponse, null);
     });
 
     test('Should return null if post() returns 204', () async {
       // Arrange
-      client.mockResponse(HttpStatus.noContent, '');
+      client.mockPost(HttpStatus.noContent, '');
       // Act
-      final sutResponse = await sut.request(url: url, method: method);
+      final sutResponse =
+          await sut.request(url: url, method: HttpAdapter.postMethod);
       // Assert
       expect(sutResponse, null);
     });
 
     test('Should return null if post() returns 204 with data', () async {
       // Arrange
-      client.mockResponse(HttpStatus.noContent, jsonBody);
+      client.mockPost(HttpStatus.noContent, jsonBody);
       // Act
-      final sutResponse = await sut.request(url: url, method: method);
+      final sutResponse =
+          await sut.request(url: url, method: HttpAdapter.postMethod);
       // Assert
       expect(sutResponse, null);
     });
@@ -104,65 +107,80 @@ void main() {
     test('Should return BadRequestError if post() returns 400 with no body',
         () async {
       // Arrange
-      client.mockResponse(HttpStatus.badRequest, '');
+      client.mockPost(HttpStatus.badRequest, '');
       // Act
-      final future = sut.request(url: url, method: method);
+      final future = sut.request(url: url, method: HttpAdapter.postMethod);
       // Assert
       expect(future, throwsA(HttpError.badRequest));
     });
 
     test('Should return BadRequestError if post() returns 400', () async {
       // Arrange
-      client.mockResponse(HttpStatus.badRequest, jsonBody);
+      client.mockPost(HttpStatus.badRequest, jsonBody);
       // Act
-      final future = sut.request(url: url, method: method);
+      final future = sut.request(url: url, method: HttpAdapter.postMethod);
       // Assert
       expect(future, throwsA(HttpError.badRequest));
     });
 
     test('Should return BadRequestError if post() returns 401', () async {
       // Arrange
-      client.mockResponse(HttpStatus.unauthorized, jsonBody);
+      client.mockPost(HttpStatus.unauthorized, jsonBody);
       // Act
-      final future = sut.request(url: url, method: method);
+      final future = sut.request(url: url, method: HttpAdapter.postMethod);
       // Assert
       expect(future, throwsA(HttpError.unauthorized));
     });
 
     test('Should return ForbiddenError if post() returns 403', () async {
       // Arrange
-      client.mockResponse(HttpStatus.forbidden, jsonBody);
+      client.mockPost(HttpStatus.forbidden, jsonBody);
       // Act
-      final future = sut.request(url: url, method: method);
+      final future = sut.request(url: url, method: HttpAdapter.postMethod);
       // Assert
       expect(future, throwsA(HttpError.forbidden));
     });
 
     test('Should return NotFoundError if post() returns 404', () async {
       // Arrange
-      client.mockResponse(HttpStatus.notFound, jsonBody);
+      client.mockPost(HttpStatus.notFound, jsonBody);
       // Act
-      final future = sut.request(url: url, method: method);
+      final future = sut.request(url: url, method: HttpAdapter.postMethod);
       // Assert
       expect(future, throwsA(HttpError.notFound));
     });
 
     test('Should return ServerError if post() returns 500', () async {
       // Arrange
-      client.mockResponse(HttpStatus.internalServerError, jsonBody);
+      client.mockPost(HttpStatus.internalServerError, jsonBody);
       // Act
-      final future = sut.request(url: url, method: method);
+      final future = sut.request(url: url, method: HttpAdapter.postMethod);
       // Assert
       expect(future, throwsA(HttpError.serverError));
     });
 
     test('Should return ServerError if post() throws', () async {
       // Arrange
-      client.mockError();
+      client.mockPostError();
       // Act
-      final future = sut.request(url: url, method: method);
+      final future = sut.request(url: url, method: HttpAdapter.postMethod);
       // Assert
       expect(future, throwsA(HttpError.serverError));
+    });
+  });
+
+  group('GET', () {
+    test('Should call get() with correct parameters (url and method)',
+        () async {
+      // Arrange
+      client.mockGet(HttpStatus.ok, jsonBody);
+      // Act
+      await sut.request(url: url, method: HttpAdapter.getMethod);
+      // Assert
+      verify(() => client.get(
+            Uri.parse(url),
+            headers: HttpAdapter.headers,
+          ));
     });
   });
 }
