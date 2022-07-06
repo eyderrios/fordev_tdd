@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 
@@ -29,14 +30,15 @@ void main() {
     verify(() => presenter.loadData()).called(1);
   });
 
-  // testWidgets('Should handle loading correctly', (WidgetTester tester) async {
-  //   await loadPage(tester);
+  testWidgets('Should handle loading correctly', (WidgetTester tester) async {
+    await loadPage(tester);
 
-  //   presenter.emitLoadind(true);
-  //   await tester.pump();
-  //   presenter.emitLoadind(false);
-  //   await tester.pump();
+    presenter.emitIsLoading(true);
+    await tester.pump();
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
-  //   expect(find.byType(CircularProgressIndicator), findsNothing);
-  // });
+    presenter.emitIsLoading(false);
+    await tester.pump();
+    expect(find.byType(CircularProgressIndicator), findsNothing);
+  });
 }
