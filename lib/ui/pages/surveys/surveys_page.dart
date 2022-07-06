@@ -18,7 +18,7 @@ class SurveysPage extends StatelessWidget {
             enlargeCenterPage: true,
             aspectRatio: 1,
           ),
-          items: [
+          items: const [
             SurveyItem(),
             SurveyItem(),
             SurveyItem(),
