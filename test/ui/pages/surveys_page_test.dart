@@ -26,13 +26,13 @@ void main() {
       SurveyViewModel(
         id: '1',
         question: 'Question 1',
-        date: 'some_date_1',
+        date: 'date_1',
         didAnswer: true,
       ),
       SurveyViewModel(
         id: '2',
         question: 'Question 2',
-        date: 'some_date_2',
+        date: 'date_2',
         didAnswer: false,
       ),
     ];
@@ -81,6 +81,8 @@ void main() {
     expect(find.text(UIError.unexpected.description), findsNothing);
     expect(find.text(R.strings.reload), findsNothing);
     expect(find.text(surveysList[0].question), findsWidgets);
+    expect(find.text(surveysList[0].date), findsWidgets);
     expect(find.text(surveysList[1].question), findsWidgets);
+    expect(find.text(surveysList[1].date), findsWidgets);
   });
 }
