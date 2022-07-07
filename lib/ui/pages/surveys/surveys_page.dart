@@ -5,8 +5,6 @@ import 'package:fordev_tdd/ui/components/components.dart';
 import 'package:fordev_tdd/ui/pages/surveys/surveys.dart';
 
 import '../../helpers/i18n/i18n.dart';
-import 'components/survey_item.dart';
-import 'surveys_presenter.dart';
 
 class SurveysPage extends StatelessWidget {
   final SurveysPresenter? presenter;
@@ -45,21 +43,23 @@ class SurveysPage extends StatelessWidget {
                   ],
                 );
               }
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20.0),
-                child: CarouselSlider(
-                  options: CarouselOptions(
-                    enlargeCenterPage: true,
-                    aspectRatio: 1,
+
+              if (snapshot.hasData) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20.0),
+                  child: CarouselSlider(
+                    options: CarouselOptions(
+                      enlargeCenterPage: true,
+                      aspectRatio: 1,
+                    ),
+                    items: snapshot.data!
+                        .map((viewModel) => SurveyItem(viewModel: viewModel))
+                        .toList(),
                   ),
-                  items: const [
-                    SurveyItem(),
-                    SurveyItem(),
-                    SurveyItem(),
-                    SurveyItem(),
-                  ],
-                ),
-              );
+                );
+              }
+
+              return const SizedBox(height: 0);
             });
       }),
     );

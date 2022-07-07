@@ -21,6 +21,8 @@ class SurveysPresenterSpy extends Mock implements SurveysPresenter {
   }
 
   void emitIsLoading(bool flag) => _isLoadingController.add(flag);
+  void emitLoadSurveys(List<SurveyViewModel> surveys) =>
+      _loadSurveysController.add(surveys);
   void emitLoadSurveysError(String error) =>
       _loadSurveysController.addError(error);
 }
