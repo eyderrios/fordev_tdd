@@ -192,13 +192,18 @@ void main() {
 
   testWidgets('Should call goToSignUp on link click',
       (WidgetTester tester) async {
+    debugPrint('##### 1');
     await loadPage(tester);
-
+    debugPrint('##### 2');
     final button = find.text(R.strings.login.toUpperCase());
+    debugPrint('##### 3');
     await tester.ensureVisible(button);
+    debugPrint('##### 4');
     await tester.tap(button);
+    debugPrint('##### 5');
     await tester.pump();
-
+    debugPrint('##### 6');
     verify(() => presenter.goToSignUp()).called(1);
+    debugPrint('##### 7');
   });
 }
