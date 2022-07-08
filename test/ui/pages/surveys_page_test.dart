@@ -23,13 +23,13 @@ void main() {
       ],
     );
     surveysList = [
-      SurveyViewModel(
+      const SurveyViewModel(
         id: '1',
         question: 'Question 1',
         date: 'date_1',
         didAnswer: true,
       ),
-      SurveyViewModel(
+      const SurveyViewModel(
         id: '2',
         question: 'Question 2',
         date: 'date_2',
@@ -40,7 +40,7 @@ void main() {
     await tester.pumpWidget(surveysPage);
   }
 
-  testWidgets('Should call LoadSurveys on page load',
+  testWidgets('Should call loadSurveys on page load',
       (WidgetTester tester) async {
     // Arrange
     await loadPage(tester);
@@ -60,7 +60,7 @@ void main() {
     expect(find.byType(CircularProgressIndicator), findsNothing);
   });
 
-  testWidgets('Should present error is loadSurveysStream fails',
+  testWidgets('Should present error is surveysStream fails',
       (WidgetTester tester) async {
     await loadPage(tester);
 
@@ -71,7 +71,7 @@ void main() {
     expect(find.text('Question 1'), findsNothing);
   });
 
-  testWidgets('Should list of surveys is loadSurveysStream succeed',
+  testWidgets('Should list of surveys is surveysStream succeed',
       (WidgetTester tester) async {
     await loadPage(tester);
 

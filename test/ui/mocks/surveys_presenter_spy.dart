@@ -6,7 +6,7 @@ import 'package:fordev_tdd/ui/pages/surveys/surveys.dart';
 
 class SurveysPresenterSpy extends Mock implements SurveysPresenter {
   final _isLoadingController = StreamController<bool>();
-  final _loadSurveysController = StreamController<List<SurveyViewModel>>();
+  final _surveysController = StreamController<List<SurveyViewModel>>();
 
   SurveysPresenterSpy() {
     _mockMethods();
@@ -16,13 +16,11 @@ class SurveysPresenterSpy extends Mock implements SurveysPresenter {
     when(() => loadData()).thenAnswer((_) async => _);
 
     when(() => isLoadingStream).thenAnswer((_) => _isLoadingController.stream);
-    when(() => loadSurveysStream)
-        .thenAnswer((_) => _loadSurveysController.stream);
+    when(() => surveysStream).thenAnswer((_) => _surveysController.stream);
   }
 
   void emitIsLoading(bool flag) => _isLoadingController.add(flag);
   void emitLoadSurveys(List<SurveyViewModel> surveys) =>
-      _loadSurveysController.add(surveys);
-  void emitLoadSurveysError(String error) =>
-      _loadSurveysController.addError(error);
+      _surveysController.add(surveys);
+  void emitLoadSurveysError(String error) => _surveysController.addError(error);
 }
