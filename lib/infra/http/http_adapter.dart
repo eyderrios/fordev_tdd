@@ -74,8 +74,7 @@ class HttpAdapter<T> implements HttpClient<T> {
         response = Response('', HttpStatus.internalServerError);
       }
     } catch (error) {
-      rethrow;
-      //throw HttpError.serverError;
+      throw HttpError.serverError;
     }
     return _handleResponse(response);
   }
