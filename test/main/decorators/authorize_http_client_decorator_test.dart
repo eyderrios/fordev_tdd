@@ -22,13 +22,18 @@ class FetchSecureCacheStorageSpy extends Mock
 
 void main() {
   const tokenKey = 'token';
+  late AuthorizeHttpClientDecorator sut;
+  late FetchSecureCacheStorageSpy fetchSecureCacheStorage;
+
+  setUp(() {
+    fetchSecureCacheStorage = FetchSecureCacheStorageSpy();
+    sut = AuthorizeHttpClientDecorator(
+      fetchSecureCacheStorage: fetchSecureCacheStorage,
+    );
+  });
 
   test('Should call FetchSecureCacheStorage with correct key', () {
     // Arrange
-    final fetchSecureCacheStorage = FetchSecureCacheStorageSpy();
-    final sut = AuthorizeHttpClientDecorator(
-      fetchSecureCacheStorage: fetchSecureCacheStorage,
-    );
     fetchSecureCacheStorage.mockFetchSecure();
     // Act
     sut.request();
