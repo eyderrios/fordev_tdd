@@ -12,14 +12,14 @@ import '../../mocks/mocks.dart';
 
 void main() {
   const dataCount = 2;
-  late HttpClientSpy<List<HttpClientBody>> client;
+  late HttpClientSpy<RemoteLoadSurveysResponse> client;
   late RemoteLoadSurveys sut;
   late String url;
-  late List<HttpClientBody> validData;
-  late List<HttpClientBody> invalidData;
+  late RemoteLoadSurveysResponse validData;
+  late RemoteLoadSurveysResponse invalidData;
 
-  List<HttpClientBody> mockValidData(int count) =>
-      List<HttpClientBody>.generate(
+  RemoteLoadSurveysResponse mockValidData(int count) =>
+      RemoteLoadSurveysResponse.generate(
           count,
           (_) => {
                 'id': faker.guid.guid(),
@@ -28,7 +28,7 @@ void main() {
                 'date': faker.date.dateTime().toIso8601String(),
               });
 
-  List<SurveyEntity> remoteDataToEntityList(List<HttpClientBody> list) =>
+  List<SurveyEntity> remoteDataToEntityList(RemoteLoadSurveysResponse list) =>
       List<SurveyEntity>.generate(
         list.length,
         (index) => RemoteSurveyModel.fromJson(list[index]).toEntity(),
@@ -36,7 +36,7 @@ void main() {
 
   setUp(() {
     url = faker.internet.httpUrl();
-    client = HttpClientSpy<List<HttpClientBody>>();
+    client = HttpClientSpy<RemoteLoadSurveysResponse>();
     sut = RemoteLoadSurveys(url: url, httpClient: client);
     validData = mockValidData(dataCount);
     invalidData = [

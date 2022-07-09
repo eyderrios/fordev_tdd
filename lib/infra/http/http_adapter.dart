@@ -5,7 +5,7 @@ import 'package:http/http.dart';
 
 import '../../data/http/http.dart';
 
-class HttpAdapter implements HttpClient<HttpClientBody> {
+class HttpAdapter<T> implements HttpClient<T> {
   static const getMethod = 'get';
   static const postMethod = 'post';
 
@@ -18,8 +18,8 @@ class HttpAdapter implements HttpClient<HttpClientBody> {
 
   HttpAdapter(this.client);
 
-  HttpClientBody? _handleResponse(Response response) {
-    HttpClientBody? body;
+  T? _handleResponse(Response response) {
+    T? body;
 
     switch (response.statusCode) {
       case HttpStatus.ok:
@@ -43,7 +43,7 @@ class HttpAdapter implements HttpClient<HttpClientBody> {
   }
 
   @override
-  Future<HttpClientBody?> request({
+  Future<T?> request({
     required String url,
     required String method,
     HttpClientBody? body,

@@ -5,8 +5,10 @@ import 'package:fordev_tdd/domain/helpers/domain_error.dart';
 import '../../../domain/usecases/usecases.dart';
 import '../../http/http.dart';
 
+typedef RemoteAddAccountResponse = Map<String, dynamic>;
+
 class RemoteAddAccount implements AddAccount {
-  final HttpClient<HttpClientBody> httpClient;
+  final HttpClient<RemoteAddAccountResponse> httpClient;
   final String url;
 
   RemoteAddAccount({
@@ -54,7 +56,7 @@ class RemoteAddAccountParams {
         passwordConfirmation: params.passwordConfirmation,
       );
 
-  HttpClientBody toJson() => {
+  RemoteAddAccountResponse toJson() => {
         'name': name,
         'email': email,
         'password': password,

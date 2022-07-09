@@ -13,7 +13,7 @@ import '../../mocks/mocks.dart';
 
 void main() {
   late String url;
-  late HttpClientSpy<HttpClientBody> client;
+  late HttpClientSpy<RemoteAddAccountResponse> client;
   late RemoteAddAccount sut;
   late AddAccountParams params;
   late HttpClientBody body;

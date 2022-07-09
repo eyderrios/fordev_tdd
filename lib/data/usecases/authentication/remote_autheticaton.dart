@@ -4,8 +4,10 @@ import '../../../domain/usecases/usecases.dart';
 import '../../http/http.dart';
 import '../../models/models.dart';
 
+typedef RemoteAuthenticationResponse = Map<String, dynamic>;
+
 class RemoteAuthentication implements Authentication {
-  final HttpClient<HttpClientBody> httpClient;
+  final HttpClient<RemoteAuthenticationResponse> httpClient;
   final String url;
 
   RemoteAuthentication({

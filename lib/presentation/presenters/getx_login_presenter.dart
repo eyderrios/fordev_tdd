@@ -114,7 +114,5 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
   }
 
   // @override
-  // void dispose() {
-  //   super.dispose();
-  // }
+  // void dispose() {}
 }

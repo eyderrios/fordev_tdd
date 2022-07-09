@@ -4,8 +4,5 @@ import '../../../data/http/http.dart';
 import '../../../infra/http/http.dart';
 
 class HttpClientFactory {
-  static HttpClient<HttpClientBody> makeHttpAdapter() {
-    final client = http.Client();
-    return HttpAdapter(client);
-  }
+  static HttpClient<T> makeHttpAdapter<T>() => HttpAdapter(http.Client());
 }

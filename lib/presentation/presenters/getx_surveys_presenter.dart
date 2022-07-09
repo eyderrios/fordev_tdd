@@ -5,8 +5,9 @@ import '../../domain/helpers/domain_error.dart';
 import '../../domain/usecases/usecases.dart';
 import '../../ui/helpers/errors/ui_error.dart';
 import '../../ui/pages/surveys/survey_view_model.dart';
+import '../../ui/pages/surveys/surveys_presenter.dart';
 
-class GetxSurveysPresenter {
+class GetxSurveysPresenter implements SurveysPresenter {
   final _isLoading = RxBool(true);
   final _surveys = Rx<List<SurveyViewModel>>([]);
 
@@ -14,9 +15,12 @@ class GetxSurveysPresenter {
 
   GetxSurveysPresenter({required this.loadSurveys});
 
+  @override
   Stream<bool> get isLoadingStream => _isLoading.stream;
+  @override
   Stream<List<SurveyViewModel>> get surveysStream => _surveys.stream;
 
+  @override
   Future<void> loadData() async {
     try {
       _isLoading.value = true;
@@ -30,7 +34,8 @@ class GetxSurveysPresenter {
               ))
           .toList();
     } on DomainError {
-      _surveys.subject.addError(UIError.unexpected.description);
+      _surveys.subject
+          .addError(UIError.unexpected.description, StackTrace.empty);
     } finally {
       _isLoading.value = false;
     }

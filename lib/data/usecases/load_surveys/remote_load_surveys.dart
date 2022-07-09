@@ -5,9 +5,11 @@ import '../../../domain/helpers/domain_error.dart';
 import '../../http/http.dart';
 import '../../models/models.dart';
 
+typedef RemoteLoadSurveysResponse = List<Map<String, dynamic>>;
+
 class RemoteLoadSurveys implements LoadSurveys {
+  final HttpClient<RemoteLoadSurveysResponse> httpClient;
   final String url;
-  final HttpClient<List<HttpClientBody>> httpClient;
 
   RemoteLoadSurveys({
     required this.url,
