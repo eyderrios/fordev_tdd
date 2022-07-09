@@ -34,11 +34,17 @@ class SurveysPage extends StatelessWidget {
             builder: (context, snapshot) {
               if (snapshot.hasError) {
                 return Container(
+                  padding: const EdgeInsets.all(20.0),
                   alignment: Alignment.center,
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(snapshot.error as String),
+                      Text(
+                        snapshot.error as String,
+                        style: const TextStyle(fontSize: 16.0),
+                        textAlign: TextAlign.center,
+                      ),
                       ElevatedButton(
                         onPressed: presenter.loadData,
                         child: Text(R.strings.reload),

@@ -47,26 +47,35 @@ class HttpAdapter<T> implements HttpClient<T> {
     required String url,
     required String method,
     HttpClientBody? body,
+    HttpClientHeaders? headers,
   }) async {
+    final HttpClientHeaders allHeaders = {};
+    final String? jsonBody = (body != null) ? jsonEncode(body) : null;
     Response response;
-    final jsonBody = (body != null) ? jsonEncode(body) : null;
+
+    allHeaders.addAll(HttpAdapter.headers);
+    if (headers != null) {
+      allHeaders.addAll(headers);
+    }
+
     try {
       if (method == HttpAdapter.postMethod) {
         response = await client.post(
           Uri.parse(url),
-          headers: HttpAdapter.headers,
           body: jsonBody,
+          headers: allHeaders,
         );
       } else if (method == HttpAdapter.getMethod) {
         response = await client.get(
           Uri.parse(url),
-          headers: HttpAdapter.headers,
+          headers: allHeaders,
         );
       } else {
         response = Response('', HttpStatus.internalServerError);
       }
     } catch (error) {
-      throw HttpError.serverError;
+      rethrow;
+      //throw HttpError.serverError;
     }
     return _handleResponse(response);
   }

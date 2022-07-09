@@ -50,6 +50,24 @@ void main() {
             headers: HttpAdapter.headers,
             body: jsonBody,
           ));
+
+      // Arrange
+      final HttpClientHeaders fakeHeaders = {
+        'some_header_key': 'some_header_value'
+      };
+      final HttpClientHeaders expectedHeaders = Map.from(HttpAdapter.headers);
+      expectedHeaders.addAll(fakeHeaders);
+      // Act
+      await sut.request(
+          url: url,
+          method: HttpAdapter.postMethod,
+          body: mapBody,
+          headers: fakeHeaders);
+      // Assert
+      verify(
+        () => client.post(Uri.parse(url),
+            body: jsonBody, headers: expectedHeaders),
+      );
     });
 
     test('Should call post() without body', () async {
@@ -181,6 +199,27 @@ void main() {
             Uri.parse(url),
             headers: HttpAdapter.headers,
           ));
+
+      // Arrange
+      client.mockGet(HttpStatus.ok, jsonBody);
+      final HttpClientHeaders fakeHeaders = {
+        'some_header_key': 'some_header_value'
+      };
+      final HttpClientHeaders expectedHeaders = Map.from(HttpAdapter.headers);
+      expectedHeaders.addAll(fakeHeaders);
+      // Act
+      await sut.request(
+        url: url,
+        method: HttpAdapter.getMethod,
+        headers: fakeHeaders,
+      );
+      // Assert
+      verify(
+        () => client.get(
+          Uri.parse(url),
+          headers: expectedHeaders,
+        ),
+      );
     });
 
     test('Should return data if get() returns 200', () async {
