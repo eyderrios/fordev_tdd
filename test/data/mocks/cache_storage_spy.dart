@@ -7,6 +7,10 @@ class CacheStorageSpy extends Mock implements CacheStorage {
     when(() => fetch(key ?? any())).thenAnswer((_) async => data ?? []);
   }
 
+  void mockDelete({String? key}) {
+    when(() => delete(key ?? any())).thenAnswer((_) async => _);
+  }
+
   void mockFetchError() {
     when(() => fetch(any())).thenThrow(Exception());
   }

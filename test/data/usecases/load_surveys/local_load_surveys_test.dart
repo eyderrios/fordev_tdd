@@ -172,5 +172,15 @@ void main() {
       // Assert
       verify(() => cache.fetch(LocalLoadSurveys.surveysKey)).called(1);
     });
+
+    test('Should empty cache if it is invaid', () async {
+      // Arrange
+      cache.mockFetch(key: LocalLoadSurveys.surveysKey, data: invalidMap);
+      cache.mockDelete();
+      // Act
+      await sut.validate();
+      // Assert
+      verify(() => cache.delete(LocalLoadSurveys.surveysKey)).called(1);
+    });
   });
 }
