@@ -1,3 +1,6 @@
+import 'package:faker/faker.dart';
+import 'package:fordev_tdd/data/models/models.dart';
+import 'package:fordev_tdd/domain/entities/survey_entity.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
@@ -9,28 +12,53 @@ class LocalLoadSurveys {
 
   LocalLoadSurveys({required this.fetchCacheStorage});
 
-  Future<void> load() async {
-    await fetchCacheStorage.fetch(surveysKey);
+  Future<List<SurveyEntity>> load() async {
+    final data = await fetchCacheStorage.fetch(surveysKey);
+    return data
+        .map<SurveyEntity>((map) => LocalSurveyModel.fromJson(map).toEntity())
+        .toList();
   }
 }
 
 class FetchCacheStorageSpy extends Mock implements FetchCacheStorage {
-  void mockFetch({String? key}) {
-    when(() => fetch(key ?? any())).thenAnswer((_) async => _);
+  void mockFetch({
+    String? key,
+    List<Map>? data,
+  }) {
+    when(() => fetch(key ?? any())).thenAnswer((_) async => data ?? []);
   }
 }
 
 abstract class FetchCacheStorage {
-  Future<void> fetch(String key);
+  Future<dynamic> fetch(String key);
 }
 
 void main() {
   late LocalLoadSurveys sut;
   late FetchCacheStorageSpy fetchCacheStorage;
+  late List<Map> dataMap;
+  late List<SurveyEntity> dataEntity;
 
   setUp(() {
     fetchCacheStorage = FetchCacheStorageSpy();
     sut = LocalLoadSurveys(fetchCacheStorage: fetchCacheStorage);
+    dataMap = [
+      {
+        'id': faker.guid.guid(),
+        'question': faker.randomGenerator.string(50),
+        'date': faker.date.dateTime().toIso8601String(),
+        'didAnswer': 'false',
+      },
+      {
+        'id': faker.guid.guid(),
+        'question': faker.randomGenerator.string(50),
+        'date': faker.date.dateTime().toIso8601String(),
+        'didAnswer': 'true',
+      }
+    ];
+    dataEntity = dataMap
+        .map<SurveyEntity>((map) => LocalSurveyModel.fromJson(map).toEntity())
+        .toList();
   });
 
   test('Should call FetchCacheStorage with correct key', () async {
@@ -41,5 +69,14 @@ void main() {
     // Assert
     verify(() => fetchCacheStorage.fetch(LocalLoadSurveys.surveysKey))
         .called(1);
+  });
+
+  test('Should return a list of surveys on success', () async {
+    // Arrange
+    fetchCacheStorage.mockFetch(data: dataMap);
+    // Act
+    final surveys = await sut.load();
+    // Assert
+    expect(surveys, dataEntity);
   });
 }
