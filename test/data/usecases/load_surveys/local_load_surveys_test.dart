@@ -14,8 +14,8 @@ class LocalLoadSurveys {
   LocalLoadSurveys({required this.fetchCacheStorage});
 
   Future<List<SurveyEntity>> load() async {
-    final data = await fetchCacheStorage.fetch(surveysKey);
     try {
+      final data = await fetchCacheStorage.fetch(surveysKey);
       if (data?.isEmpty != false) {
         throw Exception();
       }
@@ -29,11 +29,12 @@ class LocalLoadSurveys {
 }
 
 class FetchCacheStorageSpy extends Mock implements FetchCacheStorage {
-  void mockFetch({
-    String? key,
-    List<Map>? data,
-  }) {
+  void mockFetch({String? key, List<Map>? data}) {
     when(() => fetch(key ?? any())).thenAnswer((_) async => data ?? []);
+  }
+
+  void mockFetchError() {
+    when(() => fetch(any())).thenThrow(Exception());
   }
 }
 
@@ -132,10 +133,20 @@ void main() {
     expect(future, throwsA(DomainError.unexpected));
   });
 
-  test('Should throw UenexpectedError if cache is incomplete (missing fields)',
+  test('Should throw UnexpectedError if cache is incomplete (missing fields)',
       () async {
     // Arrange
     fetchCacheStorage.mockFetch(data: incompleteMap);
+    // Act
+    final future = sut.load();
+    // Assert
+    expect(future, throwsA(DomainError.unexpected));
+  });
+
+  test('Should throw UnexpectedError if cache is incomplete (missing fields)',
+      () async {
+    // Arrange
+    fetchCacheStorage.mockFetchError();
     // Act
     final future = sut.load();
     // Assert
