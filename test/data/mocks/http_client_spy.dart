@@ -2,8 +2,7 @@ import 'package:mocktail/mocktail.dart';
 
 import 'package:fordev_tdd/data/http/http.dart';
 
-class HttpClientSpy<ResponseType> extends Mock
-    implements HttpClient<ResponseType> {
+class HttpClientSpy extends Mock implements HttpClient {
   HttpClientSpy() {
     registerFallbackValue(Uri());
   }
@@ -15,7 +14,7 @@ class HttpClientSpy<ResponseType> extends Mock
         headers: any(named: 'headers'),
       ));
 
-  void mockRequest(ResponseType response) {
+  void mockRequest(dynamic response) {
     _mockRequestCall().thenAnswer((_) async => response);
   }
 

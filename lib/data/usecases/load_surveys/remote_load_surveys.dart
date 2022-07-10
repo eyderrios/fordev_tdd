@@ -8,7 +8,7 @@ import '../../models/models.dart';
 typedef RemoteLoadSurveysResponse = List<Map<String, dynamic>>;
 
 class RemoteLoadSurveys implements LoadSurveys {
-  final HttpClient<RemoteLoadSurveysResponse> httpClient;
+  final HttpClient httpClient;
   final String url;
 
   RemoteLoadSurveys({
@@ -20,8 +20,9 @@ class RemoteLoadSurveys implements LoadSurveys {
   Future<List<SurveyEntity>> load() async {
     try {
       final response = await httpClient.request(url: url, method: 'get');
-      return response!
-          .map((json) => RemoteSurveyModel.fromJson(json).toEntity())
+      return response
+          .map<SurveyEntity>(
+              (json) => RemoteSurveyModel.fromJson(json).toEntity())
           .toList();
     } on HttpError catch (error) {
       throw error == HttpError.forbidden

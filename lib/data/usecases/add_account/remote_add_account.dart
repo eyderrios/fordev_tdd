@@ -8,7 +8,7 @@ import '../../http/http.dart';
 typedef RemoteAddAccountResponse = Map<String, dynamic>;
 
 class RemoteAddAccount implements AddAccount {
-  final HttpClient<RemoteAddAccountResponse> httpClient;
+  final HttpClient httpClient;
   final String url;
 
   RemoteAddAccount({

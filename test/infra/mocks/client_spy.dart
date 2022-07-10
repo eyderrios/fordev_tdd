@@ -1,6 +1,6 @@
+import 'package:fordev_tdd/main/factories/factories.dart';
 import 'package:http/http.dart' as http;
 import 'package:mocktail/mocktail.dart';
-import 'package:fordev_tdd/infra/mocks/mocks.dart';
 
 class ClientSpy extends Mock implements http.Client {
   ClientSpy() {

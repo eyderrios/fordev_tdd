@@ -7,7 +7,7 @@ import '../../models/models.dart';
 typedef RemoteAuthenticationResponse = Map<String, dynamic>;
 
 class RemoteAuthentication implements Authentication {
-  final HttpClient<RemoteAuthenticationResponse> httpClient;
+  final HttpClient httpClient;
   final String url;
 
   RemoteAuthentication({

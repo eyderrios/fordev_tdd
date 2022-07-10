@@ -12,7 +12,7 @@ import '../../mocks/mocks.dart';
 
 void main() {
   const dataCount = 2;
-  late HttpClientSpy<RemoteLoadSurveysResponse> client;
+  late HttpClientSpy client;
   late RemoteLoadSurveys sut;
   late String url;
   late RemoteLoadSurveysResponse validData;
@@ -36,7 +36,7 @@ void main() {
 
   setUp(() {
     url = faker.internet.httpUrl();
-    client = HttpClientSpy<RemoteLoadSurveysResponse>();
+    client = HttpClientSpy();
     sut = RemoteLoadSurveys(url: url, httpClient: client);
     validData = mockValidData(dataCount);
     invalidData = [

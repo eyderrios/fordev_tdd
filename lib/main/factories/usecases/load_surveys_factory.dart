@@ -5,7 +5,7 @@ import '../../../domain/usecases/load_surveys.dart';
 
 class LoadSurveysFactory {
   static LoadSurveys makeRemoteLoadSurveys() => RemoteLoadSurveys(
-        httpClient: HttpClientFactory.makeHttpAdapter(),
+        httpClient: HttpClientFactory.makeAuthorizeHttpClientDecorator(),
         url: ApiUrlFactory.makeApiUrl('surveys'),
       );
 }

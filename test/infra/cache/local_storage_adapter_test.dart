@@ -2,7 +2,7 @@ import 'package:faker/faker.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
-import 'package:fordev_tdd/infra/mocks/flutter_secure_storage_spy.dart';
+import '../mocks/flutter_secure_storage_spy.dart';
 import 'package:fordev_tdd/infra/cache/cache.dart';
 
 void main() {

@@ -6,6 +6,6 @@ class LoadCurrentAccountFactory {
   static LoadCurrentAccount makeLocalLoadCurrentAccount() {
     return LocalLoadCurrentAccount(
         fetchSecureCacheStorage:
-            LocalStorageAdapterFactory.makeLocalStorageAdapater());
+            LocalStorageAdapterFactory.makeLocalStorageAdapter());
   }
 }

@@ -6,7 +6,7 @@ class SaveCurrentAccountFactory {
   static SaveCurrentAccount makeLocalSaveCurrentAccount() {
     return LocalSaveCurrentAccount(
       saveSecureCacheStorage:
-          LocalStorageAdapterFactory.makeLocalStorageAdapater(),
+          LocalStorageAdapterFactory.makeLocalStorageAdapter(),
     );
   }
 }

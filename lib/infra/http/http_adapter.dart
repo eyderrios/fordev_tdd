@@ -5,7 +5,7 @@ import 'package:http/http.dart';
 
 import '../../data/http/http.dart';
 
-class HttpAdapter<T> implements HttpClient<T> {
+class HttpAdapter implements HttpClient {
   static const getMethod = 'get';
   static const postMethod = 'post';
 
@@ -18,12 +18,20 @@ class HttpAdapter<T> implements HttpClient<T> {
 
   HttpAdapter(this.client);
 
-  T? _handleResponse(Response response) {
-    T? body;
+  dynamic _handleResponse(Response response) {
+    dynamic body;
 
     switch (response.statusCode) {
       case HttpStatus.ok:
-        body = response.body.isNotEmpty ? jsonDecode(response.body) : null;
+        try {
+          // _TypeError (type 'List<dynamic>'
+          //  is not a subtype of type 'List<Map<String, dynamic>>?')
+          body = (response.body.isNotEmpty)
+              ? body = jsonDecode(response.body)
+              : null;
+        } catch (error) {
+          rethrow;
+        }
         break;
       case HttpStatus.noContent:
         body = null;
@@ -43,7 +51,7 @@ class HttpAdapter<T> implements HttpClient<T> {
   }
 
   @override
-  Future<T?> request({
+  Future<dynamic> request({
     required String url,
     required String method,
     HttpClientBody? body,

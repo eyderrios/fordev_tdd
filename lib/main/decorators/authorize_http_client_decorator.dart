@@ -1,16 +1,17 @@
 import '../../data/cache/cache.dart';
 import '../../data/http/http.dart';
 
-class AuthorizeHttpClientDecorator<ResponseType> {
+class AuthorizeHttpClientDecorator implements HttpClient {
   final FetchSecureCacheStorage fetchSecureCacheStorage;
-  final HttpClient<ResponseType> decoratee;
+  final HttpClient decoratee;
 
   AuthorizeHttpClientDecorator({
     required this.fetchSecureCacheStorage,
     required this.decoratee,
   });
 
-  Future<ResponseType?> request({
+  @override
+  Future<dynamic> request({
     required String url,
     required String method,
     HttpClientBody? body,

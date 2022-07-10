@@ -8,8 +8,8 @@ import 'package:fordev_tdd/data/http/http.dart';
 import '../../data/mocks/mocks.dart';
 
 void main() {
-  late AuthorizeHttpClientDecorator<HttpClientBody> sut;
-  late HttpClientSpy<HttpClientBody> client;
+  late AuthorizeHttpClientDecorator sut;
+  late HttpClientSpy client;
   late FetchSecureCacheStorageSpy cache;
   late String url;
   late String method;

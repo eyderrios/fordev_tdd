@@ -7,7 +7,7 @@ import 'package:test/test.dart';
 
 import 'package:fordev_tdd/data/http/http.dart';
 import 'package:fordev_tdd/infra/http/http.dart';
-import 'package:fordev_tdd/infra/mocks/mocks.dart';
+import 'package:fordev_tdd/main/factories/http/http.dart';
 import '../mocks/mocks.dart';
 
 void main() {
