@@ -1,22 +1,13 @@
 import 'package:faker/faker.dart';
-import 'package:fordev_tdd/data/usecases/load_surveys/local_load_surveys.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
-import 'package:fordev_tdd/data/cache/fetch_cache_storage.dart';
+import 'package:fordev_tdd/data/usecases/load_surveys/load_surveys.dart';
 import 'package:fordev_tdd/data/models/models.dart';
 import 'package:fordev_tdd/domain/entities/survey_entity.dart';
 import 'package:fordev_tdd/domain/helpers/domain_error.dart';
 
-class FetchCacheStorageSpy extends Mock implements FetchCacheStorage {
-  void mockFetch({String? key, List<Map>? data}) {
-    when(() => fetch(key ?? any())).thenAnswer((_) async => data ?? []);
-  }
-
-  void mockFetchError() {
-    when(() => fetch(any())).thenThrow(Exception());
-  }
-}
+import '../../mocks/fetch_cache_storage_spy.dart';
 
 void main() {
   late LocalLoadSurveys sut;
