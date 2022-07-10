@@ -25,11 +25,17 @@ abstract class FetchCacheStorage {
 }
 
 void main() {
+  late LocalLoadSurveys sut;
+  late FetchCacheStorageSpy fetchCacheStorage;
+
+  setUp(() {
+    fetchCacheStorage = FetchCacheStorageSpy();
+    sut = LocalLoadSurveys(fetchCacheStorage: fetchCacheStorage);
+  });
+
   test('Should call FetchCacheStorage with correct key', () async {
     // Arrange
-    final fetchCacheStorage = FetchCacheStorageSpy();
-    final sut = LocalLoadSurveys(fetchCacheStorage: fetchCacheStorage);
-    fetchCacheStorage.mockFetch();
+    fetchCacheStorage.mockFetch(key: LocalLoadSurveys.surveysKey);
     // Act
     await sut.load();
     // Assert
