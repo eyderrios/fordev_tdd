@@ -192,5 +192,15 @@ void main() {
       // Assert
       verify(() => cache.delete(LocalLoadSurveys.surveysKey)).called(1);
     });
+
+    test('Should empty cache if CacheStorage throws', () async {
+      // Arrange
+      cache.mockFetchError();
+      cache.mockDelete();
+      // Act
+      await sut.validate();
+      // Assert
+      verify(() => cache.delete(LocalLoadSurveys.surveysKey)).called(1);
+    });
   });
 }
