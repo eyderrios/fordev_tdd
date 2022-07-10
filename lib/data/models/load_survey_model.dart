@@ -1,5 +1,3 @@
-import 'package:fordev_tdd/domain/helpers/domain_error.dart';
-
 import '../../domain/entities/entities.dart';
 
 class LocalSurveyModel {

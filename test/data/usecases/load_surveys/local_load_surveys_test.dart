@@ -1,32 +1,12 @@
 import 'package:faker/faker.dart';
-import 'package:fordev_tdd/data/models/models.dart';
-import 'package:fordev_tdd/domain/entities/survey_entity.dart';
-import 'package:fordev_tdd/domain/helpers/domain_error.dart';
+import 'package:fordev_tdd/data/usecases/load_surveys/local_load_surveys.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
-// implements LoadSurveys
-class LocalLoadSurveys {
-  static const surveysKey = 'surveys';
-
-  final FetchCacheStorage fetchCacheStorage;
-
-  LocalLoadSurveys({required this.fetchCacheStorage});
-
-  Future<List<SurveyEntity>> load() async {
-    try {
-      final data = await fetchCacheStorage.fetch(surveysKey);
-      if (data?.isEmpty != false) {
-        throw Exception();
-      }
-      return data
-          .map<SurveyEntity>((map) => LocalSurveyModel.fromJson(map).toEntity())
-          .toList();
-    } catch (error) {
-      throw DomainError.unexpected;
-    }
-  }
-}
+import 'package:fordev_tdd/data/cache/fetch_cache_storage.dart';
+import 'package:fordev_tdd/data/models/models.dart';
+import 'package:fordev_tdd/domain/entities/survey_entity.dart';
+import 'package:fordev_tdd/domain/helpers/domain_error.dart';
 
 class FetchCacheStorageSpy extends Mock implements FetchCacheStorage {
   void mockFetch({String? key, List<Map>? data}) {
@@ -36,10 +16,6 @@ class FetchCacheStorageSpy extends Mock implements FetchCacheStorage {
   void mockFetchError() {
     when(() => fetch(any())).thenThrow(Exception());
   }
-}
-
-abstract class FetchCacheStorage {
-  Future<dynamic> fetch(String key);
 }
 
 void main() {
