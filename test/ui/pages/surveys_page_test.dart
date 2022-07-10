@@ -48,27 +48,18 @@ void main() {
     verify(() => presenter.loadData()).called(1);
   });
 
-  testWidgets('Should handle loading correctly', (WidgetTester tester) async {
-    await loadPage(tester);
-
-    presenter.emitIsLoading(true);
-    await tester.pump();
-    expect(find.byType(CircularProgressIndicator), findsOneWidget);
-
-    presenter.emitIsLoading(false);
-    await tester.pump();
-    expect(find.byType(CircularProgressIndicator), findsNothing);
-  });
-
   testWidgets('Should present error is surveysStream fails',
       (WidgetTester tester) async {
     await loadPage(tester);
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
     presenter.emitLoadSurveysError(UIError.unexpected.description);
     await tester.pump();
+
     expect(find.text(UIError.unexpected.description), findsOneWidget);
     expect(find.text(R.strings.reload), findsOneWidget);
     expect(find.text('Question 1'), findsNothing);
+    expect(find.byType(CircularProgressIndicator), findsNothing);
   });
 
   testWidgets('Should list of surveys is surveysStream succeed',
@@ -84,6 +75,7 @@ void main() {
     expect(find.text(surveysList[0].date), findsWidgets);
     expect(find.text(surveysList[1].question), findsWidgets);
     expect(find.text(surveysList[1].date), findsWidgets);
+    expect(find.byType(CircularProgressIndicator), findsNothing);
   });
 
   testWidgets('Should call loadSurveys on reload button click',

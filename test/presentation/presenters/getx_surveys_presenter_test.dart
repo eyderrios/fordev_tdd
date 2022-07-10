@@ -51,7 +51,6 @@ void main() {
   test('Should emit correct events on success', () async {
     loadSurveys.mockLoad(surveysEntities);
 
-    expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
     sut.surveysStream
         .listen(expectAsync1((surveys) => expect(surveys, surveysModels)));
 
@@ -62,7 +61,6 @@ void main() {
     loadSurveys.mockLoad(surveysEntities);
     loadSurveys.mockLoadError();
 
-    expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
     sut.surveysStream.listen(null,
         onError: expectAsync2(
             (error, _) => expect(error, UIError.unexpected.description)));

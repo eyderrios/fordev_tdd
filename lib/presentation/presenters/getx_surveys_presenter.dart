@@ -8,7 +8,6 @@ import '../../ui/pages/surveys/survey_view_model.dart';
 import '../../ui/pages/surveys/surveys_presenter.dart';
 
 class GetxSurveysPresenter implements SurveysPresenter {
-  final _isLoading = RxBool(true);
   final _surveys = Rx<List<SurveyViewModel>>([]);
 
   final LoadSurveys loadSurveys;
@@ -16,14 +15,11 @@ class GetxSurveysPresenter implements SurveysPresenter {
   GetxSurveysPresenter({required this.loadSurveys});
 
   @override
-  Stream<bool> get isLoadingStream => _isLoading.stream;
-  @override
   Stream<List<SurveyViewModel>> get surveysStream => _surveys.stream;
 
   @override
   Future<void> loadData() async {
     try {
-      _isLoading.value = true;
       final surveys = await loadSurveys.load();
       _surveys.value = surveys
           .map((survey) => SurveyViewModel(
@@ -36,8 +32,6 @@ class GetxSurveysPresenter implements SurveysPresenter {
     } on DomainError {
       _surveys.subject
           .addError(UIError.unexpected.description, StackTrace.empty);
-    } finally {
-      _isLoading.value = false;
     }
   }
 }
