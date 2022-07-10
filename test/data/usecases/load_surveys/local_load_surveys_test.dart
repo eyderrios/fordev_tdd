@@ -54,7 +54,7 @@ void main() {
           .toList();
     });
 
-    test('Should call FetchCacheStorage with correct key', () async {
+    test('Should call CacheStorage with correct key', () async {
       // Arrange
       cache.mockFetch(key: LocalLoadSurveys.surveysKey, data: validMap);
       // Act
@@ -117,6 +117,60 @@ void main() {
       final future = sut.load();
       // Assert
       expect(future, throwsA(DomainError.unexpected));
+    });
+  });
+
+  group('VALIDATE', () {
+    late LocalLoadSurveys sut;
+    late CacheStorageSpy cache;
+    late List<Map> validMap;
+    late List<Map> invalidMap;
+    late List<Map> incompleteMap;
+    late List<SurveyEntity> validEntities;
+
+    setUp(() {
+      cache = CacheStorageSpy();
+      sut = LocalLoadSurveys(cacheStorage: cache);
+      validMap = [
+        {
+          'id': faker.guid.guid(),
+          'question': faker.randomGenerator.string(50),
+          'date': faker.date.dateTime().toIso8601String(),
+          'didAnswer': 'false',
+        },
+        {
+          'id': faker.guid.guid(),
+          'question': faker.randomGenerator.string(50),
+          'date': faker.date.dateTime().toIso8601String(),
+          'didAnswer': 'true',
+        }
+      ];
+      invalidMap = [
+        {
+          'id': faker.guid.guid(),
+          'question': faker.randomGenerator.string(50),
+          'date': 'invalid_date',
+          'didAnswer': 'false',
+        }
+      ];
+      incompleteMap = [
+        {
+          'date': faker.date.dateTime().toIso8601String(),
+          'didAnswer': 'false',
+        }
+      ];
+      validEntities = validMap
+          .map<SurveyEntity>((map) => LocalSurveyModel.fromJson(map).toEntity())
+          .toList();
+    });
+
+    test('Should call CacheStorage with correct key', () async {
+      // Arrange
+      cache.mockFetch(key: LocalLoadSurveys.surveysKey, data: validMap);
+      // Act
+      await sut.validate();
+      // Assert
+      verify(() => cache.fetch(LocalLoadSurveys.surveysKey)).called(1);
     });
   });
 }

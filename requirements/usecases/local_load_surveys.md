@@ -13,7 +13,7 @@
 # Local Validate Surveys
 
 > ## Caso de sucesso
-1. Sistema solicita os dados das enquetes do Cache
+1. ✅ Sistema solicita os dados das enquetes do Cache
 > ## Exceção - Dados inválidos no cache
 1. Sistema limpa os dados do cache
 
