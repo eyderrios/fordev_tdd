@@ -46,6 +46,7 @@ void main() {
   late FetchCacheStorageSpy fetchCacheStorage;
   late List<Map> validMap;
   late List<Map> invalidMap;
+  late List<Map> incompleteMap;
   late List<SurveyEntity> validEntities;
 
   setUp(() {
@@ -71,12 +72,12 @@ void main() {
         'question': faker.randomGenerator.string(50),
         'date': 'invalid_date',
         'didAnswer': 'false',
-      },
+      }
+    ];
+    incompleteMap = [
       {
-        'id': faker.guid.guid(),
-        'question': faker.randomGenerator.string(50),
         'date': faker.date.dateTime().toIso8601String(),
-        'didAnswer': 'invalid_bool',
+        'didAnswer': 'false',
       }
     ];
     validEntities = validMap
@@ -86,7 +87,8 @@ void main() {
 
   test('Should call FetchCacheStorage with correct key', () async {
     // Arrange
-    fetchCacheStorage.mockFetch(key: LocalLoadSurveys.surveysKey);
+    fetchCacheStorage.mockFetch(
+        key: LocalLoadSurveys.surveysKey, data: validMap);
     // Act
     await sut.load();
     // Assert
@@ -124,6 +126,16 @@ void main() {
   test('Should throw UenexpectedError if cache is invalid', () async {
     // Arrange
     fetchCacheStorage.mockFetch(data: invalidMap);
+    // Act
+    final future = sut.load();
+    // Assert
+    expect(future, throwsA(DomainError.unexpected));
+  });
+
+  test('Should throw UenexpectedError if cache is incomplete (missing fields)',
+      () async {
+    // Arrange
+    fetchCacheStorage.mockFetch(data: incompleteMap);
     // Act
     final future = sut.load();
     // Assert

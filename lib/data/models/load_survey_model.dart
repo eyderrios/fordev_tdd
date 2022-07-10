@@ -1,3 +1,5 @@
+import 'package:fordev_tdd/domain/helpers/domain_error.dart';
+
 import '../../domain/entities/entities.dart';
 
 class LocalSurveyModel {
@@ -16,9 +18,9 @@ class LocalSurveyModel {
   static List<String> get fields => ['id', 'question', 'date', 'didAnswer'];
 
   factory LocalSurveyModel.fromJson(Map json) {
-    // if (!json.keys.toSet().containsAll(fields)) {
-    //   throw HttpError.invalidData;
-    // }
+    if (!json.keys.toSet().containsAll(fields)) {
+      throw Exception();
+    }
     return LocalSurveyModel(
       id: json['id'],
       question: json['question'],
