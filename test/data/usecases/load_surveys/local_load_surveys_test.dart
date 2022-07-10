@@ -50,7 +50,7 @@ void main() {
         }
       ];
       validEntities = validMap
-          .map<SurveyEntity>((map) => LocalSurveyModel.fromJson(map).toEntity())
+          .map<SurveyEntity>((map) => LocalSurveyModel.fromMap(map).toEntity())
           .toList();
     });
 
@@ -126,7 +126,6 @@ void main() {
     late List<Map> validMap;
     late List<Map> invalidMap;
     late List<Map> incompleteMap;
-    late List<SurveyEntity> validEntities;
 
     setUp(() {
       cache = CacheStorageSpy();
@@ -159,9 +158,6 @@ void main() {
           'didAnswer': 'false',
         }
       ];
-      validEntities = validMap
-          .map<SurveyEntity>((map) => LocalSurveyModel.fromJson(map).toEntity())
-          .toList();
     });
 
     test('Should call CacheStorage with correct key', () async {
@@ -201,6 +197,62 @@ void main() {
       await sut.validate();
       // Assert
       verify(() => cache.delete(LocalLoadSurveys.surveysKey)).called(1);
+    });
+  });
+
+  group('SAVE', () {
+    late LocalLoadSurveys sut;
+    late CacheStorageSpy cache;
+    late List<Map<String, String>> validMap;
+    late List<Map<String, String>> invalidMap;
+    late List<Map<String, String>> incompleteMap;
+    late List<SurveyEntity> validEntities;
+
+    setUp(() {
+      cache = CacheStorageSpy();
+      sut = LocalLoadSurveys(cacheStorage: cache);
+      validMap = [
+        {
+          'id': faker.guid.guid(),
+          'question': faker.randomGenerator.string(50),
+          'date': faker.date.dateTime().toIso8601String(),
+          'didAnswer': 'false',
+        },
+        {
+          'id': faker.guid.guid(),
+          'question': faker.randomGenerator.string(50),
+          'date': faker.date.dateTime().toIso8601String(),
+          'didAnswer': 'true',
+        }
+      ];
+      invalidMap = [
+        {
+          'id': faker.guid.guid(),
+          'question': faker.randomGenerator.string(50),
+          'date': 'invalid_date',
+          'didAnswer': 'false',
+        }
+      ];
+      incompleteMap = [
+        {
+          'date': faker.date.dateTime().toIso8601String(),
+          'didAnswer': 'false',
+        }
+      ];
+      validEntities = validMap
+          .map<SurveyEntity>((map) => LocalSurveyModel.fromMap(map).toEntity())
+          .toList();
+    });
+
+    test('Should call CacheStorage with correct params', () async {
+      // Arrange
+      cache.mockSave(key: LocalLoadSurveys.surveysKey, value: validMap);
+      // Act
+      await sut.save(validEntities);
+      // Assert
+      verify(() =>
+              cache.save(key: LocalLoadSurveys.surveysKey, value: validMap))
+          .called(1);
     });
   });
 }

@@ -15,7 +15,7 @@ class LocalSurveyModel {
 
   static List<String> get fields => ['id', 'question', 'date', 'didAnswer'];
 
-  factory LocalSurveyModel.fromJson(Map json) {
+  factory LocalSurveyModel.fromMap(Map json) {
     if (!json.keys.toSet().containsAll(fields)) {
       throw Exception();
     }
@@ -27,6 +27,22 @@ class LocalSurveyModel {
     );
   }
 
+  factory LocalSurveyModel.fromEntity(SurveyEntity entity) {
+    return LocalSurveyModel(
+      id: entity.id,
+      question: entity.question,
+      date: entity.dateTime,
+      didAnswer: entity.didAnswer,
+    );
+  }
+
   SurveyEntity toEntity() => SurveyEntity(
       id: id, question: question, dateTime: date, didAnswer: didAnswer);
+
+  Map<String, String> toMap() => {
+        'id': id,
+        'question': question,
+        'date': date.toIso8601String(),
+        'didAnswer': didAnswer.toString(),
+      };
 }

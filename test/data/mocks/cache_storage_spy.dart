@@ -11,6 +11,12 @@ class CacheStorageSpy extends Mock implements CacheStorage {
     when(() => delete(key ?? any())).thenAnswer((_) async => _);
   }
 
+  void mockSave({String? key, dynamic value}) {
+    when(() => save(
+        key: key ?? any(named: 'key'),
+        value: value ?? any(named: 'value'))).thenAnswer((_) async => _);
+  }
+
   void mockFetchError() {
     when(() => fetch(any())).thenThrow(Exception());
   }
