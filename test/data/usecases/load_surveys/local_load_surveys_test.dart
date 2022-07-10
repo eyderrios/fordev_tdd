@@ -15,12 +15,16 @@ class LocalLoadSurveys {
 
   Future<List<SurveyEntity>> load() async {
     final data = await fetchCacheStorage.fetch(surveysKey);
-    if (data?.isEmpty != false) {
+    try {
+      if (data?.isEmpty != false) {
+        throw Exception();
+      }
+      return data
+          .map<SurveyEntity>((map) => LocalSurveyModel.fromJson(map).toEntity())
+          .toList();
+    } catch (error) {
       throw DomainError.unexpected;
     }
-    return data
-        .map<SurveyEntity>((map) => LocalSurveyModel.fromJson(map).toEntity())
-        .toList();
   }
 }
 
@@ -40,13 +44,14 @@ abstract class FetchCacheStorage {
 void main() {
   late LocalLoadSurveys sut;
   late FetchCacheStorageSpy fetchCacheStorage;
-  late List<Map> dataMap;
-  late List<SurveyEntity> dataEntity;
+  late List<Map> validMap;
+  late List<Map> invalidMap;
+  late List<SurveyEntity> validEntities;
 
   setUp(() {
     fetchCacheStorage = FetchCacheStorageSpy();
     sut = LocalLoadSurveys(fetchCacheStorage: fetchCacheStorage);
-    dataMap = [
+    validMap = [
       {
         'id': faker.guid.guid(),
         'question': faker.randomGenerator.string(50),
@@ -60,7 +65,21 @@ void main() {
         'didAnswer': 'true',
       }
     ];
-    dataEntity = dataMap
+    invalidMap = [
+      {
+        'id': faker.guid.guid(),
+        'question': faker.randomGenerator.string(50),
+        'date': 'invalid_date',
+        'didAnswer': 'false',
+      },
+      {
+        'id': faker.guid.guid(),
+        'question': faker.randomGenerator.string(50),
+        'date': faker.date.dateTime().toIso8601String(),
+        'didAnswer': 'invalid_bool',
+      }
+    ];
+    validEntities = validMap
         .map<SurveyEntity>((map) => LocalSurveyModel.fromJson(map).toEntity())
         .toList();
   });
@@ -77,11 +96,11 @@ void main() {
 
   test('Should return a list of surveys on success', () async {
     // Arrange
-    fetchCacheStorage.mockFetch(data: dataMap);
+    fetchCacheStorage.mockFetch(data: validMap);
     // Act
     final surveys = await sut.load();
     // Assert
-    expect(surveys, dataEntity);
+    expect(surveys, validEntities);
   });
 
   test('Should throw UenexpectedError if cache is empty', () async {
@@ -96,6 +115,15 @@ void main() {
   test('Should throw UenexpectedError if cache is null', () async {
     // Arrange
     fetchCacheStorage.mockFetch(data: null);
+    // Act
+    final future = sut.load();
+    // Assert
+    expect(future, throwsA(DomainError.unexpected));
+  });
+
+  test('Should throw UenexpectedError if cache is invalid', () async {
+    // Arrange
+    fetchCacheStorage.mockFetch(data: invalidMap);
     // Act
     final future = sut.load();
     // Assert
