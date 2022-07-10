@@ -204,8 +204,6 @@ void main() {
     late LocalLoadSurveys sut;
     late CacheStorageSpy cache;
     late List<Map<String, String>> validMap;
-    late List<Map<String, String>> invalidMap;
-    late List<Map<String, String>> incompleteMap;
     late List<SurveyEntity> validEntities;
 
     setUp(() {
@@ -225,20 +223,6 @@ void main() {
           'didAnswer': 'true',
         }
       ];
-      invalidMap = [
-        {
-          'id': faker.guid.guid(),
-          'question': faker.randomGenerator.string(50),
-          'date': 'invalid_date',
-          'didAnswer': 'false',
-        }
-      ];
-      incompleteMap = [
-        {
-          'date': faker.date.dateTime().toIso8601String(),
-          'didAnswer': 'false',
-        }
-      ];
       validEntities = validMap
           .map<SurveyEntity>((map) => LocalSurveyModel.fromMap(map).toEntity())
           .toList();
@@ -253,6 +237,15 @@ void main() {
       verify(() =>
               cache.save(key: LocalLoadSurveys.surveysKey, value: validMap))
           .called(1);
+    });
+
+    test('Should throws UnexpectedError if save() throws', () async {
+      // Arrange
+      cache.mockSaveError();
+      // Act
+      final future = sut.save(validEntities);
+      // Assert
+      expect(future, throwsA(DomainError.unexpected));
     });
   });
 }

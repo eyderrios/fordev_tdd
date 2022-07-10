@@ -27,10 +27,10 @@
 > ## Caso de sucesso
 1. Sistema valida dos dados das enquetes
 2. Sistema apaga dos dados do cache antigo
-3. Sistema grava os novos dados no Cache
+3. ✅ Sistema grava os novos dados no Cache
 
 > ## Exceção - Erro ao apagar dados no Cache
 1. Sistema retorna uma mensagem de erro
 
 > ## Exceção - Erro ao gravar dados no Cache
-1. Sistema retorna uma mensagem de erro
+1. ✅ Sistema retorna uma mensagem de erro
