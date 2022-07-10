@@ -22,7 +22,7 @@ void main() {
 
   test('Should call FetchSecureCacheStorage with correct parameter', () async {
     // Arrange
-    fetchSecureCacheStorage.mockFecthSecure(key: null, token: token);
+    fetchSecureCacheStorage.mockFetchSecure(key: null, token: token);
     // Act
     await sut.load();
     // Assert
@@ -31,7 +31,7 @@ void main() {
 
   test('Should return an AccountEntity', () async {
     // Arrange
-    fetchSecureCacheStorage.mockFecthSecure(key: null, token: token);
+    fetchSecureCacheStorage.mockFetchSecure(key: null, token: token);
     // Act
     final account = await sut.load();
     // Assert
@@ -41,7 +41,7 @@ void main() {
   test('Should throw UnexpectedError if FetchSecureCacheStorage throws',
       () async {
     // Arrange
-    fetchSecureCacheStorage.mockFecthSecureError(key: null);
+    fetchSecureCacheStorage.mockFetchSecureError(key: null);
     // Act
     final future = sut.load();
     // Assert
