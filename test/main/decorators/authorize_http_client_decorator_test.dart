@@ -20,27 +20,37 @@ class AuthorizeHttpClientDecorator<ResponseType> {
     HttpClientBody? body,
     HttpClientHeaders? headers,
   }) async {
-    final token = await fetchSecureCacheStorage.fetchSecure('token');
-    HttpClientHeaders authHeaders = {};
-    if (token != null) {
-      authHeaders.addAll({'x-access-token': token});
+    try {
+      final token = await fetchSecureCacheStorage.fetchSecure('token');
+      HttpClientHeaders authHeaders = {};
+      if (token != null) {
+        authHeaders.addAll({'x-access-token': token});
+      }
+      if (headers != null) {
+        authHeaders.addAll(headers);
+      }
+      return await decoratee.request(
+        url: url,
+        method: method,
+        body: body,
+        headers: authHeaders.isNotEmpty ? authHeaders : null,
+      );
+    } catch (error) {
+      throw HttpError.forbidden;
     }
-    if (headers != null) {
-      authHeaders.addAll(headers);
-    }
-    return await decoratee.request(
-      url: url,
-      method: method,
-      body: body,
-      headers: authHeaders.isNotEmpty ? authHeaders : null,
-    );
   }
 }
 
 class FetchSecureCacheStorageSpy extends Mock
     implements FetchSecureCacheStorage {
+  When _mockFecthSecureCall() => when(() => fetchSecure(any()));
+
   void mockFetchSecure(String token) {
-    when(() => fetchSecure(any())).thenAnswer((_) async => token);
+    _mockFecthSecureCall().thenAnswer((_) async => token);
+  }
+
+  void mockFetchSecureError() {
+    _mockFecthSecureCall().thenThrow(Exception());
   }
 }
 
@@ -133,5 +143,16 @@ void main() {
     final response = await sut.request(url: url, method: method, body: body);
     // Assert
     expect(response, body);
+  });
+
+  test('Should throw ForbidenError if FetchSecureCacheStorage throws',
+      () async {
+    // Arrange
+    cache.mockFetchSecureError();
+    client.mockRequest(body);
+    // Act
+    final future = sut.request(url: url, method: method, body: body);
+    // Assert
+    expect(future, throwsA(HttpError.forbidden));
   });
 }
