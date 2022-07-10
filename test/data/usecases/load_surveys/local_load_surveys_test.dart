@@ -1,6 +1,7 @@
 import 'package:faker/faker.dart';
 import 'package:fordev_tdd/data/models/models.dart';
 import 'package:fordev_tdd/domain/entities/survey_entity.dart';
+import 'package:fordev_tdd/domain/helpers/domain_error.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
@@ -14,6 +15,9 @@ class LocalLoadSurveys {
 
   Future<List<SurveyEntity>> load() async {
     final data = await fetchCacheStorage.fetch(surveysKey);
+    if (data.isEmpty) {
+      throw DomainError.unexpected;
+    }
     return data
         .map<SurveyEntity>((map) => LocalSurveyModel.fromJson(map).toEntity())
         .toList();
@@ -78,5 +82,14 @@ void main() {
     final surveys = await sut.load();
     // Assert
     expect(surveys, dataEntity);
+  });
+
+  test('Should throw UenexpectedError if cache is empty', () async {
+    // Arrange
+    fetchCacheStorage.mockFetch(data: []);
+    // Act
+    final future = sut.load();
+    // Assert
+    expect(future, throwsA(DomainError.unexpected));
   });
 }
