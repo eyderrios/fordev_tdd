@@ -7,116 +7,116 @@ import 'package:fordev_tdd/data/models/models.dart';
 import 'package:fordev_tdd/domain/entities/survey_entity.dart';
 import 'package:fordev_tdd/domain/helpers/domain_error.dart';
 
-import '../../mocks/fetch_cache_storage_spy.dart';
+import '../../mocks/cache_storage_spy.dart';
 
 void main() {
-  late LocalLoadSurveys sut;
-  late FetchCacheStorageSpy fetchCacheStorage;
-  late List<Map> validMap;
-  late List<Map> invalidMap;
-  late List<Map> incompleteMap;
-  late List<SurveyEntity> validEntities;
+  group('LOAD', () {
+    late LocalLoadSurveys sut;
+    late CacheStorageSpy cache;
+    late List<Map> validMap;
+    late List<Map> invalidMap;
+    late List<Map> incompleteMap;
+    late List<SurveyEntity> validEntities;
 
-  setUp(() {
-    fetchCacheStorage = FetchCacheStorageSpy();
-    sut = LocalLoadSurveys(fetchCacheStorage: fetchCacheStorage);
-    validMap = [
-      {
-        'id': faker.guid.guid(),
-        'question': faker.randomGenerator.string(50),
-        'date': faker.date.dateTime().toIso8601String(),
-        'didAnswer': 'false',
-      },
-      {
-        'id': faker.guid.guid(),
-        'question': faker.randomGenerator.string(50),
-        'date': faker.date.dateTime().toIso8601String(),
-        'didAnswer': 'true',
-      }
-    ];
-    invalidMap = [
-      {
-        'id': faker.guid.guid(),
-        'question': faker.randomGenerator.string(50),
-        'date': 'invalid_date',
-        'didAnswer': 'false',
-      }
-    ];
-    incompleteMap = [
-      {
-        'date': faker.date.dateTime().toIso8601String(),
-        'didAnswer': 'false',
-      }
-    ];
-    validEntities = validMap
-        .map<SurveyEntity>((map) => LocalSurveyModel.fromJson(map).toEntity())
-        .toList();
-  });
+    setUp(() {
+      cache = CacheStorageSpy();
+      sut = LocalLoadSurveys(cacheStorage: cache);
+      validMap = [
+        {
+          'id': faker.guid.guid(),
+          'question': faker.randomGenerator.string(50),
+          'date': faker.date.dateTime().toIso8601String(),
+          'didAnswer': 'false',
+        },
+        {
+          'id': faker.guid.guid(),
+          'question': faker.randomGenerator.string(50),
+          'date': faker.date.dateTime().toIso8601String(),
+          'didAnswer': 'true',
+        }
+      ];
+      invalidMap = [
+        {
+          'id': faker.guid.guid(),
+          'question': faker.randomGenerator.string(50),
+          'date': 'invalid_date',
+          'didAnswer': 'false',
+        }
+      ];
+      incompleteMap = [
+        {
+          'date': faker.date.dateTime().toIso8601String(),
+          'didAnswer': 'false',
+        }
+      ];
+      validEntities = validMap
+          .map<SurveyEntity>((map) => LocalSurveyModel.fromJson(map).toEntity())
+          .toList();
+    });
 
-  test('Should call FetchCacheStorage with correct key', () async {
-    // Arrange
-    fetchCacheStorage.mockFetch(
-        key: LocalLoadSurveys.surveysKey, data: validMap);
-    // Act
-    await sut.load();
-    // Assert
-    verify(() => fetchCacheStorage.fetch(LocalLoadSurveys.surveysKey))
-        .called(1);
-  });
+    test('Should call FetchCacheStorage with correct key', () async {
+      // Arrange
+      cache.mockFetch(key: LocalLoadSurveys.surveysKey, data: validMap);
+      // Act
+      await sut.load();
+      // Assert
+      verify(() => cache.fetch(LocalLoadSurveys.surveysKey)).called(1);
+    });
 
-  test('Should return a list of surveys on success', () async {
-    // Arrange
-    fetchCacheStorage.mockFetch(data: validMap);
-    // Act
-    final surveys = await sut.load();
-    // Assert
-    expect(surveys, validEntities);
-  });
+    test('Should return a list of surveys on success', () async {
+      // Arrange
+      cache.mockFetch(data: validMap);
+      // Act
+      final surveys = await sut.load();
+      // Assert
+      expect(surveys, validEntities);
+    });
 
-  test('Should throw UenexpectedError if cache is empty', () async {
-    // Arrange
-    fetchCacheStorage.mockFetch(data: []);
-    // Act
-    final future = sut.load();
-    // Assert
-    expect(future, throwsA(DomainError.unexpected));
-  });
+    test('Should throw UenexpectedError if cache is empty', () async {
+      // Arrange
+      cache.mockFetch(data: []);
+      // Act
+      final future = sut.load();
+      // Assert
+      expect(future, throwsA(DomainError.unexpected));
+    });
 
-  test('Should throw UenexpectedError if cache is null', () async {
-    // Arrange
-    fetchCacheStorage.mockFetch(data: null);
-    // Act
-    final future = sut.load();
-    // Assert
-    expect(future, throwsA(DomainError.unexpected));
-  });
+    test('Should throw UenexpectedError if cache is null', () async {
+      // Arrange
+      cache.mockFetch(data: null);
+      // Act
+      final future = sut.load();
+      // Assert
+      expect(future, throwsA(DomainError.unexpected));
+    });
 
-  test('Should throw UenexpectedError if cache is invalid', () async {
-    // Arrange
-    fetchCacheStorage.mockFetch(data: invalidMap);
-    // Act
-    final future = sut.load();
-    // Assert
-    expect(future, throwsA(DomainError.unexpected));
-  });
+    test('Should throw UenexpectedError if cache is invalid', () async {
+      // Arrange
+      cache.mockFetch(data: invalidMap);
+      // Act
+      final future = sut.load();
+      // Assert
+      expect(future, throwsA(DomainError.unexpected));
+    });
 
-  test('Should throw UnexpectedError if cache is incomplete (missing fields)',
-      () async {
-    // Arrange
-    fetchCacheStorage.mockFetch(data: incompleteMap);
-    // Act
-    final future = sut.load();
-    // Assert
-    expect(future, throwsA(DomainError.unexpected));
-  });
+    test('Should throw UnexpectedError if cache is incomplete (missing fields)',
+        () async {
+      // Arrange
+      cache.mockFetch(data: incompleteMap);
+      // Act
+      final future = sut.load();
+      // Assert
+      expect(future, throwsA(DomainError.unexpected));
+    });
 
-  test('Should throw UnexpectedError if cache is incomplete (missing fields)',
-      () async {
-    // Arrange
-    fetchCacheStorage.mockFetchError();
-    // Act
-    final future = sut.load();
-    // Assert
-    expect(future, throwsA(DomainError.unexpected));
+    test('Should throw UnexpectedError if cache is incomplete (missing fields)',
+        () async {
+      // Arrange
+      cache.mockFetchError();
+      // Act
+      final future = sut.load();
+      // Assert
+      expect(future, throwsA(DomainError.unexpected));
+    });
   });
 }

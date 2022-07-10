@@ -1,21 +1,20 @@
-// implements LoadSurveys
 import '../../../domain/entities/entities.dart';
 import '../../../domain/helpers/domain_error.dart';
 import '../../../domain/usecases/load_surveys.dart';
-import '../../cache/fetch_cache_storage.dart';
+import '../../cache/cache_storage.dart';
 import '../../models/load_survey_model.dart';
 
 class LocalLoadSurveys implements LoadSurveys {
   static const surveysKey = 'surveys';
 
-  final FetchCacheStorage fetchCacheStorage;
+  final CacheStorage cacheStorage;
 
-  LocalLoadSurveys({required this.fetchCacheStorage});
+  LocalLoadSurveys({required this.cacheStorage});
 
   @override
   Future<List<SurveyEntity>> load() async {
     try {
-      final data = await fetchCacheStorage.fetch(surveysKey);
+      final data = await cacheStorage.fetch(surveysKey);
       if (data?.isEmpty != false) {
         throw Exception();
       }
