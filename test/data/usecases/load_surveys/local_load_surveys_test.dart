@@ -182,5 +182,15 @@ void main() {
       // Assert
       verify(() => cache.delete(LocalLoadSurveys.surveysKey)).called(1);
     });
+
+    test('Should empty cache if it is incomplete', () async {
+      // Arrange
+      cache.mockFetch(key: LocalLoadSurveys.surveysKey, data: incompleteMap);
+      cache.mockDelete();
+      // Act
+      await sut.validate();
+      // Assert
+      verify(() => cache.delete(LocalLoadSurveys.surveysKey)).called(1);
+    });
   });
 }
