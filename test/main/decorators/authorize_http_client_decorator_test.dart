@@ -21,14 +21,19 @@ class AuthorizeHttpClientDecorator<ResponseType> {
     HttpClientHeaders? headers,
   }) async {
     final token = await fetchSecureCacheStorage.fetchSecure('token');
-    HttpClientHeaders authHeaders = {'x-access-token': token ?? ''};
-    final response = await decoratee.request(
+    HttpClientHeaders authHeaders = {};
+    if (token != null) {
+      authHeaders.addAll({'x-access-token': token});
+    }
+    if (headers != null) {
+      authHeaders.addAll(headers);
+    }
+    return await decoratee.request(
       url: url,
       method: method,
       body: body,
-      headers: authHeaders,
+      headers: authHeaders.isNotEmpty ? authHeaders : null,
     );
-    return response;
   }
 }
 
@@ -59,6 +64,7 @@ void main() {
   late String method;
   late HttpClientBody body;
   late HttpClientHeaders tokenHeader;
+  late HttpClientHeaders someHeader;
   late String tokenValue;
   const tokenKey = 'token';
 
@@ -74,19 +80,20 @@ void main() {
     body = {'some_key': 'some_value'};
     tokenValue = faker.guid.guid();
     tokenHeader = {'x-access-token': tokenValue};
+    someHeader = {'some_header_key': 'some_header_value'};
   });
 
-  test('Should call FetchSecureCacheStorage with correct key', () {
+  test('Should call FetchSecureCacheStorage with correct key', () async {
     // Arrange
     cache.mockFetchSecure(tokenValue);
     client.mockRequest({});
     // Act
-    sut.request(url: url, method: method, body: body);
+    await sut.request(url: url, method: method, body: body);
     // Assert
     verify(() => cache.fetchSecure(tokenKey)).called(1);
   });
 
-  test('Should call decoratee with access token on header', () {
+  test('Should call decoratee with access token on header', () async {
     //
     // DECORATEE: the class that is being decorated
     //
@@ -94,7 +101,7 @@ void main() {
     cache.mockFetchSecure(tokenValue);
     client.mockRequest({});
     // Act
-    sut.request(url: url, method: method, body: body);
+    await sut.request(url: url, method: method, body: body);
     // Assert
     verify(() => client.request(
           url: url,
@@ -102,5 +109,29 @@ void main() {
           body: body,
           headers: tokenHeader,
         )).called(1);
+
+    // Assert
+    final HttpClientHeaders expectedHeaders = Map.from(tokenHeader);
+    expectedHeaders.addAll(someHeader);
+    // Act
+    await sut.request(
+        url: url, method: method, body: body, headers: someHeader);
+    // Assert
+    verify(() => client.request(
+          url: url,
+          method: method,
+          body: body,
+          headers: expectedHeaders,
+        )).called(1);
+  });
+
+  test('Should return same result than decoratee', () async {
+    // Arrange
+    cache.mockFetchSecure(tokenValue);
+    client.mockRequest(body);
+    // Act
+    final response = await sut.request(url: url, method: method, body: body);
+    // Assert
+    expect(response, body);
   });
 }
