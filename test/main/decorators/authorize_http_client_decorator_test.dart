@@ -35,8 +35,11 @@ class AuthorizeHttpClientDecorator<ResponseType> {
         body: body,
         headers: authHeaders.isNotEmpty ? authHeaders : null,
       );
+    } on HttpError {
+      rethrow;
     } catch (error) {
-      throw HttpError.forbidden;
+      rethrow;
+      //throw HttpError.forbidden;
     }
   }
 }
@@ -56,13 +59,19 @@ class FetchSecureCacheStorageSpy extends Mock
 
 class HttpClientSpy<ResponseType> extends Mock
     implements HttpClient<ResponseType> {
+  When _mockRequestCall() => when(() => request(
+        url: any(named: 'url'),
+        method: any(named: 'method'),
+        body: any(named: 'body'),
+        headers: any(named: 'headers'),
+      ));
+
   void mockRequest(ResponseType response) {
-    when(() => request(
-          url: any(named: 'url'),
-          method: any(named: 'method'),
-          body: any(named: 'body'),
-          headers: any(named: 'headers'),
-        )).thenAnswer((_) async => response);
+    _mockRequestCall().thenAnswer((_) async => response);
+  }
+
+  void mockRequestError(HttpError error) {
+    _mockRequestCall().thenThrow(error);
   }
 }
 
@@ -148,11 +157,21 @@ void main() {
   test('Should throw ForbidenError if FetchSecureCacheStorage throws',
       () async {
     // Arrange
-    cache.mockFetchSecureError();
     client.mockRequest(body);
+    cache.mockFetchSecureError();
     // Act
     final future = sut.request(url: url, method: method, body: body);
     // Assert
     expect(future, throwsA(HttpError.forbidden));
+  });
+
+  test('Should rethrow if decoratee throws', () async {
+    // Arrange
+    cache.mockFetchSecure(tokenValue);
+    client.mockRequestError(HttpError.badRequest);
+    // Act
+    final future = sut.request(url: url, method: method, body: body);
+    // Assert
+    expect(future, throwsA(HttpError.badRequest));
   });
 }
