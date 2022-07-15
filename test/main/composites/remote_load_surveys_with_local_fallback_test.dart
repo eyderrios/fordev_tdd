@@ -1,67 +1,13 @@
 import 'package:faker/faker.dart';
-import 'package:fordev_tdd/domain/helpers/helpers.dart';
-import 'package:fordev_tdd/domain/usecases/load_surveys.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
-import 'package:fordev_tdd/data/usecases/load_surveys/load_surveys.dart';
+import 'package:fordev_tdd/domain/helpers/helpers.dart';
+import 'package:fordev_tdd/main/composites/remote_load_surveys_with_local_fallback.dart';
 import 'package:fordev_tdd/domain/entities/survey_entity.dart';
 
-class RemoteLoadSurveysWithLocalFallback implements LoadSurveys {
-  final RemoteLoadSurveys remote;
-  final LocalLoadSurveys local;
-
-  RemoteLoadSurveysWithLocalFallback({
-    required this.remote,
-    required this.local,
-  });
-
-  @override
-  Future<List<SurveyEntity>> load() async {
-    List<SurveyEntity> response;
-
-    try {
-      response = await remote.load();
-      await local.save(response);
-      return response;
-    } catch (error) {
-      if (error == DomainError.accessDenied) {
-        rethrow;
-      }
-      await local.validate();
-      response = await local.load();
-    }
-    return response;
-  }
-}
-
-class RemoteLoadSurveysSpy extends Mock implements RemoteLoadSurveys {
-  When _mockLoadCall() => when(() => load());
-
-  void mockLoad(List<SurveyEntity> values) {
-    _mockLoadCall().thenAnswer((_) async => values);
-  }
-
-  void mockLoadError(DomainError error) {
-    _mockLoadCall().thenThrow(error);
-  }
-}
-
-class LocalLoadSurveysSpy extends Mock implements LocalLoadSurveys {
-  When _mockValidateCall() => when(() => validate());
-
-  void mockSave(List<SurveyEntity> values) {
-    when(() => save(values)).thenAnswer((_) async => values);
-  }
-
-  void mockLoad(List<SurveyEntity> values) {
-    when(() => load()).thenAnswer((_) async => values);
-  }
-
-  void mockValidate() {
-    _mockValidateCall().thenAnswer((_) async => _);
-  }
-}
+import '../mocks/local_load_survey_spy.dart';
+import '../mocks/remote_load_surveys_spy.dart';
 
 void main() {
   late RemoteLoadSurveysWithLocalFallback sut;
@@ -146,5 +92,18 @@ void main() {
     final surveys = await sut.load();
     // Assert
     expect(surveys, localSurveys);
+  });
+
+  test('Should throw UnexpectedError if remote and local load throws',
+      () async {
+    // Arrange
+    remote.mockLoadError(DomainError.unexpected);
+    local.mockLocalLoadError();
+    local.mockValidate();
+
+    // Act
+    final future = sut.load();
+    // Assert
+    expect(future, throwsA(DomainError.unexpected));
   });
 }
