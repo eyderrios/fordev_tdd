@@ -1,11 +1,12 @@
 import 'package:faker/faker.dart';
+import 'package:fordev_tdd/domain/usecases/load_surveys.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
 import 'package:fordev_tdd/data/usecases/load_surveys/load_surveys.dart';
 import 'package:fordev_tdd/domain/entities/survey_entity.dart';
 
-class RemoteLoadSurveysWithLocalFallback {
+class RemoteLoadSurveysWithLocalFallback implements LoadSurveys {
   final RemoteLoadSurveys remote;
   final LocalLoadSurveys local;
 
@@ -14,10 +15,11 @@ class RemoteLoadSurveysWithLocalFallback {
     required this.local,
   });
 
-  Future<void> load() async {
+  @override
+  Future<List<SurveyEntity>> load() async {
     final response = await remote.load();
     await local.save(response);
-    return Future<void>(() {});
+    return response;
   }
 }
 
@@ -37,13 +39,13 @@ void main() {
   late RemoteLoadSurveysWithLocalFallback sut;
   late RemoteLoadSurveysSpy remote;
   late LocalLoadSurveysSpy local;
-  late List<SurveyEntity> surveys;
+  late List<SurveyEntity> remoteSurveys;
 
   setUp(() {
     remote = RemoteLoadSurveysSpy();
     local = LocalLoadSurveysSpy();
     sut = RemoteLoadSurveysWithLocalFallback(remote: remote, local: local);
-    surveys = [
+    remoteSurveys = [
       SurveyEntity(
         id: faker.guid.guid(),
         question: faker.randomGenerator.string(50),
@@ -55,7 +57,7 @@ void main() {
 
   test('Should call remote load', () async {
     // Arrange
-    remote.mockLoad(surveys);
+    remote.mockLoad(remoteSurveys);
     // Act
     await sut.load();
     // Assert
@@ -64,11 +66,21 @@ void main() {
 
   test('Should call local save with remote data', () async {
     // Arrange
-    remote.mockLoad(surveys);
-    local.mockSave(surveys);
+    remote.mockLoad(remoteSurveys);
+    local.mockSave(remoteSurveys);
     // Act
     await sut.load();
     // Assert
-    verify(() => local.save(surveys)).called(1);
+    verify(() => local.save(remoteSurveys)).called(1);
+  });
+
+  test('Should return remote data', () async {
+    // Arrange
+    remote.mockLoad(remoteSurveys);
+    local.mockSave(remoteSurveys);
+    // Act
+    final surveys = await sut.load();
+    // Assert
+    expect(surveys, remoteSurveys);
   });
 }
