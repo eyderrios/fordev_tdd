@@ -18,33 +18,46 @@ void main() {
     value = faker.randomGenerator.string(50);
   });
 
-  test('Should call LocalStorage with correct params', () async {
-    // Arrange
-    storage.mockDeleteItem();
-    storage.mockSetItem();
-    // Act
-    await sut.save(key: key, value: value);
-    // Assert
-    verify(() => storage.deleteItem(key)).called(1);
-    verify(() => storage.setItem(key, value)).called(1);
+  group('SAVE', () {
+    test('Should call LocalStorage with correct params', () async {
+      // Arrange
+      storage.mockDeleteItem();
+      storage.mockSetItem();
+      // Act
+      await sut.save(key: key, value: value);
+      // Assert
+      verify(() => storage.deleteItem(key)).called(1);
+      verify(() => storage.setItem(key, value)).called(1);
+    });
+
+    test('Should throws if deleteItem throws', () {
+      // Arrange
+      storage.mockDeleteItemError();
+      // Act
+      final future = sut.save(key: key, value: value);
+      // Assert
+      expect(future, throwsA(const TypeMatcher<Exception>()));
+    });
+
+    test('Should throws if setItem throws', () {
+      // Arrange
+      storage.mockDeleteItem();
+      storage.mockSetItemError();
+      // Act
+      final future = sut.save(key: key, value: value);
+      // Assert
+      expect(future, throwsA(const TypeMatcher<Exception>()));
+    });
   });
 
-  test('Should throws if deleteItem throws', () {
-    // Arrange
-    storage.mockDeleteItemError();
-    // Act
-    final future = sut.save(key: key, value: value);
-    // Assert
-    expect(future, throwsA(const TypeMatcher<Exception>()));
-  });
-
-  test('Should throws if setItem throws', () {
-    // Arrange
-    storage.mockDeleteItem();
-    storage.mockSetItemError();
-    // Act
-    final future = sut.save(key: key, value: value);
-    // Assert
-    expect(future, throwsA(const TypeMatcher<Exception>()));
+  group('DELETE', () {
+    test('Should call LocalStorage with correct params', () async {
+      // Arrange
+      storage.mockDeleteItem();
+      // Act
+      await sut.delete(key);
+      // Assert
+      verify(() => storage.deleteItem(key)).called(1);
+    });
   });
 }
