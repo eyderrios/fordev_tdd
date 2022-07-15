@@ -1,39 +1,9 @@
 import 'package:faker/faker.dart';
-import 'package:localstorage/localstorage.dart';
+import 'package:fordev_tdd/infra/cache/local_storage_adapter.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
-class LocalStorageAdapter {
-  LocalStorage localStorage;
-
-  LocalStorageAdapter({
-    required this.localStorage,
-  });
-
-  Future<void> save({required String key, required dynamic value}) async {
-    await localStorage.deleteItem(key);
-    await localStorage.setItem(key, value);
-    return Future<void>(() {});
-  }
-}
-
-class LocalStorageSpy extends Mock implements LocalStorage {
-  void mockDeleteItem() {
-    when(() => deleteItem(any())).thenAnswer((_) async => _);
-  }
-
-  void mockSetItem() {
-    when(() => setItem(any(), any())).thenAnswer((_) async => _);
-  }
-
-  void mockDeleteItemError() {
-    when(() => deleteItem(any())).thenThrow(Exception());
-  }
-
-  void mockSetItemError() {
-    when(() => setItem(any(), any())).thenThrow(Exception());
-  }
-}
+import '../mocks/local_storage_spy.dart';
 
 void main() {
   late LocalStorageAdapter sut;
