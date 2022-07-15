@@ -59,5 +59,14 @@ void main() {
       // Assert
       verify(() => storage.deleteItem(key)).called(1);
     });
+
+    test('Should throws if deleteItem throws', () async {
+      // Arrange
+      storage.mockDeleteItemError();
+      // Act
+      final future = sut.delete(key);
+      // Assert
+      expect(future, throwsA(const TypeMatcher<Exception>()));
+    });
   });
 }
