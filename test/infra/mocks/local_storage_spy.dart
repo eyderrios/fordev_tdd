@@ -10,6 +10,10 @@ class LocalStorageSpy extends Mock implements LocalStorage {
     when(() => setItem(any(), any())).thenAnswer((_) async => _);
   }
 
+  void mockGetItem() {
+    when(() => getItem(any())).thenAnswer((_) async => _);
+  }
+
   void mockDeleteItemError() {
     when(() => deleteItem(any())).thenThrow(Exception());
   }
