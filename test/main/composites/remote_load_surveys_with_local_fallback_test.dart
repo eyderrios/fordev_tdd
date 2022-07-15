@@ -18,9 +18,18 @@ class RemoteLoadSurveysWithLocalFallback implements LoadSurveys {
 
   @override
   Future<List<SurveyEntity>> load() async {
-    final response = await remote.load();
-    await local.save(response);
-    return response;
+    try {
+      final response = await remote.load();
+      await local.save(response);
+      return response;
+    } catch (error) {
+      if (error == DomainError.accessDenied) {
+        rethrow;
+      }
+      await local.validate();
+      await local.load();
+    }
+    return [];
   }
 }
 
@@ -37,8 +46,18 @@ class RemoteLoadSurveysSpy extends Mock implements RemoteLoadSurveys {
 }
 
 class LocalLoadSurveysSpy extends Mock implements LocalLoadSurveys {
+  When _mockValidateCall() => when(() => validate());
+
   void mockSave(List<SurveyEntity> values) {
     when(() => save(values)).thenAnswer((_) async => values);
+  }
+
+  void mockLoad() {
+    when(() => load()).thenAnswer((_) async => []);
+  }
+
+  void mockValidate() {
+    _mockValidateCall().thenAnswer((_) async => _);
   }
 }
 
@@ -65,6 +84,8 @@ void main() {
   test('Should call remote load', () async {
     // Arrange
     remote.mockLoad(remoteSurveys);
+    local.mockValidate();
+    local.mockSave(remoteSurveys);
     // Act
     await sut.load();
     // Assert
@@ -98,5 +119,17 @@ void main() {
     final future = sut.load();
     // Assert
     expect(future, throwsA(DomainError.accessDenied));
+  });
+
+  test('Should call load fetch on remote error', () async {
+    // Arrange
+    remote.mockLoadError(DomainError.unexpected);
+    local.mockValidate();
+    local.mockLoad();
+    // Act
+    await sut.load();
+    // Assert
+    verify(() => local.validate()).called(1);
+    verify(() => local.load()).called(1);
   });
 }
