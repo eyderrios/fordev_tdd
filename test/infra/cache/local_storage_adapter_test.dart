@@ -11,12 +11,17 @@ class LocalStorageAdapter {
   });
 
   Future<void> save({required String key, required dynamic value}) async {
+    await localStorage.deleteItem(key);
     await localStorage.setItem(key, value);
     return Future<void>(() {});
   }
 }
 
 class LocalStorageSpy extends Mock implements LocalStorage {
+  void mockDeleteItem() {
+    when(() => deleteItem(any())).thenAnswer((_) async => _);
+  }
+
   void mockSetItem() {
     when(() => setItem(any(), any())).thenAnswer((_) async => _);
   }
@@ -37,10 +42,12 @@ void main() {
 
   test('Should call LocalStorage with correct params', () async {
     // Arrange
+    storage.mockDeleteItem();
     storage.mockSetItem();
     // Act
     await sut.save(key: key, value: value);
     // Assert
+    verify(() => storage.deleteItem(key)).called(1);
     verify(() => storage.setItem(key, value)).called(1);
   });
 }
