@@ -25,6 +25,14 @@ class LocalStorageSpy extends Mock implements LocalStorage {
   void mockSetItem() {
     when(() => setItem(any(), any())).thenAnswer((_) async => _);
   }
+
+  void mockDeleteItemError() {
+    when(() => deleteItem(any())).thenThrow(Exception());
+  }
+
+  void mockSetItemError() {
+    when(() => setItem(any(), any())).thenThrow(Exception());
+  }
 }
 
 void main() {
@@ -49,5 +57,24 @@ void main() {
     // Assert
     verify(() => storage.deleteItem(key)).called(1);
     verify(() => storage.setItem(key, value)).called(1);
+  });
+
+  test('Should throws if deleteItem throws', () {
+    // Arrange
+    storage.mockDeleteItemError();
+    // Act
+    final future = sut.save(key: key, value: value);
+    // Assert
+    expect(future, throwsA(const TypeMatcher<Exception>()));
+  });
+
+  test('Should throws if setItem throws', () {
+    // Arrange
+    storage.mockDeleteItem();
+    storage.mockSetItemError();
+    // Act
+    final future = sut.save(key: key, value: value);
+    // Assert
+    expect(future, throwsA(const TypeMatcher<Exception>()));
   });
 }
