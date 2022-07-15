@@ -11,7 +11,7 @@ class HttpClientFactory {
   static HttpClient makeAuthorizeHttpClientDecorator() =>
       AuthorizeHttpClientDecorator(
         fetchSecureCacheStorage:
-            LocalStorageAdapterFactory.makeLocalStorageAdapter(),
+            SecureStorageAdapterFactory.makeSecureStorageAdapter(),
         decoratee: HttpClientFactory.makeHttpAdapter(),
       );
 }

@@ -9,13 +9,13 @@ void main() {
   late String key;
   late String value;
   late FlutterSecureStorageSpy storage;
-  late LocalStorageAdapter sut;
+  late SecureStorageAdapter sut;
 
   setUp(() {
     key = faker.lorem.word();
     value = faker.guid.guid();
     storage = FlutterSecureStorageSpy();
-    sut = LocalStorageAdapter(secureStorage: storage);
+    sut = SecureStorageAdapter(secureStorage: storage);
   });
 
   group('saveSecure', () {
