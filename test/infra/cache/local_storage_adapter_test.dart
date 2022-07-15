@@ -23,14 +23,16 @@ class LocalStorageSpy extends Mock implements LocalStorage {
 }
 
 void main() {
-  late String key = faker.randomGenerator.string(8);
-  late String value = faker.randomGenerator.string(50);
   late LocalStorageAdapter sut;
   late LocalStorageSpy storage;
+  late String key;
+  late dynamic value;
 
   setUp(() {
     storage = LocalStorageSpy();
     sut = LocalStorageAdapter(localStorage: storage);
+    key = faker.randomGenerator.string(8);
+    value = faker.randomGenerator.string(50);
   });
 
   test('Should call LocalStorage with correct params', () async {
