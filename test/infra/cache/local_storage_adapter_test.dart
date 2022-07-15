@@ -51,7 +51,7 @@ void main() {
   });
 
   group('DELETE', () {
-    test('Should call LocalStorage with correct params', () async {
+    test('Should call localStorage with correct params', () async {
       // Arrange
       storage.mockDeleteItem();
       // Act
@@ -71,13 +71,22 @@ void main() {
   });
 
   group('FETCH', () {
-    test('Should call LocalStorage with correct params', () async {
+    test('Should call localStorage with correct params', () async {
       // Arrange
-      storage.mockGetItem();
+      storage.mockGetItem(value);
       // Act
       await sut.fetch(key);
       // Assert
       verify(() => storage.getItem(key)).called(1);
+    });
+
+    test('Should return same value as localStorage', () async {
+      // Arrange
+      storage.mockGetItem(value);
+      // Act
+      final data = await sut.fetch(key);
+      // Assert
+      expect(data, value);
     });
   });
 }
