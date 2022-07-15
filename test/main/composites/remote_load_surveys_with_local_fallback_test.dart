@@ -18,8 +18,10 @@ class RemoteLoadSurveysWithLocalFallback implements LoadSurveys {
 
   @override
   Future<List<SurveyEntity>> load() async {
+    List<SurveyEntity> response;
+
     try {
-      final response = await remote.load();
+      response = await remote.load();
       await local.save(response);
       return response;
     } catch (error) {
@@ -27,9 +29,9 @@ class RemoteLoadSurveysWithLocalFallback implements LoadSurveys {
         rethrow;
       }
       await local.validate();
-      await local.load();
+      response = await local.load();
     }
-    return [];
+    return response;
   }
 }
 
@@ -52,8 +54,8 @@ class LocalLoadSurveysSpy extends Mock implements LocalLoadSurveys {
     when(() => save(values)).thenAnswer((_) async => values);
   }
 
-  void mockLoad() {
-    when(() => load()).thenAnswer((_) async => []);
+  void mockLoad(List<SurveyEntity> values) {
+    when(() => load()).thenAnswer((_) async => values);
   }
 
   void mockValidate() {
@@ -66,6 +68,7 @@ void main() {
   late RemoteLoadSurveysSpy remote;
   late LocalLoadSurveysSpy local;
   late List<SurveyEntity> remoteSurveys;
+  late List<SurveyEntity> localSurveys;
 
   setUp(() {
     remote = RemoteLoadSurveysSpy();
@@ -79,6 +82,7 @@ void main() {
         didAnswer: faker.randomGenerator.boolean(),
       ),
     ];
+    localSurveys = remoteSurveys;
   });
 
   test('Should call remote load', () async {
@@ -125,11 +129,22 @@ void main() {
     // Arrange
     remote.mockLoadError(DomainError.unexpected);
     local.mockValidate();
-    local.mockLoad();
+    local.mockLoad(localSurveys);
     // Act
     await sut.load();
     // Assert
     verify(() => local.validate()).called(1);
     verify(() => local.load()).called(1);
+  });
+
+  test('Should return local stored surveys', () async {
+    // Arrange
+    remote.mockLoadError(DomainError.unexpected);
+    local.mockValidate();
+    local.mockLoad(localSurveys);
+    // Act
+    final surveys = await sut.load();
+    // Assert
+    expect(surveys, localSurveys);
   });
 }
