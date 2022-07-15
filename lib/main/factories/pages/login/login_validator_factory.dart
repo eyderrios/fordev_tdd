@@ -1,7 +1,7 @@
 import '../../../builders/validator_builder.dart';
 import '../../../../validation/protocols/protocols.dart';
 import '../../../../presentation/protocols/protocols.dart';
-import '../../../../validation/validators/validators.dart';
+import '../../../composites/validator_composite.dart';
 
 class LoginValidatorFactory {
   static Validator makeLoginValidator() =>

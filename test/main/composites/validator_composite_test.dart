@@ -1,9 +1,9 @@
-import 'package:fordev_tdd/presentation/protocols/validator.dart';
 import 'package:test/test.dart';
 
-import 'package:fordev_tdd/validation/validators/validator_composite.dart';
+import 'package:fordev_tdd/presentation/protocols/validator.dart';
+import 'package:fordev_tdd/main/composites/validator_composite.dart';
 
-import '../mocks/field_validator_spy.dart';
+import '../../validation/mocks/field_validator_spy.dart';
 
 void main() {
   const input = {'some_field': 'some_value'};

@@ -1,5 +1,5 @@
 import '../../presentation/protocols/validator.dart';
-import '../protocols/field_validator.dart';
+import '../../validation/protocols/field_validator.dart';
 
 class ValidatorComposite implements Validator {
   final List<FieldValidator> validators;
