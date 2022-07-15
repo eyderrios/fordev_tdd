@@ -2,23 +2,31 @@ import 'package:localstorage/localstorage.dart';
 import 'package:mocktail/mocktail.dart';
 
 class LocalStorageSpy extends Mock implements LocalStorage {
+  When _deleteItemCall() => when(() => deleteItem(any()));
+  When _getItemCall() => when(() => getItem(any()));
+  When _setItemCall() => when(() => setItem(any(), any()));
+
   void mockDeleteItem() {
-    when(() => deleteItem(any())).thenAnswer((_) async => _);
+    _deleteItemCall().thenAnswer((_) async => _);
   }
 
   void mockSetItem() {
-    when(() => setItem(any(), any())).thenAnswer((_) async => _);
+    _setItemCall().thenAnswer((_) async => _);
   }
 
   void mockGetItem(dynamic value) {
-    when(() => getItem(any())).thenAnswer((_) async => value);
+    _getItemCall().thenAnswer((_) async => value);
   }
 
   void mockDeleteItemError() {
-    when(() => deleteItem(any())).thenThrow(Exception());
+    _deleteItemCall().thenThrow(Exception());
   }
 
   void mockSetItemError() {
-    when(() => setItem(any(), any())).thenThrow(Exception());
+    _setItemCall().thenThrow(Exception());
+  }
+
+  void mockGetItemError() {
+    _getItemCall().thenThrow(Exception());
   }
 }

@@ -88,5 +88,14 @@ void main() {
       // Assert
       expect(data, value);
     });
+
+    test('Should throws if getItem throws', () async {
+      // Arrange
+      storage.mockGetItemError();
+      // Act
+      final future = sut.fetch(key);
+      // Assert
+      expect(future, throwsA(const TypeMatcher<Exception>()));
+    });
   });
 }
